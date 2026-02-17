@@ -3,19 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Audio Stem Splitting Pipeline — Technical Overview</title>
+<title>Audio Stem Splitting Pipeline</title>
 <style>
-/* Typography */
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Source+Code+Pro:wght@400;600&family=Source+Sans+3:wght@400;600&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap');
 
 :root {
-  /* Fonts */
   --font-display: 'Fraunces', Georgia, serif;
   --font-body: 'Source Serif 4', Georgia, serif;
   --font-body-sans: 'Source Sans 3', system-ui, sans-serif;
   --font-mono: 'Source Code Pro', monospace;
 
-  /* Colors - Primitives */
   --color-ink: #2c2825;
   --color-ink-soft: #5c5550;
   --color-ink-muted: #8a8580;
@@ -27,7 +24,6 @@
   --teal-pale: #b8d4dc;
   --ember-terracotta: #c4704b;
 
-  /* Semantic Tokens */
   --color-text: var(--color-ink);
   --color-text-soft: var(--color-ink-soft);
   --color-text-muted: var(--color-ink-muted);
@@ -39,7 +35,6 @@
   --color-accent-pale: var(--teal-pale);
   --color-callout: var(--ember-terracotta);
 
-  /* Spacing */
   --space-xs: 8px;
   --space-sm: 12px;
   --space-md: 20px;
@@ -47,14 +42,11 @@
   --space-xl: 48px;
   --space-xxl: 64px;
 
-  /* Shadows */
   --shadow-soft: 0 2px 8px hsla(25, 40%, 30%, 0.08);
   --shadow-lifted: 0 4px 16px hsla(25, 40%, 30%, 0.12);
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   font-family: var(--font-body);
@@ -66,12 +58,8 @@ body {
   padding: var(--space-lg) var(--space-md);
 }
 
-.container {
-  max-width: 820px;
-  margin: 0 auto;
-}
+.container { max-width: 820px; margin: 0 auto; }
 
-/* Typography */
 h1, h2, h3, h4 {
   font-family: var(--font-display);
   line-height: 1.2;
@@ -114,18 +102,11 @@ h4 {
   color: var(--color-ink-soft);
 }
 
-p {
-  margin: 0 0 var(--space-md) 0;
-}
+p { margin: 0 0 var(--space-md) 0; }
+ul, ol { margin: 0 0 var(--space-md) 0; padding-left: var(--space-lg); }
+li { margin-bottom: var(--space-xs); }
 
-ul, ol {
-  margin: 0 0 var(--space-md) 0;
-  padding-left: var(--space-lg);
-}
-
-li {
-  margin-bottom: var(--space-xs);
-}
+strong { font-weight: 600; }
 
 code {
   font-family: var(--font-mono);
@@ -155,7 +136,6 @@ pre code {
   color: var(--color-text);
 }
 
-/* Tables */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -166,10 +146,7 @@ table {
   box-shadow: var(--shadow-soft);
 }
 
-thead {
-  background: var(--color-accent);
-  color: white;
-}
+thead { background: var(--color-accent); color: white; }
 
 th, td {
   text-align: left;
@@ -185,23 +162,11 @@ th {
   letter-spacing: 0.5px;
 }
 
-td {
-  font-size: 15px;
-}
+td { font-size: 15px; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--color-cream); }
+td code { font-size: 13px; }
 
-tbody tr:last-child td {
-  border-bottom: none;
-}
-
-tbody tr:hover {
-  background: var(--color-cream);
-}
-
-td code {
-  font-size: 13px;
-}
-
-/* Callout Boxes */
 .callout {
   background: var(--color-cream);
   border-left: 4px solid var(--color-callout);
@@ -221,15 +186,8 @@ td code {
   letter-spacing: 0.5px;
 }
 
-.callout p:last-child {
-  margin-bottom: 0;
-}
+.callout p:last-child, .callout ul:last-child, .callout pre:last-child { margin-bottom: 0; }
 
-.callout ul {
-  margin-bottom: 0;
-}
-
-/* Flow Diagram */
 .flow-step {
   background: var(--color-surface);
   padding: var(--space-md);
@@ -260,7 +218,6 @@ td code {
   margin: 0;
 }
 
-/* Folder Structure */
 .folder-structure {
   background: var(--color-linen);
   padding: var(--space-md);
@@ -273,63 +230,103 @@ td code {
   box-shadow: var(--shadow-soft);
 }
 
-.folder-structure .folder {
-  color: var(--color-accent);
-  font-weight: 600;
-}
+.folder-structure .folder { color: var(--color-accent); font-weight: 600; }
+.folder-structure .comment { color: var(--color-text-muted); }
 
-.folder-structure .comment {
-  color: var(--color-text-muted);
-}
-
-/* Header */
 header {
   border-bottom: 3px solid var(--color-linen);
   padding-bottom: var(--space-lg);
   margin-bottom: var(--space-xl);
 }
 
-/* Print Styles */
-@media print {
-  body {
-    background: white;
-    padding: 0;
-  }
-
-  .callout {
-    break-inside: avoid;
-  }
-
-  table {
-    break-inside: avoid;
-  }
-
-  h2, h3 {
-    break-after: avoid;
-  }
+/* Download buttons */
+.download-group {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  margin: var(--space-lg) 0;
 }
 
-/* Responsive */
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-body-sans);
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  background: var(--color-accent);
+  border: none;
+  padding: 14px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  min-height: 48px;
+  box-shadow: var(--shadow-soft);
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.download-btn:hover, .download-btn:focus-visible {
+  background: var(--color-accent-deep);
+  box-shadow: var(--shadow-lifted);
+}
+
+.download-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.download-btn svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.download-btn-secondary {
+  background: var(--color-callout);
+}
+
+.download-btn-secondary:hover, .download-btn-secondary:focus-visible {
+  background: #a85e3e;
+}
+
+/* Quick start section */
+.quick-start {
+  background: var(--color-surface);
+  border: 2px solid var(--color-accent-pale);
+  border-radius: 12px;
+  padding: var(--space-lg);
+  margin: var(--space-lg) 0;
+  box-shadow: var(--shadow-soft);
+}
+
+.quick-start h3 {
+  margin-top: 0;
+  color: var(--color-accent-deep);
+}
+
+.quick-start ol {
+  font-family: var(--font-body-sans);
+  margin-bottom: 0;
+}
+
+.quick-start li { margin-bottom: var(--space-sm); }
+
+@media print {
+  body { background: white; padding: 0; }
+  .callout, table { break-inside: avoid; }
+  h2, h3 { break-after: avoid; }
+  .download-group { display: none; }
+}
+
 @media (max-width: 600px) {
-  body {
-    padding: var(--space-md) var(--space-sm);
-  }
-
-  h1 {
-    font-size: 32px;
-  }
-
-  h2 {
-    font-size: 26px;
-  }
-
-  table {
-    font-size: 13px;
-  }
-
-  th, td {
-    padding: var(--space-xs) var(--space-sm);
-  }
+  body { padding: var(--space-md) var(--space-sm); }
+  h1 { font-size: 32px; }
+  h2 { font-size: 26px; }
+  table { font-size: 13px; }
+  th, td { padding: var(--space-xs) var(--space-sm); }
+  .download-group { flex-direction: column; }
+  .download-btn { justify-content: center; }
 }
 </style>
 </head>
@@ -339,145 +336,50 @@ header {
 
 <header>
   <h1>Audio Stem Splitting Pipeline</h1>
-  <p class="subtitle">A local-first workflow for producing multi-level practice tracks from YouTube source audio, built with Claude Code</p>
+  <p class="subtitle">Separate vocals from instrumentals, produce practice tracks at multiple vocal levels, and automate the whole thing with an LLM.</p>
 </header>
 
 <section>
-  <h2>What This Is</h2>
+  <h2>Get Started</h2>
 
-  <p>This is a technical communication document describing a local-first audio processing pipeline for youth musical theater. It takes YouTube source audio, separates vocals from instruments using AI, then produces practice tracks at multiple vocal levels. Students access the final recordings via Soundslice, an interactive sheet music player.</p>
+  <p>This page describes a pipeline that takes any song, splits it into vocals and instrumentals using AI, then produces practice-ready tracks at four vocal levels (full, half, ghost, karaoke). It runs locally on a Mac, processes a typical 12-song show in under an hour, and every step is automated.</p>
 
-  <p>The pipeline runs entirely on a local Mac (M-series), processes a typical show in under an hour, and produces four versions of each song: full mix, half vocals, ghost vocals, and karaoke. Every step is automated, idempotent, and logged.</p>
+  <p>You can replicate it in about 15 minutes. Download the setup script to install the tools, then paste the prompt into Claude Code (or any coding LLM) and it will generate a customized pipeline for your songs.</p>
 
-  <p>The entire pipeline was built collaboratively with Claude Code — an LLM-assisted workflow that turned musical theater production needs into a robust automation system.</p>
+  <div class="download-group">
+    <button class="download-btn" onclick="downloadSetup()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download Setup Script
+    </button>
+    <button class="download-btn download-btn-secondary" onclick="downloadPrompt()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download LLM Prompt
+    </button>
+  </div>
+
+  <div class="quick-start">
+    <h3>Quick Start</h3>
+    <ol>
+      <li>Run <code>bash stem-setup.sh</code> to install Demucs, FFmpeg, and yt-dlp</li>
+      <li>Open <code>stem-pipeline-prompt.md</code> and fill in your song list (name + YouTube URL)</li>
+      <li>Paste the prompt into Claude Code, Cursor, or any coding LLM</li>
+      <li>The LLM generates a pipeline script customized to your songs</li>
+      <li>Run the script step-by-step: <code>./pipeline.sh step1</code>, <code>./pipeline.sh step2</code>, etc.</li>
+    </ol>
+  </div>
 </section>
 
 <section>
-  <h2>The Core Tool: Demucs</h2>
+  <h2>What the Pipeline Produces</h2>
 
-  <p><strong>Demucs</strong> is Meta's open-source AI audio source separation tool. It runs locally on Mac hardware (M-series processes a 3-minute song in about 1-2 minutes) and produces surprisingly clean separations between vocals and instrumentals.</p>
-
-  <h3>Installation</h3>
-
-  <pre><code># Install dependencies via Homebrew
-brew install ffmpeg yt-dlp
-
-# Create a Python virtual environment
-python3 -m venv ~/audio-venv
-source ~/audio-venv/bin/activate
-
-# Install Demucs
-pip install demucs</code></pre>
-
-  <h3>Key Command</h3>
-
-  <pre><code>demucs --two-stems vocals -n htdemucs "source.wav"</code></pre>
-
-  <ul>
-    <li><code>--two-stems vocals</code> — Outputs two files: <code>vocals.wav</code> and <code>no_vocals.wav</code>. This is almost always what you want for practice tracks (simpler than 4-stem separation into drums/bass/other/vocals).</li>
-    <li><code>-n htdemucs</code> — Specifies the Hybrid Transformer model, a good default for most music.</li>
-    <li><code>-n htdemucs_ft</code> — Fine-tuned variant, slower but better on problem tracks (heavily orchestrated, choral, or dense mixes).</li>
-  </ul>
-
-  <h3>Alternatives Worth Knowing</h3>
+  <p>For each song, the pipeline outputs four versions at different vocal levels. Students (or anyone practicing) can switch between them as they learn:</p>
 
   <table>
     <thead>
       <tr>
-        <th>Tool</th>
-        <th>Notes</th>
-        <th>Cost</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><strong>Lalal.ai Phoenix</strong></td>
-        <td>Web-based, extremely clean on orchestral music</td>
-        <td>Subscription</td>
-      </tr>
-      <tr>
-        <td><strong>Moises.ai</strong></td>
-        <td>Musician-focused app with pitch/tempo control</td>
-        <td>Freemium</td>
-      </tr>
-      <tr>
-        <td><strong>Logic Pro</strong></td>
-        <td>Built-in stem separation (adequate, not exceptional)</td>
-        <td>One-time</td>
-      </tr>
-      <tr>
-        <td><strong>Demucs</strong></td>
-        <td>Open-source, scriptable, runs locally</td>
-        <td>Free</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <p>For a production pipeline where you need repeatability, logging, and integration with other tools, Demucs is the best choice.</p>
-</section>
-
-<section>
-  <h2>The Pipeline</h2>
-
-  <p>The full pipeline consists of 7 steps (numbered 0-6). Each step is idempotent — re-running the pipeline skips completed work and only processes what's new or changed.</p>
-
-  <div class="flow-step">
-    <div class="flow-step-header">Step 0: Environment Check</div>
-    <div class="flow-step-tool">bash</div>
-    <div class="flow-step-description">Verifies all required tools are installed and accessible (yt-dlp, ffmpeg, demucs, rubberband, sox). Exits early if anything is missing.</div>
-  </div>
-
-  <div class="flow-step">
-    <div class="flow-step-header">Step 1: Download Source Audio</div>
-    <div class="flow-step-tool">yt-dlp</div>
-    <div class="flow-step-description">Downloads audio from YouTube URLs as high-quality WAV files. Takes ~1-2 minutes total for a typical show.</div>
-  </div>
-
-  <div class="flow-step">
-    <div class="flow-step-header">Step 2: Stem Separation</div>
-    <div class="flow-step-tool">Demucs</div>
-    <div class="flow-step-description">Splits each song into vocals.wav + no_vocals.wav using AI source separation. ~1-2 minutes per song on M-series Mac.</div>
-  </div>
-
-  <div class="flow-step">
-    <div class="flow-step-header">Step 3: Pitch Shifting (Optional)</div>
-    <div class="flow-step-tool">Rubber Band</div>
-    <div class="flow-step-description">Pitch shifts vocals and instrumentals separately to match the performer's range. ~10-20 seconds per stem. Formant preservation enabled automatically for large shifts (3+ semitones).</div>
-  </div>
-
-  <div class="flow-step">
-    <div class="flow-step-header">Step 4: Cut and Splice (Optional)</div>
-    <div class="flow-step-tool">FFmpeg</div>
-    <div class="flow-step-description">Trims intros, removes sections, or reorders segments. Millisecond-precise. Takes seconds per operation.</div>
-  </div>
-
-  <div class="flow-step">
-    <div class="flow-step-header">Step 5: Lead/Backing Separation (Optional)</div>
-    <div class="flow-step-tool">audio-separator</div>
-    <div class="flow-step-description">Further splits vocals into lead vs backing vocals. Useful for ensemble pieces. ~1 minute per song.</div>
-  </div>
-
-  <div class="flow-step">
-    <div class="flow-step-header">Step 6: Normalization and Export</div>
-    <div class="flow-step-tool">FFmpeg</div>
-    <div class="flow-step-description">Normalizes to -14 LUFS (consistent perceived loudness) and exports final MP3s. Takes seconds per file.</div>
-  </div>
-
-  <p>A typical 12-song show processes in under an hour, with most of that time spent on stem separation (Step 2).</p>
-</section>
-
-<section>
-  <h2>The Delivery Layer</h2>
-
-  <p>After stems are produced, a separate Python script (<code>catalog.py</code>, stdlib only) automates uploading to Soundslice via their API. It creates <strong>four recordings per song</strong>, each with a different vocal level:</p>
-
-  <table>
-    <thead>
-      <tr>
-        <th>Recording</th>
-        <th>Vocal Level</th>
-        <th>Purpose</th>
-        <th>How It's Made</th>
+        <th>Track</th>
+        <th>Vocals</th>
+        <th>Use</th>
       </tr>
     </thead>
     <tbody>
@@ -485,134 +387,177 @@ pip install demucs</code></pre>
         <td><strong>Full Mix</strong></td>
         <td>100%</td>
         <td>Learn the song, hear everything</td>
-        <td>Original vocals.wav + no_vocals.wav</td>
       </tr>
       <tr>
         <td><strong>Half Vox</strong></td>
         <td>50%</td>
         <td>Practice with vocal support</td>
-        <td>no_vocals.wav + vocals.wav at 0.5 volume</td>
       </tr>
       <tr>
         <td><strong>Ghost Vox</strong></td>
         <td>10%</td>
-        <td>Near-solo, faint guide</td>
-        <td>no_vocals.wav + vocals.wav at 0.1 volume</td>
+        <td>Near-solo, faint guide in the background</td>
       </tr>
       <tr>
         <td><strong>Karaoke</strong></td>
         <td>0%</td>
-        <td>Performance mode</td>
-        <td>no_vocals.wav only</td>
+        <td>Performance mode, instrumentals only</td>
       </tr>
     </tbody>
   </table>
 
-  <h3>Mixing Command</h3>
+  <p>The half and ghost mixes are generated by mixing the isolated instrumental track with the vocal track at reduced volume. All four versions are normalized to -14 LUFS so they play at the same perceived loudness.</p>
+</section>
 
-  <p>The half and ghost mixes are generated using FFmpeg's <code>amix</code> filter with a critical flag:</p>
+<section>
+  <h2>How It Works</h2>
 
-  <pre><code>ffmpeg -i no_vocals.wav -i vocals.wav \
-  -filter_complex "[1:a]volume=0.5[v];[0:a][v]amix=inputs=2:duration=first:normalize=0" \
-  half_vox.wav</code></pre>
+  <p>The pipeline has 7 steps. Steps 3-5 are optional depending on your needs. Each step is idempotent — re-running it skips any work that's already done.</p>
 
-  <div class="callout">
-    <h4>Critical: normalize=0</h4>
-    <p>Without <code>normalize=0</code>, FFmpeg automatically reduces the instrumental volume to "make room" for the vocals. This results in the instrumentals sounding too quiet in half/ghost mixes. The flag tells FFmpeg: "Don't auto-adjust levels, just mix what I give you."</p>
+  <div class="flow-step">
+    <div class="flow-step-header">Step 0: Environment Check</div>
+    <div class="flow-step-tool">bash</div>
+    <div class="flow-step-description">Verifies all required tools are installed. Exits early with install instructions if anything is missing.</div>
   </div>
+
+  <div class="flow-step">
+    <div class="flow-step-header">Step 1: Download Source Audio</div>
+    <div class="flow-step-tool">yt-dlp</div>
+    <div class="flow-step-description">Downloads audio from YouTube URLs as high-quality WAV. ~1-2 minutes for a full show.</div>
+  </div>
+
+  <div class="flow-step">
+    <div class="flow-step-header">Step 2: Stem Separation</div>
+    <div class="flow-step-tool">Demucs (htdemucs model)</div>
+    <div class="flow-step-description">AI splits each song into vocals.wav + no_vocals.wav. ~1-2 minutes per song on Apple Silicon.</div>
+  </div>
+
+  <div class="flow-step">
+    <div class="flow-step-header">Step 3: Pitch Shift (optional)</div>
+    <div class="flow-step-tool">Rubber Band</div>
+    <div class="flow-step-description">Transpose vocals and instrumentals separately to match a performer's range. ~10-20 seconds per stem.</div>
+  </div>
+
+  <div class="flow-step">
+    <div class="flow-step-header">Step 4: Cut and Splice (optional)</div>
+    <div class="flow-step-tool">FFmpeg</div>
+    <div class="flow-step-description">Trim intros, remove sections, reorder segments. Timestamps defined in a config file.</div>
+  </div>
+
+  <div class="flow-step">
+    <div class="flow-step-header">Step 5: Lead/Backing Separation (optional)</div>
+    <div class="flow-step-tool">audio-separator</div>
+    <div class="flow-step-description">Further split the vocal track into lead vs backing vocals. Useful for ensemble pieces.</div>
+  </div>
+
+  <div class="flow-step">
+    <div class="flow-step-header">Step 6: Mix, Normalize, and Export</div>
+    <div class="flow-step-tool">FFmpeg</div>
+    <div class="flow-step-description">Generate Full/Half/Ghost/Karaoke versions, two-pass normalize to -14 LUFS, export final files.</div>
+  </div>
+</section>
+
+<section>
+  <h2>The Core Tool: Demucs</h2>
+
+  <p><strong>Demucs</strong> is Meta's open-source AI model for audio source separation. It runs locally (no cloud, no API keys) and produces clean vocal/instrumental splits on most music.</p>
+
+  <h3>Key Command</h3>
+
+  <pre><code>demucs --two-stems vocals -n htdemucs "source.wav"</code></pre>
+
+  <ul>
+    <li><code>--two-stems vocals</code> — Split into vocals vs. everything else. Almost always the right choice for practice tracks.</li>
+    <li><code>-n htdemucs</code> — Hybrid Transformer model. Good default for most music.</li>
+    <li><code>-n htdemucs_ft</code> — Fine-tuned variant. Slower, but better on orchestral, choral, or dense mixes.</li>
+  </ul>
+
+  <h3>Alternatives</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Tool</th>
+        <th>Best For</th>
+        <th>Cost</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Demucs</strong></td>
+        <td>Scriptable, local, free, integrates into automation</td>
+        <td>Free</td>
+      </tr>
+      <tr>
+        <td><strong>Lalal.ai Phoenix</strong></td>
+        <td>Orchestral music, highest quality on complex arrangements</td>
+        <td>Subscription</td>
+      </tr>
+      <tr>
+        <td><strong>Moises.ai</strong></td>
+        <td>Musicians who want a GUI with pitch/tempo control built in</td>
+        <td>Freemium</td>
+      </tr>
+      <tr>
+        <td><strong>Logic Pro</strong></td>
+        <td>Quick one-offs if you already own Logic</td>
+        <td>One-time</td>
+      </tr>
+    </tbody>
+  </table>
 </section>
 
 <section>
   <h2>Folder Structure</h2>
 
-  <p>The pipeline organizes work into a clear, sequential folder structure. Each step reads from the previous step's output and writes to its own folder.</p>
+  <p>Each step reads from the previous folder and writes to its own. This makes it easy to spot-check intermediate outputs and re-run any single step without redoing everything.</p>
 
   <div class="folder-structure">
 <span class="folder">Production/</span>
-  <span class="folder">01-Source/</span>          <span class="comment"># Downloaded WAV files from YouTube</span>
-  <span class="folder">02-Stems/</span>           <span class="comment"># Demucs output (vocals.wav + no_vocals.wav per song)</span>
-  <span class="folder">02-Stems-MP3/</span>       <span class="comment"># Cached MP3 conversions for quick review</span>
-  <span class="folder">03-Shifted/</span>         <span class="comment"># Pitch-shifted variants (optional)</span>
-  <span class="folder">04-Cut/</span>             <span class="comment"># Trimmed/spliced versions (optional)</span>
-  <span class="folder">05-Lead-Backing/</span>    <span class="comment"># Lead vs backing vocal separation (optional)</span>
-  <span class="folder">06-Final/</span>           <span class="comment"># Normalized exports ready for upload</span>
-  <span class="folder">logs/</span>               <span class="comment"># Per-step, per-song execution logs</span>
-  </div>
-
-  <p>This structure makes it easy to:</p>
-  <ul>
-    <li>Spot-check the output of any individual step</li>
-    <li>Re-run a single step without redoing earlier work</li>
-    <li>Debug issues by reading the logs for a specific song and step</li>
-    <li>Archive or delete intermediate files once the final versions are confirmed</li>
-  </ul>
-</section>
-
-<section>
-  <h2>Hard-Won Lessons</h2>
-
-  <p>These are the kinds of details you only learn after processing a few dozen songs and noticing something sounds wrong.</p>
-
-  <div class="callout">
-    <h4>Pitch Shift Stems Separately, Not the Mix</h4>
-    <p>Always pitch shift the vocals and instrumentals independently, then recombine them. Shifting the full mix sounds noticeably worse — artifacts that are subtle in one stem become obvious when both are shifted together.</p>
-  </div>
-
-  <div class="callout">
-    <h4>Two-Pass Loudnorm</h4>
-    <p>FFmpeg's <code>loudnorm</code> filter requires two passes to hit its target accurately. Pass 1 measures the audio and outputs correction values. Pass 2 applies those values. Single-pass loudnorm consistently overshoots its target by 1-2 LUFS.</p>
-    <pre><code># Pass 1: Measure
-ffmpeg -i input.wav -af loudnorm=print_format=json -f null -
-
-# Pass 2: Apply (using measured_I, measured_LRA, etc.)
-ffmpeg -i input.wav -af loudnorm=I=-14:LRA=7:measured_I=-18.2:... output.wav</code></pre>
-  </div>
-
-  <div class="callout">
-    <h4>Formant Preservation for Big Shifts</h4>
-    <p>Rubber Band's <code>--formant</code> flag prevents chipmunk (shifting up) or monster (shifting down) effects. Auto-enable it for shifts of 3 or more semitones. Below that threshold, it's usually not necessary.</p>
-  </div>
-
-  <div class="callout">
-    <h4>Two-Stem Mode Is Almost Always What You Want</h4>
-    <p>Demucs can separate audio into 4 stems (vocals, drums, bass, other). This sounds impressive but for practice tracks you just need "voice" vs "not voice." Two-stem mode (<code>--two-stems vocals</code>) is faster, simpler to work with, and sounds better when recombined.</p>
-  </div>
-
-  <div class="callout">
-    <h4>Idempotency Saves Hours</h4>
-    <p>Every step checks whether its output already exists before running. This means you can re-run the entire pipeline after adding one new song, and it will only process that song — skipping the 11 songs it already completed. Build this in from the start.</p>
+  <span class="folder">01-Source/</span>          <span class="comment"># Downloaded WAV files</span>
+  <span class="folder">02-Stems/</span>           <span class="comment"># Demucs output: vocals.wav + no_vocals.wav per song</span>
+  <span class="folder">03-Shifted/</span>         <span class="comment"># Pitch-shifted variants (if needed)</span>
+  <span class="folder">04-Cut/</span>             <span class="comment"># Trimmed/spliced versions (if needed)</span>
+  <span class="folder">05-Lead-Backing/</span>    <span class="comment"># Lead vs backing vocals (if needed)</span>
+  <span class="folder">06-Final/</span>           <span class="comment"># Normalized Full/Half/Ghost/Karaoke exports</span>
+  <span class="folder">logs/</span>               <span class="comment"># Per-step, per-song log files</span>
   </div>
 </section>
 
 <section>
-  <h2>Replicating This With an LLM</h2>
+  <h2>Things That Will Save You Time</h2>
 
-  <p>The entire pipeline was built collaboratively with Claude Code. Here's what made that process work well:</p>
+  <div class="callout">
+    <h4>Pitch shift the stems, not the mix</h4>
+    <p>If you need to change a song's key, shift the vocals and instrumentals separately, then recombine. Shifting the full mix produces noticeably worse artifacts.</p>
+  </div>
 
-  <h3>Key Context to Provide</h3>
-  <ul>
-    <li><strong>What tools you have installed.</strong> Claude Code can check your system, but starting with "I have ffmpeg, yt-dlp, and demucs installed" saves time.</li>
-    <li><strong>Your folder structure.</strong> Show the LLM where source files live and where outputs should go.</li>
-    <li><strong>Your end deliverable.</strong> "I need four MP3 files per song, normalized to -14 LUFS, uploaded to Soundslice" is much clearer than "I need practice tracks."</li>
-    <li><strong>Your constraints.</strong> "No pip dependencies in the upload script" or "Must run on Mac M1" shapes the solution space early.</li>
-  </ul>
+  <div class="callout">
+    <h4>Two-pass loudnorm</h4>
+    <p>FFmpeg's <code>loudnorm</code> filter needs two passes to hit its target. Pass 1 measures, pass 2 corrects with the measured values. Single-pass consistently overshoots by 1-2 LUFS, which means some songs will be noticeably louder than others.</p>
+  </div>
 
-  <h3>Why This Works Well With LLMs</h3>
-  <p>The pipeline is built entirely on CLI tools (bash, ffmpeg, demucs, rubberband). These have well-documented interfaces that LLMs understand deeply. You're not asking the LLM to invent new algorithms — you're asking it to orchestrate existing tools in a sensible sequence.</p>
+  <div class="callout">
+    <h4>normalize=0 when mixing vocal levels</h4>
+    <p>When generating half/ghost mixes with <code>amix</code>, add <code>normalize=0</code>. Without it, FFmpeg auto-reduces the instrumental volume to "make room" for the quiet vocals, making the backing track too soft.</p>
+    <pre><code>ffmpeg -i no_vocals.wav -i vocals.wav \
+  -filter_complex "[1:a]volume=0.5[v];[0:a][v]amix=inputs=2:duration=first:normalize=0" \
+  half_vox.wav</code></pre>
+  </div>
 
-  <h3>Iteration Pattern</h3>
-  <ol>
-    <li><strong>Start with one song, one step.</strong> Get Step 2 (stem separation) working perfectly before moving to Step 3.</li>
-    <li><strong>Test with real audio.</strong> Synthetic examples don't reveal issues like DC offset, clipping, or phase problems.</li>
-    <li><strong>Listen critically.</strong> If something sounds wrong, describe what you hear. "The vocals sound thin in the half mix" led directly to discovering the <code>normalize=0</code> issue.</li>
-    <li><strong>Build idempotency early.</strong> Once you have 3-4 steps working, the time savings from re-running only changed steps becomes significant.</li>
-  </ol>
+  <div class="callout">
+    <h4>Formant preservation for big pitch shifts</h4>
+    <p>Rubber Band's <code>--formant</code> flag prevents chipmunk (up) or monster (down) effects. Enable it automatically for shifts of 3+ semitones.</p>
+  </div>
+
+  <div class="callout">
+    <h4>Two-stem mode is almost always right</h4>
+    <p>Demucs can do 4-stem separation (vocals/drums/bass/other), but for practice tracks you just need "voice" vs "not voice." Two-stem mode is faster, simpler, and sounds better when recombined.</p>
+  </div>
 </section>
 
 <section>
   <h2>Tools Reference</h2>
-
-  <p>A compact reference for all tools used in the pipeline.</p>
 
   <table>
     <thead>
@@ -640,7 +585,7 @@ ffmpeg -i input.wav -af loudnorm=I=-14:LRA=7:measured_I=-18.2:... output.wav</co
       </tr>
       <tr>
         <td><strong>Rubber Band</strong></td>
-        <td>High-quality pitch shifting with formant preservation</td>
+        <td>Pitch shifting with formant preservation</td>
         <td><code>brew install rubberband</code></td>
       </tr>
       <tr>
@@ -648,28 +593,241 @@ ffmpeg -i input.wav -af loudnorm=I=-14:LRA=7:measured_I=-18.2:... output.wav</co
         <td>Lead/backing vocal separation (optional)</td>
         <td><code>pip install audio-separator[cpu]</code></td>
       </tr>
-      <tr>
-        <td><strong>SoX</strong></td>
-        <td>Audio utilities (optional, for advanced effects)</td>
-        <td><code>brew install sox</code></td>
-      </tr>
     </tbody>
   </table>
 
-  <h3>Minimum System Requirements</h3>
+  <h3>System Requirements</h3>
   <ul>
     <li><strong>macOS</strong> 11.0+ (Intel or Apple Silicon)</li>
     <li><strong>Python</strong> 3.8+</li>
-    <li><strong>Disk space:</strong> ~500MB per song for intermediate files (can be deleted after final export)</li>
-    <li><strong>RAM:</strong> 8GB minimum, 16GB recommended for large orchestral files</li>
+    <li><strong>Disk:</strong> ~500MB per song for intermediate files (deletable after export)</li>
+    <li><strong>RAM:</strong> 8GB minimum, 16GB recommended</li>
   </ul>
 </section>
 
 <footer style="margin-top: var(--space-xxl); padding-top: var(--space-lg); border-top: 2px solid var(--color-linen); color: var(--color-text-muted); font-size: 14px;">
-  <p>Pipeline developed for Actors Garden youth musical theater program. Built collaboratively with Claude Code, February 2026.</p>
+  <p>Originally built for the Actors Garden youth musical theater program. Built with Claude Code.</p>
 </footer>
 
 </div>
+
+<script>
+function downloadFile(filename, content) {
+  var blob = new Blob([content], { type: 'text/plain' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+}
+
+function downloadSetup() {
+  var script = [
+    '#!/bin/bash',
+    '# stem-setup.sh — Install everything needed for the stem splitting pipeline',
+    '#',
+    '# Usage: bash stem-setup.sh',
+    '# Tested on macOS 12+ (Intel and Apple Silicon)',
+    '',
+    'set -euo pipefail',
+    '',
+    'GREEN="\\033[0;32m"; RED="\\033[0;31m"; DIM="\\033[2m"; NC="\\033[0m"',
+    'ok()  { echo -e "${GREEN}+${NC}  $*"; }',
+    'err() { echo -e "${RED}x${NC}  $*"; }',
+    'dim() { echo -e "${DIM}   $*${NC}"; }',
+    '',
+    'echo ""',
+    'echo "=== Stem Splitting Pipeline — Setup ==="',
+    'echo ""',
+    '',
+    '# ── Homebrew ──────────────────────────────────────────────────',
+    'if ! command -v brew &> /dev/null; then',
+    '  err "Homebrew not found. Install it first:"',
+    '  dim "https://brew.sh"',
+    '  exit 1',
+    'fi',
+    'ok "Homebrew"',
+    '',
+    '# ── FFmpeg ────────────────────────────────────────────────────',
+    'if command -v ffmpeg &> /dev/null; then',
+    '  ok "FFmpeg (already installed)"',
+    'else',
+    '  echo "  Installing FFmpeg..."',
+    '  brew install ffmpeg',
+    '  ok "FFmpeg"',
+    'fi',
+    '',
+    '# ── yt-dlp ────────────────────────────────────────────────────',
+    'if command -v yt-dlp &> /dev/null; then',
+    '  ok "yt-dlp (already installed)"',
+    'else',
+    '  echo "  Installing yt-dlp..."',
+    '  brew install yt-dlp',
+    '  ok "yt-dlp"',
+    'fi',
+    '',
+    '# ── Rubber Band (optional, for pitch shifting) ───────────────',
+    'if command -v rubberband &> /dev/null || command -v rubberband-cli &> /dev/null; then',
+    '  ok "Rubber Band (already installed)"',
+    'else',
+    '  echo "  Installing Rubber Band..."',
+    '  brew install rubberband',
+    '  ok "Rubber Band"',
+    'fi',
+    '',
+    '# ── Python venv + Demucs ─────────────────────────────────────',
+    'VENV_DIR="${DEMUCS_VENV:-$HOME/demucs-env}"',
+    '',
+    'if [[ -f "$VENV_DIR/bin/activate" ]]; then',
+    '  source "$VENV_DIR/bin/activate"',
+    '  if command -v demucs &> /dev/null; then',
+    '    ok "Demucs (already installed in $VENV_DIR)"',
+    '    deactivate',
+    '  else',
+    '    echo "  Venv exists but Demucs missing. Installing..."',
+    '    pip install demucs',
+    '    ok "Demucs"',
+    '    deactivate',
+    '  fi',
+    'else',
+    '  echo "  Creating Python venv at $VENV_DIR..."',
+    '  python3 -m venv "$VENV_DIR"',
+    '  source "$VENV_DIR/bin/activate"',
+    '  echo "  Installing Demucs (this may take a minute)..."',
+    '  pip install demucs',
+    '  ok "Demucs (installed in $VENV_DIR)"',
+    '  deactivate',
+    'fi',
+    '',
+    '# ── Create folder structure ──────────────────────────────────',
+    'PROJECT_DIR="${1:-./stem-pipeline}"',
+    'mkdir -p "$PROJECT_DIR"/{01-Source,02-Stems,03-Shifted,04-Cut,05-Lead-Backing,06-Final,logs}',
+    'ok "Folder structure created at $PROJECT_DIR/"',
+    '',
+    '# ── Done ─────────────────────────────────────────────────────',
+    'echo ""',
+    'echo "=== Setup complete ==="',
+    'echo ""',
+    'echo "Next steps:"',
+    'echo "  1. Open stem-pipeline-prompt.md"',
+    'echo "  2. Fill in your song list"',
+    'echo "  3. Paste the prompt into Claude Code or another coding LLM"',
+    'echo "  4. Run the generated pipeline script"',
+    'echo ""',
+  ].join('\n');
+
+  downloadFile('stem-setup.sh', script);
+}
+
+function downloadPrompt() {
+  var prompt = [
+    '# Stem Splitting Pipeline — LLM Prompt',
+    '',
+    'Paste this entire file into Claude Code, Cursor, or any coding LLM.',
+    'Fill in the SONGS section below first.',
+    '',
+    '---',
+    '',
+    '## What I Need',
+    '',
+    'Build me a bash script that processes a list of songs through an audio',
+    'stem splitting pipeline. The script should:',
+    '',
+    '1. Download source audio from YouTube as WAV (using yt-dlp)',
+    '2. Split each song into vocals + instrumentals using Demucs',
+    '3. Generate four versions of each song:',
+    '   - Full Mix (original audio)',
+    '   - Half Vox (instrumentals + vocals at 50% volume)',
+    '   - Ghost Vox (instrumentals + vocals at 10% volume)',
+    '   - Karaoke (instrumentals only)',
+    '4. Normalize all output to -14 LUFS',
+    '5. Export as WAV (or MP3 if I specify)',
+    '',
+    '## My Songs',
+    '',
+    'Replace these examples with your actual songs.',
+    'Format: slug | Display Name | YouTube URL',
+    '',
+    '```',
+    'my-shot | My Shot | https://youtu.be/Ic7NqP_YGlg',
+    'dear-theodosia | Dear Theodosia | https://youtu.be/TKpJjdKcjeo',
+    'how-far-ill-go | How Far I\'ll Go | https://youtu.be/cPAbx5kgCJo',
+    '```',
+    '',
+    '## My Setup',
+    '',
+    '- **Working directory:** [your project folder, e.g. ~/my-show/]',
+    '- **OS:** macOS (Apple Silicon / Intel)',
+    '- **Demucs venv:** ~/demucs-env',
+    '- **Tools installed:** ffmpeg, yt-dlp, demucs',
+    '  (If not installed yet, run stem-setup.sh first)',
+    '',
+    '## Optional Features (delete any you don\'t need)',
+    '',
+    '- [ ] **Pitch shifting:** Some songs need to be transposed.',
+    '      List which songs and how many semitones (e.g., "dear-theodosia: +5")',
+    '      Use Rubber Band. Shift vocals and instrumentals separately.',
+    '      Enable --formant for shifts of 3+ semitones.',
+    '',
+    '- [ ] **Cutting/trimming:** Some songs need sections removed.',
+    '      List timestamps (e.g., "my-shot: keep 0:00-1:15, 2:30-end")',
+    '',
+    '- [ ] **Lead/backing separation:** Split vocals further into lead vs backing.',
+    '      Uses audio-separator package. List which songs need this.',
+    '',
+    '## Technical Requirements',
+    '',
+    'These are non-negotiable. The LLM should follow all of them:',
+    '',
+    '- **Idempotent steps.** Every step must check if its output already exists',
+    '  and skip completed work. Re-running the script after adding one new song',
+    '  should only process that song.',
+    '',
+    '- **Step-based routing.** The script should accept a step argument:',
+    '  `./pipeline.sh check` (verify tools)',
+    '  `./pipeline.sh step1` (download)',
+    '  `./pipeline.sh step2` (stems)',
+    '  `./pipeline.sh step6` (mix + normalize + export)',
+    '  `./pipeline.sh status` (show progress grid)',
+    '',
+    '- **Logged output.** All tool output goes to per-song log files in a logs/',
+    '  folder. This prevents long ffmpeg/demucs output from flooding the terminal.',
+    '',
+    '- **Two-stem mode.** Use `demucs --two-stems vocals -n htdemucs`.',
+    '  Do NOT use 4-stem mode unless I specifically ask for drums/bass/other.',
+    '',
+    '- **Two-pass loudnorm.** Single-pass overshoots. Pass 1 measures with',
+    '  `loudnorm=print_format=json`, pass 2 applies the measured values with',
+    '  `linear=true`.',
+    '',
+    '- **normalize=0 in amix.** When mixing vocal levels (half/ghost), use',
+    '  `amix=inputs=2:duration=first:normalize=0` to prevent FFmpeg from',
+    '  auto-reducing the instrumental volume.',
+    '',
+    '- **Folder structure:**',
+    '  ```',
+    '  [project]/01-Source/      # Downloaded WAVs',
+    '  [project]/02-Stems/       # Demucs output per song',
+    '  [project]/03-Shifted/     # Pitch-shifted (if needed)',
+    '  [project]/04-Cut/         # Trimmed (if needed)',
+    '  [project]/05-Lead-Backing/ # Lead/backing (if needed)',
+    '  [project]/06-Final/       # Normalized exports',
+    '  [project]/logs/           # Execution logs',
+    '  ```',
+    '',
+    '## Output',
+    '',
+    'Generate a single bash script file called `pipeline.sh` that I can run',
+    'immediately. Include the song configuration at the top of the script',
+    'so I can edit it later without re-prompting.',
+    '',
+  ].join('\n');
+
+  downloadFile('stem-pipeline-prompt.md', prompt);
+}
+</script>
 
 </body>
 </html>
