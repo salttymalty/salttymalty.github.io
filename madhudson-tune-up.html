@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<!-- guards: core/color, core/layout, core/typography -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mad Hudson — Site Tune-Up</title>
+  <style>
+    :root {
+      /* Primitives — brighter, cleaner palette */
+      --ink: oklch(0.25 0.01 250);
+      --ink-soft: oklch(0.45 0.02 250);
+      --accent: oklch(0.55 0.12 250);
+      --accent-light: oklch(0.95 0.02 250);
+      --accent-dark: oklch(0.42 0.10 250);
+      --warm: oklch(0.62 0.10 70);
+      --warm-light: oklch(0.96 0.02 70);
+      --green: oklch(0.55 0.10 155);
+      --green-light: oklch(0.95 0.02 155);
+      --red: oklch(0.55 0.12 25);
+      --red-light: oklch(0.96 0.02 25);
+      --ground: oklch(0.98 0.005 250);
+      --surface: oklch(1.0 0 0);
+      --border-raw: oklch(0.92 0.005 250);
+
+      /* Semantic tokens */
+      --color-primary: var(--accent);
+      --color-primary-light: var(--accent-light);
+      --color-primary-dark: var(--accent-dark);
+      --color-success: var(--green);
+      --color-success-light: var(--green-light);
+      --color-danger: var(--red);
+      --color-danger-light: var(--red-light);
+      --color-highlight: var(--warm);
+      --color-highlight-light: var(--warm-light);
+      --color-text: var(--ink);
+      --color-text-soft: var(--ink-soft);
+      --color-ground: var(--ground);
+      --color-surface: var(--surface);
+      --color-border: var(--border-raw);
+      --shadow-soft: 0 1px 6px oklch(0.25 0.01 250 / 0.06);
+      --radius: 10px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Source Sans 3', system-ui, -apple-system, sans-serif;
+      color: var(--color-text);
+      background: var(--color-ground);
+      line-height: 1.7;
+      font-size: 16.5px;
+    }
+
+    header {
+      background: var(--color-text);
+      color: white;
+      padding: 2.5rem 2rem 2rem;
+    }
+
+    header h1 {
+      font-family: 'Source Sans 3', system-ui, sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    header p {
+      font-size: 1rem;
+      opacity: 0.7;
+      margin-top: 0.25rem;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      color: var(--color-text);
+      margin: 2.5rem 0 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    h2:first-of-type { margin-top: 0; }
+
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 1.5rem 0 0.4rem;
+      color: var(--color-text);
+    }
+
+    p, li { margin-bottom: 0.6rem; }
+
+    ul { padding-left: 1.25rem; }
+    ul li { padding-left: 0.25rem; }
+
+    .callout {
+      border-left: 3px solid var(--color-primary);
+      background: var(--color-primary-light);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+    }
+
+    .callout strong { color: var(--color-primary-dark); }
+
+    .callout-warm {
+      border-left-color: var(--color-highlight);
+      background: var(--color-highlight-light);
+    }
+
+    .callout-warm strong { color: var(--color-highlight); }
+
+    .callout-green {
+      border-left-color: var(--color-success);
+      background: var(--color-success-light);
+    }
+
+    .callout-green strong { color: var(--color-success); }
+
+    .before-after {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin: 1rem 0 1.5rem;
+      border: 1px solid var(--color-border);
+    }
+
+    .before-after .col { padding: 1rem 1.25rem; }
+    .before-after .col.before { background: var(--color-danger-light); }
+    .before-after .col.after { background: var(--color-success-light); }
+
+    .before-after .col-label {
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+    }
+
+    .before .col-label { color: var(--color-danger); }
+    .after .col-label { color: var(--color-success); }
+
+    .before-after ul { list-style: none; padding: 0; font-size: 0.92rem; }
+    .before-after li { margin-bottom: 0.35rem; padding-left: 1.2rem; position: relative; }
+    .before li::before { content: '\2717'; position: absolute; left: 0; color: var(--color-danger); font-weight: 700; }
+    .after li::before { content: '\2713'; position: absolute; left: 0; color: var(--color-success); font-weight: 700; }
+
+    .step-list {
+      counter-reset: steps;
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0;
+    }
+
+    .step-list li {
+      counter-increment: steps;
+      padding: 0.85rem 1rem 0.85rem 3rem;
+      position: relative;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 0.6rem;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .step-list li::before {
+      content: counter(steps);
+      position: absolute;
+      left: 0.85rem;
+      top: 0.85rem;
+      width: 1.6rem;
+      height: 1.6rem;
+      background: var(--color-primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .step-list li strong { color: var(--color-text); }
+
+    .next-moves { list-style: none; padding: 0; }
+
+    .next-moves li {
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .next-moves li:last-child { border-bottom: none; }
+
+    .next-moves .tag {
+      display: inline-block;
+      padding: 0.1rem 0.45rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-left: 0.4rem;
+      vertical-align: middle;
+    }
+
+    .tag-admin { background: var(--color-primary-light); color: var(--color-primary-dark); }
+    .tag-content { background: var(--color-success-light); color: var(--color-success); }
+    .tag-code { background: var(--color-highlight-light); color: var(--color-highlight); }
+
+    .question-block {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin: 0.75rem 0;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .question-block p {
+      margin-bottom: 0.4rem;
+      font-size: 0.95rem;
+    }
+
+    .question-block p:last-child { margin-bottom: 0; }
+
+    .question-block strong {
+      color: var(--color-text);
+    }
+
+    .question-context {
+      color: var(--color-text-soft);
+      font-size: 0.9rem;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--color-border);
+      margin: 2.5rem 0;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--color-text-soft);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--color-border);
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 640px) {
+      .before-after { grid-template-columns: 1fr; }
+      .container { padding: 1.5rem 1rem 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Mad Hudson Watches</h1>
+  <p>Site tune-up &mdash; March 2026</p>
+</header>
+
+<div class="container">
+
+  <h2>What this is</h2>
+
+  <p>I made a copy of your live theme and worked on that copy &mdash; nothing on the live site has changed. The copy is called "garens-edits" and it's sitting in your Shopify admin under Online Store &gt; Themes, ready for you to preview.</p>
+
+  <p>I went through the theme code and made a set of targeted improvements to how the site loads and how it communicates with Google. The site still looks and works exactly the same &mdash; all the changes are under the hood.</p>
+
+  <div class="callout">
+    <strong>The bottom line:</strong> Your site will load noticeably faster, Google will see your brand and products more accurately, and you become eligible for richer search results (FAQ answers, breadcrumb trails, better product cards). These are the kinds of changes that compound over time &mdash; they won't make you #1 overnight, but they remove real drag and open real doors.
+  </div>
+
+  <hr>
+
+  <h2>What changed</h2>
+
+  <h3>The site loads faster</h3>
+  <ul>
+    <li><strong>Removed unused code.</strong> The theme was loading two big JavaScript libraries just to power a mute button and a newsletter animation. I rewrote that in a few lines of modern code and deleted the libraries. That's about 100KB your visitors no longer have to download before the page appears.</li>
+    <li><strong>Reorganized how stylesheets load.</strong> 38 style files were all blocking the page from appearing until they finished downloading. 34 of them don't need to do that. They now load in the background, so visitors see the page sooner.</li>
+    <li><strong>Prioritized the hero image.</strong> Your big homepage banner was set to load last. I flipped it to load first, since it's the first thing people see. Google specifically measures how fast this main image appears.</li>
+  </ul>
+
+  <h3>Google gets better information about your brand and products</h3>
+  <ul>
+    <li><strong>Corrected the brand name.</strong> Behind the scenes, your products were telling Google your brand was "madman store." The theme now sends "Mad Hudson Watches" to Google.</li>
+    <li><strong>All your product photos now go to Google, not just the first one.</strong> Better-looking product cards in search results.</li>
+    <li><strong>Fixed some broken URLs and protocols</strong> in the hidden data your site sends to Google.</li>
+  </ul>
+
+  <h3>New features that help in search</h3>
+  <ul>
+    <li><strong>Breadcrumbs.</strong> Every page now shows a trail like "Home &gt; Products &gt; Miami Watch." Google can display this in search results &mdash; looks more polished than a raw URL.</li>
+    <li><strong>FAQ answers tagged for Google.</strong> Your 8 FAQ questions can now appear as expandable answers right in search results. Your listing takes up more space, which means more clicks.</li>
+  </ul>
+
+  <h3>Better on phones</h3>
+  <ul>
+    <li>Buttons and links that were too small to tap comfortably are now at the recommended minimums.</li>
+    <li>Footer text that was too small to read has been bumped up.</li>
+  </ul>
+
+  <hr>
+
+  <h2>Before and after</h2>
+
+  <div class="before-after">
+    <div class="col before">
+      <div class="col-label">Before</div>
+      <ul>
+        <li>Page loads slowly (lots of blocking files)</li>
+        <li>~100KB of unused JavaScript</li>
+        <li>Hero image loads last</li>
+        <li>Google sees brand as "madman store"</li>
+        <li>Only 1 product image sent to Google</li>
+        <li>No breadcrumbs</li>
+        <li>FAQ not tagged for rich results</li>
+        <li>Some phone buttons too small to tap</li>
+      </ul>
+    </div>
+    <div class="col after">
+      <div class="col-label">After</div>
+      <ul>
+        <li>Page loads noticeably faster</li>
+        <li>~1KB of lean, modern code</li>
+        <li>Hero image loads first</li>
+        <li>Google sees "Mad Hudson Watches"</li>
+        <li>All product images sent to Google</li>
+        <li>Breadcrumbs on every page</li>
+        <li>FAQ can show in Google results</li>
+        <li>All buttons meet phone-friendly sizes</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr>
+
+  <h2>What this could mean for the site</h2>
+
+  <p><strong>More clicks from search.</strong> When your FAQ answers, breadcrumb trails, and product photos show up directly in Google results, your listing looks more complete and trustworthy than competitors with a plain blue link. Pages with these "rich results" get meaningfully more clicks.</p>
+
+  <p><strong>Better rankings over time.</strong> Google measures how fast your site loads as a ranking factor. Cutting 100KB of unused code won't shoot you to #1, but it removes drag that was holding you back compared to faster sites. These gains compound over weeks.</p>
+
+  <p><strong>A more professional search presence.</strong> Right now, some Google results show "madman store" as the brand and use raw URLs. After this, they'll show "Mad Hudson Watches" with clean breadcrumb paths. It's the difference between looking polished and looking like a default Shopify store.</p>
+
+  <div class="callout">
+    <strong>Timeline:</strong> Speed improvements show up immediately in tools like Google PageSpeed Insights. Search result changes roll in over 2-4 weeks as Google recrawls your pages. The full payoff comes from stacking these with the next moves below.
+  </div>
+
+  <hr>
+
+  <h2>A few questions before going further</h2>
+
+  <p>I noticed some things in the theme that I'd want to understand before making assumptions. These aren't problems &mdash; they're context I don't have.</p>
+
+  <div class="question-block">
+    <p><strong>Who built the original theme?</strong></p>
+    <p class="question-context">The Spotlight theme has some custom work layered on top &mdash; custom JavaScript, custom CSS, a video section with a mute toggle, a newsletter animation. Was this done by a developer? An agency? Is there a relationship there that should be looped in before publishing changes to their work?</p>
+  </div>
+
+  <div class="question-block">
+    <p><strong>Was "madman store" as the vendor intentional?</strong></p>
+    <p class="question-context">Every product has the Vendor field set to "madman store." This is what Shopify was sending to Google as your brand name. It could be a placeholder from setup that never got updated, or it might have been on purpose. Either way, the theme now overrides it for Google, but the field itself still says "madman store" in the admin &mdash; worth fixing there too.</p>
+  </div>
+
+  <div class="question-block">
+    <p><strong>Is anyone managing theme updates?</strong></p>
+    <p class="question-context">Shopify occasionally pushes updates to the Spotlight base theme. If someone is responsible for pulling those updates in, they should know about these changes so they don't get overwritten. If nobody's managing updates, that's fine &mdash; just means we'd want to check in on it periodically.</p>
+  </div>
+
+  <div class="question-block">
+    <p><strong>Was more custom functionality planned?</strong></p>
+    <p class="question-context">The theme included jQuery and Modernizr (two big JavaScript libraries) but only used them for a couple of small things. Sometimes that means a developer added them planning to build more features later. If there's a roadmap or wishlist for the site, good to know so we don't remove something that was meant to support future work. (I checked thoroughly &mdash; nothing else in the theme references them, so the removal is safe as far as the current code goes.)</p>
+  </div>
+
+  <hr>
+
+  <h2>How to make it live</h2>
+
+  <ol class="step-list">
+    <li><strong>Preview it.</strong> In Shopify admin, go to Online Store &gt; Themes. Find "garens-edits" and click Preview. Browse around &mdash; homepage, a product page, FAQ, a collection. Everything should look exactly the same.</li>
+    <li><strong>Publish when ready.</strong> On "garens-edits," click the three dots and hit Publish. Your old theme stays saved as a backup &mdash; you can switch back anytime with one click.</li>
+  </ol>
+
+  <div class="callout-green callout">
+    <strong>Is this risky?</strong> No. The site looks and works exactly the same. Nothing depends on the code we removed (verified). Your old theme stays as a one-click rollback.
+  </div>
+
+  <hr>
+
+  <h2>What's next</h2>
+
+  <p>The theme work is done. Everything below is content and settings &mdash; changes you'd make in the Shopify admin, no code involved.</p>
+
+  <div class="callout-green callout">
+    <strong>Already done:</strong> Your product SEO titles and descriptions are filled in with good custom copy. That's one of the most important pieces and it's handled.
+  </div>
+
+  <ul class="next-moves">
+    <li>
+      <strong>Fix the vendor name on products</strong> &mdash; Every product says "madman store." Change to "Mad Hudson Watches." Bulk edit: Products &gt; select all &gt; Bulk edit &gt; Vendor column. Two minutes.
+      <span class="tag tag-admin">Shopify Admin</span>
+    </li>
+    <li>
+      <strong>Write short descriptions for collections</strong> &mdash; Mad Hudson, New Releases, 3 OG watches, mad merch &mdash; all have empty descriptions. Two or three sentences each. Helps Google understand what they are and helps you show up for related searches.
+      <span class="tag tag-admin">Shopify Admin</span>
+    </li>
+    <li>
+      <strong>Add alt text to secondary product images</strong> &mdash; Main photos have good descriptions. The extra angles and hover images are missing them. Helps with image search and accessibility.
+      <span class="tag tag-admin">Shopify Admin</span>
+    </li>
+    <li>
+      <strong>Change store language to US English</strong> &mdash; Currently set to Canadian English. Settings &gt; Store details. Quick fix.
+      <span class="tag tag-admin">Shopify Admin</span>
+    </li>
+    <li>
+      <strong>Set up Google Search Console</strong> &mdash; Submit your sitemap so Google picks up the new structured data faster. Free, takes 10 minutes, and it's the main way you'd track whether these changes are working.
+      <span class="tag tag-admin">Google Search Console</span>
+    </li>
+    <li>
+      <strong>Start writing about your artists</strong> &mdash; Blog posts or spotlight pages about your collaborating artists. There's almost no competition for phrases like "artist collaboration watches." That's wide open territory for Mad Hudson to own.
+      <span class="tag tag-content">Content</span>
+    </li>
+    <li>
+      <strong>Add artist names to product data</strong> &mdash; The theme is wired to tell Google who designed each watch, but it needs you to add the artist name as a product field. Connects your watches to the artists in Google's eyes.
+      <span class="tag tag-admin">Shopify Admin</span>
+    </li>
+    <li>
+      <strong>Expandable product details</strong> &mdash; Specs, care instructions, artist bio in collapsible sections on the product page. Gives visitors more info without clutter, and gives Google more to index.
+      <span class="tag tag-code">Future Code</span>
+    </li>
+  </ul>
+
+</div>
+
+<footer>
+  Prepared for Mad Hudson Watches &mdash; March 2026
+</footer>
+
+</body>
+</html>
