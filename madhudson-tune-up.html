@@ -504,6 +504,111 @@
       font-style: italic;
     }
 
+    /* --- Bounce cliff --- */
+    .bounce-cliff {
+      display: flex;
+      align-items: flex-end;
+      gap: 0;
+      height: 120px;
+      margin: 1rem 0;
+      padding: 0 0.5rem;
+    }
+
+    .bounce-bar {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .bounce-bar .bb-fill {
+      width: 100%;
+      max-width: 56px;
+      border-radius: 6px 6px 0 0;
+      background: var(--color-success);
+      transition: height 0.3s;
+    }
+
+    .bounce-bar.warn .bb-fill { background: var(--color-highlight); }
+    .bounce-bar.bad .bb-fill { background: var(--color-danger); }
+
+    .bounce-bar .bb-pct {
+      font-size: 1rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .bounce-bar.warn .bb-pct { color: var(--color-highlight); }
+    .bounce-bar.bad .bb-pct { color: var(--color-danger); }
+
+    .bounce-bar .bb-label {
+      font-size: 0.7rem;
+      color: var(--color-text-soft);
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    /* --- Split stat --- */
+    .split-stat {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin: 1rem 0;
+      border: 1px solid var(--color-border);
+    }
+
+    .split-stat .split-half {
+      padding: 1rem 1.25rem;
+      text-align: center;
+    }
+
+    .split-stat .split-half:first-child {
+      background: var(--color-primary-light);
+    }
+
+    .split-stat .split-half:last-child {
+      background: var(--color-success-light);
+    }
+
+    .split-stat .split-big {
+      font-size: 2.2rem;
+      font-weight: 900;
+      line-height: 1.1;
+    }
+
+    .split-stat .split-half:first-child .split-big { color: var(--color-primary); }
+    .split-stat .split-half:last-child .split-big { color: var(--color-success); }
+
+    .split-stat .split-label {
+      font-size: 0.78rem;
+      color: var(--color-text-soft);
+      margin-top: 0.25rem;
+    }
+
+    /* --- Inline stat pill --- */
+    .stat-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 20px;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.85rem;
+      margin: 0.15rem 0.15rem;
+    }
+
+    .stat-pill .pill-num {
+      font-weight: 800;
+      color: var(--color-primary);
+    }
+
+    .stat-pill.warm .pill-num { color: var(--color-highlight); }
+    .stat-pill.green .pill-num { color: var(--color-success); }
+
     hr {
       border: none;
       border-top: 1px solid var(--color-border);
@@ -528,6 +633,9 @@
       .spotlight .spot-number { font-size: 2.5rem; }
       .weight-removed { grid-template-columns: 1fr; }
       .container { padding: 1.5rem 1rem 3rem; }
+      .split-stat { grid-template-columns: 1fr; }
+      .split-stat .split-big { font-size: 1.8rem; }
+      .bounce-cliff { height: 100px; }
     }
   </style>
 </head>
@@ -616,11 +724,77 @@
   <p class="stat-source">Source: Google PageSpeed Insights, madhudsonwatches.com, March 5 2026 (mobile, simulated slow 4G)</p>
   <p style="font-size: 0.9rem; color: var(--color-text-soft);">Note: These are lab scores on a simulated slow phone. Your real visitors already experience good speeds (2.4s LCP) &mdash; these changes make the worst-case scenarios better and improve how Google scores the site.</p>
 
+  <h3>Every second counts</h3>
+  <p>Bounce rate (people who leave without doing anything) climbs fast as load time increases:</p>
+
+  <div class="bounce-cliff">
+    <div class="bounce-bar">
+      <div class="bb-fill" style="height: 24%"></div>
+      <div class="bb-pct">9%</div>
+      <div class="bb-label">&lt; 2s</div>
+    </div>
+    <div class="bounce-bar warn">
+      <div class="bb-fill" style="height: 47%"></div>
+      <div class="bb-pct">24%</div>
+      <div class="bb-label">3s</div>
+    </div>
+    <div class="bounce-bar bad">
+      <div class="bb-fill" style="height: 76%"></div>
+      <div class="bb-pct">38%</div>
+      <div class="bb-label">5s</div>
+    </div>
+    <div class="bounce-bar bad">
+      <div class="bb-fill" style="height: 100%"></div>
+      <div class="bb-pct">53%</div>
+      <div class="bb-label">10s</div>
+    </div>
+  </div>
+  <p class="stat-source">Source: Google/SOASTA research, 2024</p>
+
+  <p style="font-size: 0.92rem;">Every 1-second improvement in load time reduces bounce rate by about 12%. Your real-visitor LCP is 2.4 seconds &mdash; firmly in the green zone. These changes keep it there and improve the margins.</p>
+
   <h3>2. Google sees your brand correctly</h3>
   <p>Google was reading "madman store" as your brand name and only seeing one product photo per listing. Now it sees "Mad Hudson Watches" with all your photos and correct URLs.</p>
 
+  <div class="split-stat">
+    <div class="split-half">
+      <div class="split-big">94%</div>
+      <div class="split-label">of all clicks go to organic results</div>
+    </div>
+    <div class="split-half">
+      <div class="split-big">6%</div>
+      <div class="split-label">go to paid ads</div>
+    </div>
+  </div>
+  <p class="stat-source">Source: BrightEdge / FirstPageSage, 2025</p>
+  <p style="font-size: 0.92rem;">This is why correct brand info matters &mdash; organic search is where the vast majority of your traffic comes from, and structured data is how you tell Google what to show.</p>
+
   <h3>3. Richer search results</h3>
   <p>Added breadcrumbs ("Home &gt; Products &gt; Miami Watch") and tagged your FAQ page so Google can show your Q&amp;As directly in search results. Bigger listing = more clicks. Also fixed some tap targets on mobile that were too small.</p>
+
+  <div class="stat-bars">
+    <div class="stat-bar green">
+      <div class="bar-value">58%</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width: 58%"></div>
+        <span class="bar-label">CTR on pages with FAQ rich results (vs 41% without)</span>
+      </div>
+    </div>
+    <div class="stat-bar">
+      <div class="bar-value">+20%</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width: 30%"></div>
+        <span class="bar-label">More clicks when breadcrumbs replace plain URLs</span>
+      </div>
+    </div>
+  </div>
+  <p class="stat-source">Sources: Milestone Research, Search Engine Journal (2024-2025)</p>
+
+  <div class="spotlight">
+    <div class="spot-number">78%</div>
+    <div class="spot-text"><strong>of retail web traffic is mobile.</strong> The tap-target fixes make sure phone users can actually use buttons and nav links without mis-tapping. Mobile visitors who can't navigate leave.</div>
+  </div>
+  <p class="stat-source">Source: Statista, 2025</p>
 
   <h3>Why this matters &mdash; the numbers</h3>
 
@@ -760,6 +934,19 @@
   </div>
   <p class="stat-source">Sources: REVIEWS.io, Store Growers, First Page Sage (2025-2026)</p>
 
+  <div class="split-stat">
+    <div class="split-half">
+      <div class="split-big">0.94%</div>
+      <div class="split-label">luxury watch conversion rate</div>
+    </div>
+    <div class="split-half">
+      <div class="split-big">2.5%</div>
+      <div class="split-label">average ecommerce conversion</div>
+    </div>
+  </div>
+  <p class="stat-source">Source: Littledata / IRP Commerce, 2025</p>
+  <p style="font-size: 0.92rem;">Watches are high-consideration purchases. People research before they buy. That means every extra touchpoint &mdash; review stars, rich search listings, blog posts &mdash; matters more, not less.</p>
+
   <ul class="next-moves">
     <li>
       <strong>Google Shopping</strong> &mdash; Puts your product images and prices at the very top of search results. Free to list, you only pay for ads. 85% of ecommerce ad clicks happen here.
@@ -771,6 +958,26 @@
       <strong>Scarcity in SEO titles</strong> &mdash; "Miami Watch &mdash; Only 100 Made" hits harder than a generic description. Limited runs and named artists are your edge.
     </li>
   </ul>
+
+  <p style="margin-top: 1rem;"><strong>Image search is a bigger deal than you'd think:</strong></p>
+  <div class="stat-bars">
+    <div class="stat-bar warm">
+      <div class="bar-value">23%</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width: 23%"></div>
+        <span class="bar-label">of Google searches return image results</span>
+      </div>
+    </div>
+    <div class="stat-bar green">
+      <div class="bar-value">80%</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width: 80%"></div>
+        <span class="bar-label">of shoppers discover products through images</span>
+      </div>
+    </div>
+  </div>
+  <p class="stat-source">Sources: Moz, Salsify (2024-2025)</p>
+  <p style="font-size: 0.92rem;">Your watches are visual products. Alt text on all photos (next moves above) is how Google finds them in image search.</p>
 
   <hr>
 
@@ -808,6 +1015,28 @@
     <li><strong>The watches as objects.</strong> Why you care about making something beautiful on its own terms, not just functional. The watch-as-art-piece angle is something almost no one in the space is talking about. That's your lane.</li>
     <li><strong>The craft and process.</strong> How a design goes from an artist's sketch to a finished watch. Behind-the-scenes content performs extremely well and builds the kind of trust that turns browsers into buyers.</li>
   </ul>
+
+  <div class="ring-row">
+    <div class="ring-stat">
+      <div class="ring" style="--ring-pct: 70; --ring-color: var(--color-primary);">
+        <span class="ring-number">70%</span>
+      </div>
+      <div class="ring-label">of consumers prefer learning about a brand via articles over ads</div>
+    </div>
+    <div class="ring-stat">
+      <div class="ring" style="--ring-pct: 57; --ring-color: var(--color-highlight);">
+        <span class="ring-number">57%</span>
+      </div>
+      <div class="ring-label">of ecommerce revenue happens on mobile (where content ranks strongest)</div>
+    </div>
+    <div class="ring-stat">
+      <div class="ring" style="--ring-pct: 25; --ring-color: var(--color-success);">
+        <span class="ring-number">25%</span>
+      </div>
+      <div class="ring-label">better ROI from SEO content vs paid ads over 2 years</div>
+    </div>
+  </div>
+  <p class="stat-source">Sources: Demand Metric, Statista, First Page Sage (2024-2025)</p>
 
   <p><strong>Why it works for Mad Hudson specifically:</strong></p>
   <ul>
