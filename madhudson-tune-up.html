@@ -378,6 +378,124 @@
       opacity: 1;
     }
 
+    /* --- Speed gauge --- */
+    .speed-section {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      margin: 1rem 0;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .speed-section h4 {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-text-soft);
+      margin-bottom: 0.75rem;
+    }
+
+    .speed-metric {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .speed-metric:last-child { margin-bottom: 0; }
+
+    .speed-metric .metric-label {
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .speed-metric .metric-values {
+      display: flex;
+      gap: 0.6rem;
+      align-items: center;
+      font-size: 0.88rem;
+    }
+
+    .speed-metric .val-before {
+      color: var(--color-text-soft);
+      text-decoration: line-through;
+      text-decoration-color: var(--color-danger);
+    }
+
+    .speed-metric .val-arrow {
+      color: var(--color-text-soft);
+      font-size: 0.75rem;
+    }
+
+    .speed-metric .val-after {
+      font-weight: 700;
+      color: var(--color-success);
+    }
+
+    .speed-gauge {
+      height: 6px;
+      background: var(--color-border);
+      border-radius: 3px;
+      margin-top: 0.3rem;
+      position: relative;
+      grid-column: 1 / -1;
+    }
+
+    .speed-gauge .gauge-fill {
+      height: 100%;
+      border-radius: 3px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      transition: width 0.3s;
+    }
+
+    .speed-gauge .gauge-before {
+      background: var(--color-danger);
+      opacity: 0.25;
+    }
+
+    .speed-gauge .gauge-after {
+      background: var(--color-success);
+      opacity: 0.6;
+    }
+
+    .weight-removed {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .weight-item {
+      text-align: center;
+      padding: 0.6rem 0.5rem;
+      background: var(--color-danger-light);
+      border-radius: var(--radius-sm);
+    }
+
+    .weight-item .weight-val {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--color-danger);
+    }
+
+    .weight-item .weight-label {
+      font-size: 0.72rem;
+      color: var(--color-text-soft);
+      margin-top: 0.15rem;
+    }
+
+    .weight-item.removed {
+      background: var(--color-success-light);
+    }
+
+    .weight-item.removed .weight-val {
+      color: var(--color-success);
+    }
+
     .stat-source {
       font-size: 0.75rem;
       color: var(--color-text-soft);
@@ -408,6 +526,7 @@
       .stat-bar .bar-value { font-size: 1.3rem; }
       .spotlight { grid-template-columns: 1fr; text-align: center; }
       .spotlight .spot-number { font-size: 2.5rem; }
+      .weight-removed { grid-template-columns: 1fr; }
       .container { padding: 1.5rem 1rem 3rem; }
     }
   </style>
@@ -435,7 +554,67 @@
   <h2>What changed</h2>
 
   <h3>1. Faster loading</h3>
-  <p>Your site already loads fine &mdash; this is just trimming extra weight and making the homepage banner load first instead of last. Small edge, but Google uses speed as a ranking factor.</p>
+  <p>Your site already passes Google's Core Web Vitals &mdash; real visitors are having a good experience. This is about shaving off extra weight and squeezing more out of what's already working.</p>
+
+  <p><strong>What I removed:</strong></p>
+  <div class="weight-removed">
+    <div class="weight-item removed">
+      <div class="weight-val">87 KB</div>
+      <div class="weight-label">jQuery removed</div>
+    </div>
+    <div class="weight-item removed">
+      <div class="weight-val">25 KB</div>
+      <div class="weight-label">Modernizr removed</div>
+    </div>
+    <div class="weight-item removed">
+      <div class="weight-val">34</div>
+      <div class="weight-label">CSS files unblocked</div>
+    </div>
+  </div>
+
+  <p style="font-size: 0.92rem;">jQuery and Modernizr were loading on every page but only powering a mute button and a newsletter animation. I rewrote those 25 lines in plain JavaScript &mdash; same features, 112 KB lighter. The 34 CSS files were all blocking the page from painting until they downloaded; now they load in the background.</p>
+
+  <div class="speed-section">
+    <h4>Your site today (Google PageSpeed, March 5)</h4>
+    <div class="speed-metric">
+      <div class="metric-label">Performance score (mobile)</div>
+      <div class="metric-values">
+        <span class="val-before">66</span>
+        <span class="val-arrow">&rarr;</span>
+        <span class="val-after">~75-82 est.</span>
+      </div>
+      <div class="speed-gauge">
+        <div class="gauge-fill gauge-before" style="width: 66%"></div>
+        <div class="gauge-fill gauge-after" style="width: 78%"></div>
+      </div>
+    </div>
+    <div class="speed-metric">
+      <div class="metric-label">First paint (when you first see something)</div>
+      <div class="metric-values">
+        <span class="val-before">3.2s</span>
+        <span class="val-arrow">&rarr;</span>
+        <span class="val-after">~2.0-2.5s est.</span>
+      </div>
+      <div class="speed-gauge">
+        <div class="gauge-fill gauge-before" style="width: 64%"></div>
+        <div class="gauge-fill gauge-after" style="width: 42%"></div>
+      </div>
+    </div>
+    <div class="speed-metric">
+      <div class="metric-label">Hero banner visible (LCP)</div>
+      <div class="metric-values">
+        <span class="val-before">11.7s</span>
+        <span class="val-arrow">&rarr;</span>
+        <span class="val-after">~4-7s est.</span>
+      </div>
+      <div class="speed-gauge">
+        <div class="gauge-fill gauge-before" style="width: 78%"></div>
+        <div class="gauge-fill gauge-after" style="width: 37%"></div>
+      </div>
+    </div>
+  </div>
+  <p class="stat-source">Source: Google PageSpeed Insights, madhudsonwatches.com, March 5 2026 (mobile, simulated slow 4G)</p>
+  <p style="font-size: 0.9rem; color: var(--color-text-soft);">Note: These are lab scores on a simulated slow phone. Your real visitors already experience good speeds (2.4s LCP) &mdash; these changes make the worst-case scenarios better and improve how Google scores the site.</p>
 
   <h3>2. Google sees your brand correctly</h3>
   <p>Google was reading "madman store" as your brand name and only seeing one product photo per listing. Now it sees "Mad Hudson Watches" with all your photos and correct URLs.</p>
