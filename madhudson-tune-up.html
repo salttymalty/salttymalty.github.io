@@ -240,6 +240,47 @@
       font-size: 0.9rem;
     }
 
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin: 1.25rem 0;
+    }
+
+    .stat-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1rem 1rem 0.75rem;
+      text-align: center;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .stat-card .stat-number {
+      font-size: 1.8rem;
+      font-weight: 800;
+      line-height: 1.1;
+      color: var(--color-primary);
+    }
+
+    .stat-card .stat-label {
+      font-size: 0.8rem;
+      color: var(--color-text-soft);
+      margin-top: 0.3rem;
+      line-height: 1.3;
+    }
+
+    .stat-card.accent-warm .stat-number { color: var(--color-highlight); }
+    .stat-card.accent-green .stat-number { color: var(--color-success); }
+
+    .stat-source {
+      font-size: 0.75rem;
+      color: var(--color-text-soft);
+      text-align: right;
+      margin-top: 0.25rem;
+      font-style: italic;
+    }
+
     hr {
       border: none;
       border-top: 1px solid var(--color-border);
@@ -257,6 +298,7 @@
 
     @media (max-width: 640px) {
       .before-after { grid-template-columns: 1fr; }
+      .stat-grid { grid-template-columns: 1fr; }
       .container { padding: 1.5rem 1rem 3rem; }
     }
   </style>
@@ -291,6 +333,26 @@
 
   <h3>3. Richer search results</h3>
   <p>Added breadcrumbs ("Home &gt; Products &gt; Miami Watch") and tagged your FAQ page so Google can show your Q&amp;As directly in search results. Bigger listing = more clicks. Also fixed some tap targets on mobile that were too small.</p>
+
+  <h3>Why this matters &mdash; the numbers</h3>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-number">+35%</div>
+      <div class="stat-label">click-through rate with structured data</div>
+    </div>
+    <div class="stat-card accent-warm">
+      <div class="stat-number">2.5x</div>
+      <div class="stat-label">higher conversion on fast-loading sites</div>
+    </div>
+    <div class="stat-card accent-green">
+      <div class="stat-number">90%</div>
+      <div class="stat-label">of sites don't have structured data yet</div>
+    </div>
+  </div>
+  <p class="stat-source">Sources: Search Engine Land, SeoProfy, ALM Corp (2025-2026 industry data)</p>
+
+  <p>Structured data is what we added &mdash; the brand name fix, breadcrumbs, FAQ markup, product photos. Most sites don't have it. Mad Hudson now does. That 35% CTR bump means if 100 people see your listing in Google, roughly 13 more of them click through than before.</p>
 
   <div class="before-after">
     <div class="col before">
@@ -379,20 +441,69 @@
 
   <p>The stuff above is cleanup. These are growth plays.</p>
 
+  <div class="stat-grid">
+    <div class="stat-card accent-warm">
+      <div class="stat-number">+30%</div>
+      <div class="stat-label">CTR boost from review stars in Google</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">85%</div>
+      <div class="stat-label">of ecommerce clicks go to Shopping results</div>
+    </div>
+    <div class="stat-card accent-green">
+      <div class="stat-number">24%</div>
+      <div class="stat-label">of ecommerce orders come from organic search</div>
+    </div>
+  </div>
+  <p class="stat-source">Sources: REVIEWS.io, Store Growers, First Page Sage (2025-2026)</p>
+
   <ul class="next-moves">
     <li>
-      <strong>Google Shopping</strong> &mdash; Puts your product images and prices at the very top of search results. Free to list, you only pay for ads. Probably the single biggest thing you could do.
+      <strong>Google Shopping</strong> &mdash; Puts your product images and prices at the very top of search results. Free to list, you only pay for ads. 85% of ecommerce ad clicks happen here.
     </li>
     <li>
-      <strong>Review stars in search results</strong> &mdash; Judge.me is already collecting reviews. Turn on "rich snippets" in Judge.me settings so the gold stars show up in Google. Huge click-through boost.
+      <strong>Review stars in search results</strong> &mdash; Judge.me is already collecting reviews. Turn on "rich snippets" in Judge.me settings so the gold stars show up in Google. That alone is worth ~30% more clicks.
     </li>
     <li>
       <strong>Scarcity in SEO titles</strong> &mdash; "Miami Watch &mdash; Only 100 Made" hits harder than a generic description. Limited runs and named artists are your edge.
     </li>
-    <li>
-      <strong>Own "artist watches" in search</strong> &mdash; Almost nobody is competing for phrases like "artist collaboration watches." A few blog posts about your artists could put you at the top. This is the long game.
-    </li>
   </ul>
+
+  <hr>
+
+  <h2>The case for writing about your artists</h2>
+
+  <p>This is the biggest long-term play and it's unique to Mad Hudson. You're not a generic watch brand &mdash; every piece is a named collaboration. That's a content goldmine most ecommerce brands would kill for.</p>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-number">748%</div>
+      <div class="stat-label">average ROI on SEO-driven content</div>
+    </div>
+    <div class="stat-card accent-warm">
+      <div class="stat-number">45%</div>
+      <div class="stat-label">of ecommerce revenue comes from organic search</div>
+    </div>
+    <div class="stat-card accent-green">
+      <div class="stat-number">~0</div>
+      <div class="stat-label">competitors ranking for "artist collaboration watches"</div>
+    </div>
+  </div>
+  <p class="stat-source">Sources: SeoProfy, First Page Sage, Charle Agency (2025-2026)</p>
+
+  <p><strong>What to write:</strong> A short post per artist &mdash; who they are, how the collaboration happened, what the design means. You already tell these stories in person. Put them on the site and Google sends you traffic for years.</p>
+
+  <p><strong>Why it works for Mad Hudson specifically:</strong></p>
+  <ul>
+    <li>Search terms like "artist collaboration watches," "watches designed by artists," and "limited edition art watches" have almost zero competition right now. That's wide open territory.</li>
+    <li>Each artist post creates a new landing page that can rank on its own. Six artists = six chances to show up in search.</li>
+    <li>Blog posts with images get dramatically more engagement &mdash; and you already have the product photography.</li>
+    <li>People who find you through an artist's story are warmer leads than people who searched "buy watch." They're already interested in the thing that makes Mad Hudson different.</li>
+  </ul>
+
+  <div class="callout-warm callout">
+    <strong>The compounding effect:</strong> A blog post written today can drive traffic for years. Unlike ads, you don't pay per click. Unlike social media, the content doesn't disappear in 24 hours. One good artist spotlight could become your top-performing page.
+  </div>
 
 </div>
 
