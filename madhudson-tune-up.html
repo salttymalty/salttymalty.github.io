@@ -657,6 +657,52 @@
 
   <p>I cloned your live theme and tuned up the code &mdash; how it loads, how it talks to Google, how it works on phones. The site looks and works exactly the same. All the changes are under the hood.</p>
 
+  <h2>Your site right now</h2>
+
+  <p>Before the tune-up numbers, here's what your site actually looks like in the data:</p>
+
+  <div class="split-stat">
+    <div class="split-half">
+      <div class="split-big">42,557</div>
+      <div class="split-label">sessions in the last 90 days</div>
+    </div>
+    <div class="split-half">
+      <div class="split-big">+8%</div>
+      <div class="split-label">vs. previous 90 days</div>
+    </div>
+  </div>
+
+  <div class="stat-bars">
+    <div class="stat-bar green">
+      <div class="bar-value">~500</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width: 75%"></div>
+        <span class="bar-label">sessions per day (baseline)</span>
+      </div>
+    </div>
+    <div class="stat-bar warm">
+      <div class="bar-value">$441</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width: 30%"></div>
+        <span class="bar-label">from Google search (last comparable period)</span>
+      </div>
+    </div>
+    <div class="stat-bar">
+      <div class="bar-value">$1.5K</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width: 55%"></div>
+        <span class="bar-label">from direct traffic (last comparable period)</span>
+      </div>
+    </div>
+  </div>
+  <p class="stat-source">Source: Shopify Analytics, madhudsonwatches.com</p>
+
+  <p>People are finding you. The site has real traffic and real visitors. But Google search is only a fraction of where it should be &mdash; and the 0% conversion rate in recent months means visitors are browsing but not buying. That's the opportunity.</p>
+
+  <div class="callout-green callout">
+    <strong>The meta descriptions you added a few weeks ago:</strong> Those take 2-4 weeks to show up in Google's index. It's too early to measure their impact in the analytics, but they're the right move &mdash; custom descriptions improve click-through rates by giving searchers a reason to pick your listing over the others.
+  </div>
+
   <hr>
 
   <h2>What changed</h2>
@@ -683,46 +729,80 @@
   <p style="font-size: 0.92rem;">jQuery and Modernizr were loading on every page but only powering a mute button and a newsletter animation. I rewrote those 25 lines in plain JavaScript &mdash; same features, 112 KB lighter. The 34 CSS files were all blocking the page from painting until they downloaded; now they load in the background.</p>
 
   <div class="speed-section">
-    <h4>Your site today (Google PageSpeed, March 5)</h4>
+    <h4>Your site today (Google PageSpeed, mobile, March 5-6)</h4>
     <div class="speed-metric">
       <div class="metric-label">Performance score (mobile)</div>
       <div class="metric-values">
-        <span class="val-before">66</span>
+        <span class="val-before">66-74</span>
         <span class="val-arrow">&rarr;</span>
-        <span class="val-after">~75-82 est.</span>
+        <span class="val-after">~80-85 est.</span>
       </div>
       <div class="speed-gauge">
-        <div class="gauge-fill gauge-before" style="width: 66%"></div>
-        <div class="gauge-fill gauge-after" style="width: 78%"></div>
+        <div class="gauge-fill gauge-before" style="width: 70%"></div>
+        <div class="gauge-fill gauge-after" style="width: 82%"></div>
       </div>
     </div>
     <div class="speed-metric">
       <div class="metric-label">First paint (when you first see something)</div>
       <div class="metric-values">
-        <span class="val-before">3.2s</span>
+        <span class="val-before">2.0-3.2s</span>
         <span class="val-arrow">&rarr;</span>
-        <span class="val-after">~2.0-2.5s est.</span>
+        <span class="val-after">~1.5-2.0s est.</span>
       </div>
       <div class="speed-gauge">
-        <div class="gauge-fill gauge-before" style="width: 64%"></div>
-        <div class="gauge-fill gauge-after" style="width: 42%"></div>
+        <div class="gauge-fill gauge-before" style="width: 55%"></div>
+        <div class="gauge-fill gauge-after" style="width: 35%"></div>
       </div>
     </div>
     <div class="speed-metric">
       <div class="metric-label">Hero banner visible (LCP)</div>
       <div class="metric-values">
-        <span class="val-before">11.7s</span>
+        <span class="val-before">7.6-11.7s</span>
         <span class="val-arrow">&rarr;</span>
-        <span class="val-after">~4-7s est.</span>
+        <span class="val-after">~4-6s est.</span>
       </div>
       <div class="speed-gauge">
-        <div class="gauge-fill gauge-before" style="width: 78%"></div>
-        <div class="gauge-fill gauge-after" style="width: 37%"></div>
+        <div class="gauge-fill gauge-before" style="width: 65%"></div>
+        <div class="gauge-fill gauge-after" style="width: 35%"></div>
+      </div>
+    </div>
+    <div class="speed-metric">
+      <div class="metric-label">Speed Index</div>
+      <div class="metric-values">
+        <span class="val-before">2.8-4.7s</span>
+        <span class="val-arrow">&rarr;</span>
+        <span class="val-after">~2.0-3.0s est.</span>
+      </div>
+      <div class="speed-gauge">
+        <div class="gauge-fill gauge-before" style="width: 50%"></div>
+        <div class="gauge-fill gauge-after" style="width: 30%"></div>
       </div>
     </div>
   </div>
-  <p class="stat-source">Source: Google PageSpeed Insights, madhudsonwatches.com, March 5 2026 (mobile, simulated slow 4G)</p>
-  <p style="font-size: 0.9rem; color: var(--color-text-soft);">Note: These are lab scores on a simulated slow phone. Your real visitors already experience good speeds (2.4s LCP) &mdash; these changes make the worst-case scenarios better and improve how Google scores the site.</p>
+  <p class="stat-source">Source: Google PageSpeed Insights, madhudsonwatches.com, March 5-6 2026 (mobile, simulated slow 4G). Ranges reflect natural test-to-test variance.</p>
+  <p style="font-size: 0.9rem; color: var(--color-text-soft);">Note: These are lab scores on a simulated slow phone &mdash; they vary between tests. Your real visitors already experience good speeds (2.4s LCP via Chrome real-user data). These changes improve the margins and help Google rank you higher.</p>
+
+  <div class="speed-section" style="border-left: 3px solid var(--color-success); margin-top: 1rem;">
+    <h4>What your real visitors actually experience (Chrome User Data, 28-day rolling)</h4>
+    <div class="speed-metric">
+      <div class="metric-label">Largest Contentful Paint</div>
+      <div class="metric-values"><span class="val-after">2.4s &check;</span></div>
+    </div>
+    <div class="speed-metric">
+      <div class="metric-label">First Contentful Paint</div>
+      <div class="metric-values"><span class="val-after">1.7s &check;</span></div>
+    </div>
+    <div class="speed-metric">
+      <div class="metric-label">Interaction to Next Paint</div>
+      <div class="metric-values"><span class="val-after">151ms &check;</span></div>
+    </div>
+    <div class="speed-metric">
+      <div class="metric-label">Cumulative Layout Shift</div>
+      <div class="metric-values"><span class="val-after">0 &check;</span></div>
+    </div>
+  </div>
+  <p class="stat-source">Source: Chrome UX Report (CrUX), real-user data from Chrome browsers visiting madhudsonwatches.com</p>
+  <p style="font-size: 0.9rem; color: var(--color-text-soft);"><strong>Core Web Vitals: Passed.</strong> Your site is already in the green zone for all three metrics Google uses for ranking. These tune-ups keep it there while improving the lab scores that flag future issues.</p>
 
   <h3>Every second counts</h3>
   <p>Bounce rate (people who leave without doing anything) climbs fast as load time increases:</p>
