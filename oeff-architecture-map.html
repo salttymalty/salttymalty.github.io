@@ -568,7 +568,7 @@
       <li><a href="#host-helper">Host Helper 2026 Schema</a></li>
       <li><a href="#ownership">Field Ownership Model</a></li>
       <li><a href="#directory">Unified Directory Design</a></li>
-      <li><a href="#asset-layer">Asset Layer Blueprint</a></li>
+      <li><a href="#asset-layer">Asset + Delivery Tracking</a></li>
       <li><a href="#patterns">Industry Patterns (Codex)</a></li>
       <li><a href="#anti-patterns">Anti-Patterns to Avoid</a></li>
       <li><a href="#cleanup">Cleanup Checklist</a></li>
@@ -636,27 +636,27 @@
   <span class="entity">Films</span>         <span class="annotation">Titles, runtimes, licensing terms</span>
   <span class="entity">Members</span>       <span class="annotation">14k email list (separate from active partners)</span>
 
-<span class="layer-label">RELATIONAL LAYER</span> <span class="annotation">(season-specific)</span>
+<span class="layer-label">RELATIONAL LAYER</span> <span class="annotation">(season-specific, event-linked)</span>
   <span class="entity">Events</span>        <span class="annotation">Links a venue + film + contacts + date/time</span>
     Screenings  <span class="annotation">(primary event type)</span>
     Action Fairs, Panels, Concerts <span class="annotation">(future subtypes)</span>
 
+  <span class="entity">Assets</span>        <span class="annotation">Master index of all inbound/outbound/internal files</span>
+  <span class="entity">Asset Versions</span> <span class="annotation">QC history per file version</span>
+  <span class="entity">Deliverables</span>  <span class="annotation">Screening packets, guides, kits &mdash; linked to Events</span>
+  <span class="entity">Delivery Log</span>  <span class="annotation">Recipient-level tracking (who got what, when)</span>
+  <span class="entity">Comms Log</span>     <span class="annotation">Email outreach tracking, linked to Events + Directory</span>
+
 <span class="layer-label">ASSEMBLED LAYER</span> <span class="annotation">(script-generated, Kim-editable)</span>
   <span class="entity">Host Helper 2026</span>  <span class="annotation">28 flat rows with ~28 text/date/URL fields</span>
     <span class="annotation">One row per event &rarr; one Interface Designer page per event</span>
-
-<span class="layer-label">ASSET LAYER</span> <span class="annotation">(proposed &mdash; fills largest current gap)</span>
-  <span class="entity">Assets</span>        <span class="annotation">Master index of all inbound/outbound/internal files</span>
-  <span class="entity">Asset Versions</span> <span class="annotation">QC history per file version</span>
-  <span class="entity">Deliverables</span>  <span class="annotation">Packaged outputs (screening packets, guides, kits)</span>
-  <span class="entity">Delivery Log</span>  <span class="annotation">Recipient-level tracking (who got what, when)</span>
 
 <span class="layer-label">RESILIENCE LAYER</span> <span class="annotation">(operational infrastructure)</span>
   <span class="entity">Routing Rules</span>  <span class="annotation">Encodes "where does this go?" in data</span>
   <span class="entity">Integration Registry</span> <span class="annotation">Every script/sync: owner, schedule, failure mode</span></pre>
     </div>
     <div class="section-synthesis">
-      <strong>Why these layers:</strong> Master tables survive across festival years. The relational layer (Events) is rebuilt each season. The assembled layer flattens everything into human-readable rows. The asset layer (proposed) fills the biggest gap: tracking what comes in from filmmakers, what goes out to hosts, and what we create internally. The resilience layer makes routing and ownership visible in data instead of in one person's head.
+      <strong>Why these layers:</strong> Master tables survive across festival years. The relational layer is rebuilt each season &mdash; and it includes not just Events but all the tracking that orbits them: assets, deliverables, delivery logs, and comms. Media packets, email outreach, screening packet QA &mdash; these are relational data linked to events and people, not a separate system. The assembled layer flattens everything into human-readable rows. The resilience layer makes routing and ownership visible in data instead of in one person's head.
     </div>
   </section>
 
@@ -849,7 +849,7 @@
       </div>
     </div>
     <div class="section-synthesis">
-      <strong>Target grouping:</strong> Core Data (Directory, Venues, Films, Events, Sponsors) / Operations (Host Helper 2026, Milestones, Deliverables, Media Assets) / Pipeline (Comms Log, Packet QA, Host Confirmations). Host Contacts + Film Contacts merge into Directory. Host Intake folds into Venues/Events.
+      <strong>Target grouping:</strong> Core Data (Directory, Venues, Films, Events, Sponsors) / Tracking (Deliverables, Media Assets, Packet QA, Comms Log, Delivery Log &mdash; all linked to Events + Directory) / Operations (Host Helper 2026, Milestones, Host Confirmations). Host Contacts + Film Contacts merge into Directory. Host Intake folds into Venues/Events.
     </div>
   </section>
 
@@ -976,9 +976,9 @@
 
   <!-- ============================================ 11. ASSET LAYER ============================================ -->
   <section id="asset-layer" class="report-section">
-    <span class="section-label">11. Asset Layer Blueprint</span>
-    <h2>5 New Tables &mdash; Filling the Biggest Gap</h2>
-    <p class="section-context">From Codex research: OEFF's largest current gap is the asset/resource layer. No structured tracking of what comes in from filmmakers, what goes out to hosts, or what the team creates internally. Five new tables, all designed for Airtable.</p>
+    <span class="section-label">11. Asset + Delivery Tracking</span>
+    <h2>Relational Tables for Media, Outreach, and QA</h2>
+    <p class="section-context">These aren't a separate system &mdash; they're relational data that links to Events, Films, and Directory just like everything else. Media packets, email outreach logs, screening packet QA, and delivery confirmations all live in this layer. Some tables already exist (Deliverables, Event Media Assets, Packet QA, Comms Log). The blueprint below fills the remaining gaps.</p>
 
     <h3>Table A: Assets</h3>
     <p class="description" style="margin-bottom: var(--space-sm); color: var(--color-text-soft);">One record per logical asset. Master index of everything inbound, outbound, and internal.</p>
@@ -1069,7 +1069,7 @@
     </table>
 
     <div class="section-synthesis">
-      <strong>Relationship map:</strong> Events &harr; Deliverables (1:many). Films &harr; Assets (1:many). Assets &harr; Asset Versions (1:many). Deliverables &harr; Assets (many:many). Deliverables &harr; Delivery Log (1:many). Directory links into ownership, recipient, and escalation across all new tables.
+      <strong>Relationship map:</strong> All of these link back to Events, Films, and Directory &mdash; they're relational data, not a separate layer. Events &harr; Deliverables (1:many). Films &harr; Assets (1:many). Assets &harr; Asset Versions (1:many). Deliverables &harr; Assets (many:many). Deliverables &harr; Delivery Log (1:many). Directory links into ownership, recipient, and escalation across all tables. Existing tables (Event Media Assets, Packet QA, Comms Log) already cover parts of this &mdash; the blueprint formalizes what's ad hoc.
     </div>
   </section>
 
