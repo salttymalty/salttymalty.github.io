@@ -596,6 +596,7 @@
     <ol>
       <li><a href="#status">Data Completeness Dashboard</a></li>
       <li><a href="#team">The Team</a></li>
+      <li><a href="#canonical-sources">Canonical Sources</a></li>
       <li><a href="#hierarchy">Data Architecture</a></li>
       <li><a href="#v1-v2">v1 vs v2 Architecture</a></li>
       <li><a href="#decisions">7 Architecture Decisions</a></li>
@@ -660,9 +661,83 @@
     </div>
   </section>
 
-  <!-- ============================================ 03. ARCHITECTURE ============================================ -->
+  <!-- ============================================ 03. CANONICAL SOURCES ============================================ -->
+  <section id="canonical-sources" class="report-section">
+    <span class="section-label">03. Canonical Sources</span>
+    <h2>Where the Data Actually Lives</h2>
+    <p class="section-context">Before looking at architecture diagrams, it matters where people are actually working today. Three sources carry canonical weight &mdash; not because they were designed as databases, but because they encode real operational knowledge built up through daily use.</p>
+
+    <h3>Kim's Tracker Sheets &mdash; Process Knowledge in Spreadsheet Form</h3>
+    <p class="section-context" style="margin-bottom: var(--space-sm);">While Garen has been scraping and organizing data programmatically, Kim has been thinking through processes while inside them. These sheets are gold &mdash; their structure reflects operational reality, not abstract schema design. The column choices, groupings, and status fields encode decisions made under pressure.</p>
+
+    <div class="hierarchy">
+      <pre><span class="layer-label">SHEET 1: Host-Venue-Film Tracker</span> <span class="annotation">(5 tabs, operational core)</span>
+
+  <span class="entity">Host-Venue-Film Link</span>   <span class="annotation">The relational join &mdash; org + venue + film + screening type + status</span>
+    <span class="annotation">  + Primary contact (first, last, email)</span>
+    <span class="annotation">  + Hosting status, notes</span>
+    <span class="annotation">  This tab IS the event-centric model Kim arrived at independently</span>
+
+  <span class="entity">Directory</span>              <span class="annotation">All contacts in one place, typed by contact type</span>
+    <span class="annotation">  Org, affiliation, name, email, phone, contact type, screening type, status</span>
+    <span class="annotation">  Already unified &mdash; same person can appear with multiple roles</span>
+    <span class="annotation">  Direct precursor to the Airtable Directory table design</span>
+
+  <span class="entity">Venues</span>                 <span class="annotation">56 columns of deep operational data</span>
+    <span class="annotation">  Venue info: org, geography, address, capacity, description</span>
+    <span class="annotation">  AV: projector, screen, sound, computer, WiFi, microphone, AV lead, AV notes</span>
+    <span class="annotation">  Accessibility: wheelchair, elevator, restrooms, parking, seating,</span>
+    <span class="annotation">    transit, captions, hearing loop, lighting, signage + notes</span>
+    <span class="annotation">  This is the most detailed venue dataset OEFF has ever had</span>
+
+  <span class="entity">Films</span>                  <span class="annotation">Licensing pipeline with financial tracking</span>
+    <span class="annotation">  Film, type, licensing request type, # screenings, fee, status</span>
+    <span class="annotation">  Film survey completion, contact info (first, last, email)</span>
+
+  <span class="entity">Screenings</span>             <span class="annotation">The scheduling spine &mdash; 35 columns</span>
+    <span class="annotation">  Org, film, date, doors, start, screening type, film selection status</span>
+    <span class="annotation">  OEFF POC, host fee, host sponsor, venue, capacity, event type, ticket price</span>
+
+<span class="layer-label">SHEET 2: Host Communications Tracker</span> <span class="annotation">(2 tabs, comms process)</span>
+
+  <span class="entity">Host Communications</span>    <span class="annotation">Every outbound message tracked with RACI-style ownership</span>
+    <span class="annotation">  Communication, status, notes, channel</span>
+    <span class="annotation">  Owner (drafts), Reviewer (gives input), Approver (says yes), Sender (distributes)</span>
+    <span class="annotation">  Planned distro date, actual distro date</span>
+    <span class="annotation">  This is the comms accountability model &mdash; who owns each step</span>
+
+  <span class="entity">Host Engagements</span>      <span class="annotation">Webinars, meetings, touchpoints with dates and artifacts</span>
+    <span class="annotation">  Engagement, status, notes, date, time</span>
+    <span class="annotation">  Meeting deck (Google Slides link), meeting recording (Drive link)</span></pre>
+    </div>
+
+    <h3>OEC Active Roadmap &mdash; The Team's Working Document</h3>
+    <p class="section-context" style="margin-bottom: var(--space-sm);">This is what the team actually uses. The roadmap IS canonical for planning decisions &mdash; venue confirmations, film assignments, scheduling. It carries 3 years of history (2024&ndash;2026) and serves as the shared reference in meetings.</p>
+
+    <div class="hierarchy">
+      <pre><span class="layer-label">OEC ACTIVE ROADMAP</span> <span class="annotation">(16 tabs, multi-year)</span>
+
+  <span class="entity">2026HostVenues</span>         <span class="annotation">31 cols &mdash; the primary venue planning surface</span>
+  <span class="entity">2026Programs</span>           <span class="annotation">43 cols &mdash; film programming, licensing, scheduling</span>
+  <span class="entity">2026EarthDayActionFair</span> <span class="annotation">30 cols &mdash; April 22 flagship event planning</span>
+  <span class="entity">Progr+PartnerIdeas</span>    <span class="annotation">Pipeline of potential programming + partnerships</span>
+  <span class="entity">ProgPartners</span>           <span class="annotation">Partner organizations across all years</span>
+  <span class="annotation">  + 2025 archive: Schedule, HostVenues, LicenseInvoice, Programs, Honoraria, FinalData, Recordings</span>
+  <span class="annotation">  + 2024 archive: Programs, Recordings, Honoraria, FinalData</span>
+  <span class="annotation">  Caution: some 2025 data is stale &mdash; treat as reference, not current</span></pre>
+    </div>
+
+    <h3>Airtable &mdash; Relational Infrastructure</h3>
+    <p class="section-context" style="margin-bottom: var(--space-sm);">Airtable is canonical for relational structure &mdash; the links between tables that spreadsheets can't express. Sixteen active tables, growing toward the v2 architecture described below.</p>
+
+    <div class="section-synthesis">
+      <strong>Dual-canonical principle:</strong> Kim's sheets are canonical for validated operational data (she checks it, she's in the process). The OEC roadmap is canonical for team-facing planning (Ana references it in meetings). Airtable is canonical for relational structure (links between entities). These aren't competing &mdash; they serve different roles. Sync scripts bridge them, but Kim's process knowledge and the roadmap's institutional memory should always inform architecture decisions.
+    </div>
+  </section>
+
+  <!-- ============================================ 04. ARCHITECTURE ============================================ -->
   <section id="hierarchy" class="report-section">
-    <span class="section-label">03. Data Architecture</span>
+    <span class="section-label">04. Data Architecture</span>
     <h2>Not a Tree &mdash; A Hub with Rings</h2>
     <p class="section-context">Kim's insight: "The most specific our data will ever get is by event." But the data isn't hierarchical &mdash; Directory links to Events, Venues, Films, Assets, and Deliverables. Assets link to Films AND Events AND Venues. Deliverables draw from multiple Assets. This is a directed graph with Events at the center, not a tree with a single root.</p>
 
@@ -837,7 +912,7 @@
 
   <!-- ============================================ 04. v1 vs v2 ============================================ -->
   <section id="v1-v2" class="report-section">
-    <span class="section-label">04. Architecture Comparison</span>
+    <span class="section-label">05. Architecture Comparison</span>
     <h2>v1 (Venue-Centric) vs v2 (Event-Centric)</h2>
     <p class="section-context">The March 13 meeting surfaced why the venue-centric model broke: multi-event venues produced concatenated values, rollup chains were uneditable, and formula fields obscured what was actually stored.</p>
     <div class="compare-grid">
@@ -875,7 +950,7 @@
 
   <!-- ============================================ 05. DECISIONS ============================================ -->
   <section id="decisions" class="report-section">
-    <span class="section-label">05. Architecture Decisions</span>
+    <span class="section-label">06. Architecture Decisions</span>
     <h2>7 Decisions from March 13 Meeting</h2>
     <p class="section-context">Kim and Garen's 63-minute call produced 7 foundational decisions. These reshape how every downstream tool &mdash; Host Helper, sync scripts, merge sheets &mdash; relates to the data.</p>
     <div class="decision-grid">
@@ -922,7 +997,7 @@
 
   <!-- ============================================ 06. INVENTORY ============================================ -->
   <section id="tables" class="report-section">
-    <span class="section-label">06. Current Airtable Inventory</span>
+    <span class="section-label">07. Current Airtable Inventory</span>
     <h2>16 Active Tables</h2>
     <p class="section-context">Full inventory from <code>assemble-host-helper.py --inventory</code>. Base ID: <code>app9DymWrbAQaHH0K</code>. Zero empty shell tables found.</p>
     <div class="table-grid">
@@ -1030,16 +1105,30 @@
 
   <!-- ============================================ 07. DATA FLOW ============================================ -->
   <section id="flow" class="report-section">
-    <span class="section-label">07. Data Flow</span>
+    <span class="section-label">08. Data Flow</span>
     <h2>Pipeline Architecture</h2>
-    <p class="section-context">Dual-canonical principle: Kim's Google Sheets are canonical for validated data (she checks it). Airtable is canonical for relational data (links between tables). Sync scripts bridge them.</p>
+    <p class="section-context">Three canonical sources feed the system. Kim's tracker sheets carry process knowledge and validated operational data. The OEC Active Roadmap carries team-facing planning decisions. Airtable holds relational structure. Scripts bridge all three.</p>
     <div class="flow-container">
       <div class="flow-row">
-        <span class="flow-node canonical">Kim's Tracker Sheet</span>
+        <span class="flow-node canonical">Kim's Tracker (5 tabs)</span>
         <span class="flow-arrow">&rarr;</span>
-        <span class="flow-arrow-label">one-time import</span>
+        <span class="flow-arrow-label">validated contacts, venues, AV, films</span>
         <span class="flow-arrow">&rarr;</span>
         <span class="flow-node canonical">Directory + Venues + Films</span>
+      </div>
+      <div class="flow-row">
+        <span class="flow-node canonical">OEC Active Roadmap</span>
+        <span class="flow-arrow">&rarr;</span>
+        <span class="flow-arrow-label">scheduling, film assignments, confirmations</span>
+        <span class="flow-arrow">&rarr;</span>
+        <span class="flow-node canonical">Events table</span>
+      </div>
+      <div class="flow-row">
+        <span class="flow-node canonical">Kim's Comms Tracker (2 tabs)</span>
+        <span class="flow-arrow">&rarr;</span>
+        <span class="flow-arrow-label">outreach history, RACI, engagement log</span>
+        <span class="flow-arrow">&rarr;</span>
+        <span class="flow-node canonical">Comms Log + Deliverables</span>
       </div>
       <div class="flow-row">
         <span class="flow-node canonical">Events table</span>
@@ -1074,7 +1163,7 @@
 
   <!-- ============================================ 08. HOST HELPER SCHEMA ============================================ -->
   <section id="host-helper" class="report-section">
-    <span class="section-label">08. Host Helper 2026</span>
+    <span class="section-label">09. Host Helper 2026</span>
     <h2>28-Field Flat Table Schema</h2>
     <p class="section-context">One stakeholder output: 28 rows (one per event), 28 fields. All text/date/URL types &mdash; no formulas, no rollups, no linked records. Script-assembled from canonical data, with protected fields for operational edits.</p>
     <div class="hierarchy">
@@ -1095,7 +1184,7 @@
 
   <!-- ============================================ 09. OWNERSHIP ============================================ -->
   <section id="ownership" class="report-section">
-    <span class="section-label">09. Field Ownership</span>
+    <span class="section-label">10. Field Ownership</span>
     <h2>Script-Owned vs Team-Editable</h2>
     <p class="section-context">The assembly script overwrites 21 fields from canonical sources on every run. 7 fields are reserved for operational edits (currently Kim's responsibility) &mdash; the script reads existing values and preserves them.</p>
     <div class="ownership-grid">
@@ -1125,7 +1214,7 @@
 
   <!-- ============================================ 10. DIRECTORY ============================================ -->
   <section id="directory" class="report-section">
-    <span class="section-label">10. Unified Directory</span>
+    <span class="section-label">11. Unified Directory</span>
     <h2>Directory Table Design</h2>
     <p class="section-context">Replaces Host Contacts (52 records) + Film Contacts (14 records) with one table. ~66 records with deduplication. A person who is both a host contact and a panelist gets one record with multiple roles.</p>
     <div class="hierarchy">
@@ -1151,7 +1240,7 @@
 
   <!-- ============================================ 11. ASSET LAYER ============================================ -->
   <section id="asset-layer" class="report-section">
-    <span class="section-label">11. Asset + Delivery Tracking</span>
+    <span class="section-label">12. Asset + Delivery Tracking</span>
     <h2>Relational Tables for Media, Outreach, and QA</h2>
     <p class="section-context">These aren't a separate system &mdash; they're relational data that links to Events, Films, and Directory just like everything else. Media packets, email outreach logs, screening packet QA, and delivery confirmations all live in this layer. Some tables already exist (Deliverables, Event Media Assets, Packet QA, Comms Log). The blueprint below fills the remaining gaps.</p>
 
@@ -1250,7 +1339,7 @@
 
   <!-- ============================================ 12. PATTERNS ============================================ -->
   <section id="patterns" class="report-section">
-    <span class="section-label">12. Industry Patterns</span>
+    <span class="section-label">13. Industry Patterns</span>
     <h2>8 Patterns from Codex Research</h2>
     <p class="section-context">Cross-referenced against TIFF, Tribeca, Eventival/Eventive, Salesforce NPSP, HubSpot, VolunteerHub, Better Impact, and Eventbrite. Each pattern maps to OEFF's current or target architecture.</p>
     <div class="pattern-grid">
@@ -1310,7 +1399,7 @@
 
   <!-- ============================================ 13. ANTI-PATTERNS ============================================ -->
   <section id="anti-patterns" class="report-section">
-    <span class="section-label">13. Anti-Patterns</span>
+    <span class="section-label">14. Anti-Patterns</span>
     <h2>10 Things to Avoid</h2>
     <p class="section-context">From Codex research: failure modes seen across festival and nonprofit data architectures. Each annotated with OEFF's current exposure and mitigation.</p>
 
@@ -1358,7 +1447,7 @@
 
   <!-- ============================================ 14. CLEANUP ============================================ -->
   <section id="cleanup" class="report-section">
-    <span class="section-label">14. Cleanup Checklist</span>
+    <span class="section-label">15. Cleanup Checklist</span>
     <h2>Post-Architecture Cleanup</h2>
     <p class="section-context">Once Host Helper 2026 table exists and is validated, these legacy artifacts can be removed. The 29 rollup/formula fields on Venues are the biggest debt.</p>
     <ul class="checklist">
@@ -1380,7 +1469,7 @@
 
   <!-- ============================================ 15. TIMELINE ============================================ -->
   <section id="timeline" class="report-section">
-    <span class="section-label">15. Implementation Timeline</span>
+    <span class="section-label">16. Implementation Timeline</span>
     <h2>Path to March 20 Rollout</h2>
     <div class="timeline">
       <div class="timeline-item">
@@ -1424,7 +1513,7 @@
 
   <!-- ============================================ 16. HANDOFF ============================================ -->
   <section id="handoff" class="report-section">
-    <span class="section-label">16. Handoff Resilience</span>
+    <span class="section-label">17. Handoff Resilience</span>
     <h2>What Survives Without Garen or Kim</h2>
     <p class="section-context">OEFF's main risk is continuity, not database scale. The architecture should be self-documenting enough that a new contractor can operate it within a day.</p>
     <div class="compare-grid">
@@ -1474,7 +1563,7 @@
 
   <!-- ============================================ 17. SCALE ============================================ -->
   <section id="scale" class="report-section">
-    <span class="section-label">17. Scale Transitions</span>
+    <span class="section-label">18. Scale Transitions</span>
     <h2>When to Outgrow Airtable + Scripts</h2>
     <p class="section-context">At OEFF's current size (~30 events, ~16 films, small seasonal team), Airtable + scripts is the right core. Transition pressure appears when workforce complexity exceeds what one Airtable base can support &mdash; not when data grows.</p>
 
@@ -1494,7 +1583,7 @@
 
   <!-- ============================================ 18. OPEN QUESTIONS ============================================ -->
   <section id="questions" class="report-section">
-    <span class="section-label">18. Open Questions</span>
+    <span class="section-label">19. Open Questions</span>
     <h2>For Team Discussion</h2>
 
     <div class="question-card">
@@ -1524,10 +1613,14 @@
 
   <!-- ============================================ 19. SOURCES ============================================ -->
   <section id="sources" class="report-section">
-    <span class="section-label">19. Sources</span>
+    <span class="section-label">20. Sources</span>
     <h2>Research References</h2>
-    <p class="section-context">Codex deep research across 24 sources: film festivals, music festivals, CRMs, volunteer platforms, and event operations.</p>
+    <p class="section-context">Internal operational sources, Codex deep research across 24 external sources: film festivals, music festivals, CRMs, volunteer platforms, and event operations.</p>
     <ul class="source-list">
+      <li><strong>Kim's Host-Venue-Film Tracker</strong> &mdash; 5 tabs: Host-Venue-Film Link, Directory, Venues (56 cols), Films, Screenings (35 cols). Process knowledge built inside the work.</li>
+      <li><strong>Kim's Host Communications Tracker</strong> &mdash; 2 tabs: Host Communications (RACI ownership model), Host Engagements (webinars, recordings, decks).</li>
+      <li><strong>OEC Active Roadmap</strong> &mdash; 16 tabs spanning 2024&ndash;2026: HostVenues, Programs, EarthDayActionFair, LicenseInvoice, FinalData, Recordings, Honoraria, ProgPartners. The team's working document.</li>
+      <li>OEFF Airtable base &mdash; 16 active tables with relational links</li>
       <li>Tribeca dual-path submissions &mdash; tribecafilm.com/festival/submissions2025</li>
       <li>TIFF via FilmFreeway &mdash; filmfreeway.com/TIFF</li>
       <li>FilmFreeway festival workflows &mdash; filmfreeway.com/pages/how-it-works-for-festivals</li>
