@@ -478,6 +478,90 @@
     .timeline-date { font-family: var(--font-mono); font-size: 13px; color: var(--color-primary); font-weight: 600; }
     .timeline-content { font-size: 0.9375rem; color: var(--color-text-soft); margin-top: 2px; }
 
+    /* -- Concentric Ring Diagram -- */
+    .ring-diagram {
+      display: flex;
+      justify-content: center;
+      padding: var(--space-xl) 0;
+    }
+    .ring-container {
+      position: relative;
+      width: 640px;
+      height: 640px;
+    }
+    .ring {
+      position: absolute;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .ring-outer {
+      width: 640px; height: 640px;
+      top: 0; left: 0;
+      background: var(--color-surface-inset);
+      border: 2px solid var(--color-border);
+    }
+    .ring-mid {
+      width: 420px; height: 420px;
+      top: 110px; left: 110px;
+      background: var(--color-surface);
+      border: 2px solid var(--color-primary-light);
+    }
+    .ring-inner {
+      width: 200px; height: 200px;
+      top: 220px; left: 220px;
+      background: var(--color-primary-light);
+      border: 2px solid var(--color-primary);
+    }
+    .ring-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .ring-inner .ring-label { color: var(--color-primary-dark); }
+    .ring-mid .ring-label { color: var(--color-primary); }
+    .ring-outer .ring-label { color: var(--color-text-muted); }
+    .ring-entity {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--color-text);
+      display: block;
+      margin-top: 2px;
+    }
+    .ring-entities {
+      position: absolute;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--color-text-soft);
+      white-space: nowrap;
+    }
+    /* Positioned labels around the rings */
+    .entity-label {
+      position: absolute;
+      background: var(--color-surface-raised);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 4px 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      white-space: nowrap;
+      box-shadow: var(--shadow-soft);
+    }
+    .entity-label.canonical { border-color: var(--color-primary); color: var(--color-primary-dark); }
+    .entity-label.relational { border-color: var(--color-status-active); color: var(--color-status-active); }
+    .entity-label.output { border-color: var(--color-text-muted); color: var(--color-text-soft); }
+
+    /* Fallback for small screens — show list instead of rings */
+    .ring-fallback { display: none; }
+    @media (max-width: 768px) {
+      .ring-diagram { display: none; }
+      .ring-fallback { display: block; }
+    }
+
     /* -- Anti-pattern cards -- */
     .anti-pattern { background: var(--color-surface-raised); border: 1px solid var(--color-border); border-left: 3px solid var(--color-status-blocked); border-radius: var(--radius-md); padding: var(--space-md) var(--space-lg); margin-bottom: var(--space-sm); }
     .anti-pattern h3 { color: var(--color-status-blocked); }
@@ -545,7 +629,7 @@
   <header class="page-header">
     <span class="section-label">Architecture Map</span>
     <h1>OEFF Data Architecture v2</h1>
-    <p class="subtitle">Events as the relational key. Flat assembled tables. Unified directory. Script-owned data with Kim-editable overrides. Research-validated against 24 industry sources.</p>
+    <p class="subtitle">Events as the relational hub. Unified directory. Design-forward stakeholder outputs assembled from canonical data. Research-validated against 24 industry sources.</p>
     <div class="meta-bar">
       <span class="meta-item"><strong>Festival:</strong> April 22, 2026</span>
       <span class="meta-item"><strong>Host Helper rollout:</strong> March 20</span>
@@ -560,7 +644,7 @@
     <ol>
       <li><a href="#status">Data Completeness Dashboard</a></li>
       <li><a href="#team">The Team</a></li>
-      <li><a href="#hierarchy">Data Hierarchy</a></li>
+      <li><a href="#hierarchy">Data Architecture</a></li>
       <li><a href="#v1-v2">v1 vs v2 Architecture</a></li>
       <li><a href="#decisions">7 Architecture Decisions</a></li>
       <li><a href="#tables">Current Airtable Inventory</a></li>
@@ -624,39 +708,88 @@
     </div>
   </section>
 
-  <!-- ============================================ 03. HIERARCHY ============================================ -->
+  <!-- ============================================ 03. ARCHITECTURE ============================================ -->
   <section id="hierarchy" class="report-section">
-    <span class="section-label">03. Data Hierarchy</span>
-    <h2>Three-Layer Architecture</h2>
-    <p class="section-context">Kim's insight: "The most specific our data will ever get is by event." Master tables are persistent and year-over-year. The relational layer is season-specific. The assembled layer is script-generated and Kim-editable.</p>
-    <div class="hierarchy">
-      <pre><span class="layer-label">MASTER TABLES</span> <span class="annotation">(persistent, year-over-year)</span>
-  <span class="entity">Directory</span>     <span class="annotation">All people &mdash; one record per person, typed by role + priority</span>
-  <span class="entity">Venues</span>        <span class="annotation">Physical spaces &mdash; capacity, ADA, AV, address</span>
-  <span class="entity">Films</span>         <span class="annotation">Titles, runtimes, licensing terms</span>
-  <span class="entity">Members</span>       <span class="annotation">14k email list (separate from active partners)</span>
+    <span class="section-label">03. Data Architecture</span>
+    <h2>Not a Tree &mdash; A Hub with Rings</h2>
+    <p class="section-context">Kim's insight: "The most specific our data will ever get is by event." But the data isn't hierarchical &mdash; Directory links to Events, Venues, Films, Assets, and Deliverables. Assets link to Films AND Events AND Venues. Deliverables draw from multiple Assets. This is a directed graph with Events at the center, not a tree with a single root.</p>
 
-<span class="layer-label">RELATIONAL LAYER</span> <span class="annotation">(season-specific, event-linked)</span>
-  <span class="entity">Events</span>        <span class="annotation">Links a venue + film + contacts + date/time</span>
-    Screenings  <span class="annotation">(primary event type)</span>
-    Action Fairs, Panels, Concerts <span class="annotation">(future subtypes)</span>
+    <!-- Concentric ring diagram -->
+    <div class="ring-diagram" aria-hidden="true">
+      <div class="ring-container">
+        <!-- Outer ring: Stakeholder outputs -->
+        <div class="ring ring-outer">
+          <div style="position: absolute; top: 14px; left: 50%; transform: translateX(-50%);">
+            <span class="ring-label" style="color: var(--color-text-muted);">Stakeholder Outputs</span>
+          </div>
+        </div>
+        <!-- Mid ring: Relational + Tracking -->
+        <div class="ring ring-mid">
+          <div style="position: absolute; top: 14px; left: 50%; transform: translateX(-50%);">
+            <span class="ring-label">Relational + Tracking</span>
+          </div>
+        </div>
+        <!-- Inner ring: Core / Master -->
+        <div class="ring ring-inner">
+          <span class="ring-label" style="display: block;">Core</span>
+          <span class="ring-entity">Events</span>
+        </div>
 
-  <span class="entity">Assets</span>        <span class="annotation">Master index of all inbound/outbound/internal files</span>
-  <span class="entity">Asset Versions</span> <span class="annotation">QC history per file version</span>
-  <span class="entity">Deliverables</span>  <span class="annotation">Screening packets, guides, kits &mdash; linked to Events</span>
-  <span class="entity">Delivery Log</span>  <span class="annotation">Recipient-level tracking (who got what, when)</span>
-  <span class="entity">Comms Log</span>     <span class="annotation">Email outreach tracking, linked to Events + Directory</span>
+        <!-- Entity labels positioned around the rings -->
+        <!-- Core entities (inner ring edge) -->
+        <div class="entity-label canonical" style="top: 180px; left: -10px;">Directory</div>
+        <div class="entity-label canonical" style="top: 180px; right: -10px;">Venues</div>
+        <div class="entity-label canonical" style="top: 440px; left: 30px;">Films</div>
+        <div class="entity-label canonical" style="top: 440px; right: 30px;">Sponsors</div>
 
-<span class="layer-label">ASSEMBLED LAYER</span> <span class="annotation">(script-generated, Kim-editable)</span>
-  <span class="entity">Host Helper 2026</span>  <span class="annotation">28 flat rows with ~28 text/date/URL fields</span>
-    <span class="annotation">One row per event &rarr; one Interface Designer page per event</span>
+        <!-- Relational + tracking entities (mid ring) -->
+        <div class="entity-label relational" style="top: 120px; left: 180px;">Assets</div>
+        <div class="entity-label relational" style="top: 120px; right: 120px;">Deliverables</div>
+        <div class="entity-label relational" style="top: 490px; left: 120px;">Comms Log</div>
+        <div class="entity-label relational" style="top: 490px; right: 100px;">Delivery Log</div>
+        <div class="entity-label relational" style="top: 310px; left: 10px;">Packet QA</div>
+        <div class="entity-label relational" style="top: 310px; right: 10px;">Media Assets</div>
 
-<span class="layer-label">RESILIENCE LAYER</span> <span class="annotation">(operational infrastructure)</span>
-  <span class="entity">Routing Rules</span>  <span class="annotation">Encodes "where does this go?" in data</span>
-  <span class="entity">Integration Registry</span> <span class="annotation">Every script/sync: owner, schedule, failure mode</span></pre>
+        <!-- Stakeholder outputs (outer ring) -->
+        <div class="entity-label output" style="top: 40px; left: 50%; transform: translateX(-50%); margin-top: 20px;">Host Helper Pages</div>
+        <div class="entity-label output" style="bottom: 40px; left: 50%; transform: translateX(-50%);">Email Campaigns</div>
+        <div class="entity-label output" style="top: 50%; left: 20px; transform: translateY(-50%);">Filmmaker Kits</div>
+        <div class="entity-label output" style="top: 50%; right: 10px; transform: translateY(-50%);">Screening Packets</div>
+      </div>
     </div>
+
+    <!-- Fallback list for small screens -->
+    <div class="ring-fallback">
+      <div class="hierarchy">
+        <pre><span class="layer-label">CORE</span> <span class="annotation">(persistent, year-over-year)</span>
+  <span class="entity">Events</span>     <span class="annotation">The relational hub &mdash; everything links here</span>
+  <span class="entity">Directory</span>  <span class="annotation">All people, typed by role + priority</span>
+  <span class="entity">Venues</span>     <span class="annotation">Physical spaces</span>
+  <span class="entity">Films</span>      <span class="annotation">Titles, runtimes, licensing</span>
+  <span class="entity">Sponsors</span>   <span class="annotation">Orgs, tiers, commitments</span>
+
+<span class="layer-label">RELATIONAL + TRACKING</span> <span class="annotation">(season-specific, cross-linked)</span>
+  <span class="entity">Assets</span>         <span class="annotation">Inbound/outbound files &harr; Films, Events, Venues</span>
+  <span class="entity">Deliverables</span>   <span class="annotation">Packaged outputs &harr; Events, Assets (many:many)</span>
+  <span class="entity">Delivery Log</span>   <span class="annotation">Who got what &harr; Deliverables, Directory</span>
+  <span class="entity">Comms Log</span>      <span class="annotation">Outreach tracking &harr; Events, Directory</span>
+  <span class="entity">Packet QA</span>      <span class="annotation">Quality checks &harr; Events, Assets</span>
+  <span class="entity">Media Assets</span>   <span class="annotation">Posters, stills &harr; Events</span>
+
+<span class="layer-label">STAKEHOLDER OUTPUTS</span> <span class="annotation">(script-assembled, design-forward)</span>
+  <span class="entity">Host Helper Pages</span>   <span class="annotation">Per-event flat views for host venues</span>
+  <span class="entity">Screening Packets</span>   <span class="annotation">Bundled deliverables for day-of operations</span>
+  <span class="entity">Filmmaker Kits</span>      <span class="annotation">License docs, screening reports, press assets</span>
+  <span class="entity">Email Campaigns</span>     <span class="annotation">Mailmeteor merge data for host/filmmaker outreach</span>
+
+<span class="layer-label">RESILIENCE</span> <span class="annotation">(operational infrastructure)</span>
+  <span class="entity">Routing Rules</span>       <span class="annotation">Encodes "where does this go?" in data</span>
+  <span class="entity">Integration Registry</span> <span class="annotation">Every script/sync: owner, schedule, failure mode</span></pre>
+      </div>
+    </div>
+
     <div class="section-synthesis">
-      <strong>Why these layers:</strong> Master tables survive across festival years. The relational layer is rebuilt each season &mdash; and it includes not just Events but all the tracking that orbits them: assets, deliverables, delivery logs, and comms. Media packets, email outreach, screening packet QA &mdash; these are relational data linked to events and people, not a separate system. The assembled layer flattens everything into human-readable rows. The resilience layer makes routing and ownership visible in data instead of in one person's head.
+      <strong>Why rings, not a tree:</strong> A tree implies single-parent containment. OEFF's data has many-to-many cross-links &mdash; Directory connects to Events, Venues, Films, Assets, and Deliverables simultaneously. Assets link to Films AND Events AND Venues. The concentric ring model shows proximity to the core (Events) without forcing a false hierarchy. Data flows outward: core tables feed the relational/tracking layer, which feeds stakeholder-facing outputs (host pages, screening packets, filmmaker kits, email campaigns). Nothing flows back upstream.
     </div>
   </section>
 
@@ -685,7 +818,7 @@
           <li><strong>Organizing principle:</strong> Events</li>
           <li><strong>Host Helper:</strong> Per-event Interface Designer pages</li>
           <li><strong>Data chain:</strong> Flat text fields, script-assembled</li>
-          <li><strong>Kim's edit model:</strong> Edits flat fields directly</li>
+          <li><strong>Edit model:</strong> Team edits flat fields directly</li>
           <li><strong>Multi-event venues:</strong> One row per event &mdash; no ambiguity</li>
           <li><strong>Contacts:</strong> Unified Directory with role + priority</li>
           <li><strong>Debuggability:</strong> What you see is what's stored</li>
@@ -901,7 +1034,7 @@
   <section id="host-helper" class="report-section">
     <span class="section-label">08. Host Helper 2026</span>
     <h2>28-Field Flat Table Schema</h2>
-    <p class="section-context">One table, 28 rows (one per event), 28 fields. All text/date/URL types &mdash; no formulas, no rollups, no linked records. Created and maintained by <code>assemble-host-helper.py</code>.</p>
+    <p class="section-context">One stakeholder output: 28 rows (one per event), 28 fields. All text/date/URL types &mdash; no formulas, no rollups, no linked records. Script-assembled from canonical data, with protected fields for operational edits.</p>
     <div class="hierarchy">
       <pre><span class="layer-label">SCRIPT-OWNED FIELDS</span> <span class="annotation">(overwritten on every re-run)</span>
   Event Name, Event ID, Film Title, Film Runtime
@@ -921,8 +1054,8 @@
   <!-- ============================================ 09. OWNERSHIP ============================================ -->
   <section id="ownership" class="report-section">
     <span class="section-label">09. Field Ownership</span>
-    <h2>Script-Owned vs Kim-Editable</h2>
-    <p class="section-context">The assembly script overwrites 21 fields from canonical sources on every run. 7 fields are Kim's domain &mdash; the script reads existing values and preserves them.</p>
+    <h2>Script-Owned vs Team-Editable</h2>
+    <p class="section-context">The assembly script overwrites 21 fields from canonical sources on every run. 7 fields are reserved for operational edits (currently Kim's responsibility) &mdash; the script reads existing values and preserves them.</p>
     <div class="ownership-grid">
       <div class="ownership-col">
         <h3><span class="owner-chip owner-script">Script</span> 21 fields</h3>
@@ -936,13 +1069,13 @@
         </ul>
       </div>
       <div class="ownership-col">
-        <h3><span class="owner-chip owner-kim">Kim</span> 7 fields</h3>
+        <h3><span class="owner-chip owner-kim">Team</span> 7 fields</h3>
         <ul class="field-list">
           <li>Parking</li><li>Transit</li><li>WiFi</li><li>AV Notes</li>
           <li>Volunteer Needs</li><li>Screening Packet URL</li><li>Notes</li>
         </ul>
         <div class="section-synthesis" style="border-top: none; padding-top: 0; margin-top: var(--space-md);">
-          <strong>Contract:</strong> If Kim edits any of these 7 fields, re-running the script will not overwrite her changes. Script reads existing values first, only writes if blank.
+          <strong>Contract:</strong> Edits to these 7 fields are preserved across re-runs. The script reads existing values first, only writes if blank. This is what makes the stakeholder output safe for collaborative editing.
         </div>
       </div>
     </div>
@@ -1161,7 +1294,7 @@
     </div>
     <div class="anti-pattern">
       <h3>6. Silent bidirectional edits</h3>
-      <p class="mitigation"><strong>Risk:</strong> Two systems editing the same field without ownership rules. <strong>Mitigation:</strong> Script-owned vs Kim-editable split. Sync scripts have explicit direction.</p>
+      <p class="mitigation"><strong>Risk:</strong> Two systems editing the same field without ownership rules. <strong>Mitigation:</strong> Script-owned vs team-editable split. Sync scripts have explicit direction.</p>
     </div>
     <div class="anti-pattern">
       <h3>7. No version records for assets</h3>
