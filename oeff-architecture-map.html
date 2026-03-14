@@ -532,6 +532,15 @@
     .schema-table td:first-child { font-family: var(--font-mono); font-size: 13px; }
     .schema-table td:nth-child(2) { font-family: var(--font-mono); font-size: 12px; color: var(--color-text-muted); }
 
+    /* -- Ops Map badges -- */
+    .badge-platform { display: inline-block; font-family: var(--font-mono); font-size: 12px; padding: 2px 8px; border-radius: var(--radius-sm); background: var(--color-surface-inset); color: var(--color-text-soft); border: 1px solid var(--color-border); white-space: nowrap; }
+    .badge-yoy { background: var(--color-primary-light); color: var(--color-primary-dark); border-color: var(--color-primary); }
+    .badge-seasonal { background: var(--color-surface-raised); color: var(--color-text-soft); border-color: var(--color-border); }
+    .badge-central { background: var(--color-surface-inset); color: var(--color-primary-dark); }
+    .badge-personal { background: var(--color-surface-raised); color: var(--color-text-muted); border-style: dashed; }
+    .ops-subsection { margin-bottom: var(--space-lg); }
+    .ops-subsection h3 { margin-bottom: var(--space-sm); }
+
     /* -- Open Questions -- */
     .question-card {
       background: var(--color-surface-raised);
@@ -597,6 +606,7 @@
       <li><a href="#status">Data Completeness Dashboard</a></li>
       <li><a href="#team">The Team</a></li>
       <li><a href="#canonical-sources">Canonical Sources</a></li>
+      <li><a href="#ops-map">Operational Map</a></li>
       <li><a href="#hierarchy">Data Architecture</a></li>
       <li><a href="#v1-v2">v1 vs v2 Architecture</a></li>
       <li><a href="#decisions">7 Architecture Decisions</a></li>
@@ -735,9 +745,113 @@
     </div>
   </section>
 
-  <!-- ============================================ 04. ARCHITECTURE ============================================ -->
+  <!-- ============================================ 04. OPERATIONAL MAP ============================================ -->
+  <section id="ops-map" class="report-section">
+    <span class="section-label">04. Operational Map</span>
+    <h2>Where, When, Who, and What Persists</h2>
+    <p class="section-context">The architecture diagram shows data relationships. This section shows the operational reality: which platforms host what, when things get touched during the festival cycle, who (by role) owns what, and what carries forward year to year.</p>
+
+    <div class="ops-subsection">
+      <h3>Platform Map</h3>
+      <table class="team-table">
+        <thead><tr><th>System</th><th>What Lives There</th><th>Who Accesses</th><th>Centralized?</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Airtable</strong></td><td>Relational data: Events, Directory, Venues, Films, Sponsors, Host Helper, Deliverables, Assets, Comms Log, Host Confirmations, Webinar Content</td><td>Host Comms Coordinator, Technical Coordinator, Executive Director</td><td><span class="badge-platform badge-central">Centralized</span></td></tr>
+          <tr><td><strong>Google Sheets</strong> (Kim's trackers)</td><td>Validated operational data: host-venue-film links, directory, venues (56 cols), films, screenings, comms RACI, host engagements</td><td>Host Comms Coordinator (primary), Technical Coordinator (sync)</td><td><span class="badge-platform badge-personal">Personal &rarr; Team</span></td></tr>
+          <tr><td><strong>Google Sheets</strong> (OEC Roadmap)</td><td>Team planning: venue schedule, programming, action fairs, licensing, partner pipeline. 3 years of history.</td><td>Entire team</td><td><span class="badge-platform badge-central">Centralized</span></td></tr>
+          <tr><td><strong>Google Drive</strong> (OEC)</td><td>Film screening copies, press kits, slide decks, meeting recordings, webinar decks, host logos, marketing assets</td><td>Entire team (varied access)</td><td><span class="badge-platform badge-central">Centralized</span></td></tr>
+          <tr><td><strong>Eventbrite</strong></td><td>Ticketing: 14+ published events, access codes, tax settings, attendee data</td><td>Digital Communications (primary), Technical Coordinator (batch ops)</td><td><span class="badge-platform badge-central">Centralized</span></td></tr>
+          <tr><td><strong>Cloudflare Pages</strong></td><td>Host guide site (hosts.oneearthfilmfest.org). Git-connected, auto-deploys on push.</td><td>Technical Coordinator (deploy), Host Comms Coordinator (content input)</td><td><span class="badge-platform badge-central">Centralized</span></td></tr>
+          <tr><td><strong>GitHub</strong></td><td>Scripts, sync tooling, architecture decisions, host guide source</td><td>Technical Coordinator</td><td><span class="badge-platform badge-personal">Personal infra</span></td></tr>
+          <tr><td><strong>Mailchimp / Mailmeteor</strong></td><td>14k member list, host/filmmaker outreach campaigns, merge data</td><td>Host Comms Coordinator, Digital Communications</td><td><span class="badge-platform badge-central">Centralized</span></td></tr>
+          <tr><td><strong>Google Forms</strong></td><td>Host intake form, film intake survey</td><td>Host Comms Coordinator (admin), Technical Coordinator (data routing)</td><td><span class="badge-platform badge-central">Centralized</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ops-subsection">
+      <h3>Festival Cycle &mdash; When Things Get Worked On</h3>
+      <table class="team-table">
+        <thead><tr><th>Phase</th><th>Timeframe</th><th>What Happens to the Data</th><th>Active Platforms</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Off-season</strong></td><td>May&ndash;October</td><td>Season closeout. Archive current data. Review what worked. Build or improve tooling. Minimal team activity.</td><td>Google Drive (archival), GitHub (tooling)</td></tr>
+          <tr><td><strong>Planning</strong></td><td>November&ndash;January</td><td>Film selection begins. Venue outreach starts. Host partnerships renewed or recruited. Roadmap populated.</td><td>OEC Roadmap, Google Forms (intake), Airtable (scaffolding)</td></tr>
+          <tr><td><strong>Build-out</strong></td><td>February&ndash;March</td><td>Events table populated. Host Helper assembled. Eventbrite events created. Comms campaigns drafted. Assets start flowing in from filmmakers.</td><td>All platforms active. Kim's trackers + Airtable + Eventbrite + Drive</td></tr>
+          <tr><td><strong>Crunch</strong></td><td>April 1&ndash;21</td><td>Schema frozen (April 11). Data entry finalized. Screening packets assembled. Host confirmations chased. Last-minute film swaps.</td><td>Airtable (edits only), Eventbrite (final), Google Drive (packets)</td></tr>
+          <tr><td><strong>Festival week</strong></td><td>April 22&ndash;27</td><td>Read-only for most data. Day-of operational edits only (cancellations, schedule shifts). Host-facing pages live.</td><td>Host guide (read), Eventbrite (live), Airtable (emergency edits only)</td></tr>
+          <tr><td><strong>Wind-down</strong></td><td>April 28&ndash;May</td><td>Post-festival reporting. Filmmaker screening reports. Host thank-yous. Attendance data collected. Season close-out.</td><td>Airtable (reporting views), Google Sheets (final data), Drive (archives)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ops-subsection">
+      <h3>Role-Based Ownership</h3>
+      <p class="section-context" style="margin-bottom: var(--space-sm);">Who touches what, by role rather than name. Roles outlast individuals &mdash; this is the ownership map that survives turnover.</p>
+      <table class="team-table">
+        <thead><tr><th>Role</th><th>Creates / Owns</th><th>Edits / Maintains</th><th>Reads / Consumes</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Executive Director</strong></td><td>Greenlights (film selection, venue approval, budget)</td><td>Roadmap (strategic decisions)</td><td>All reporting views, host guide</td></tr>
+          <tr><td><strong>Technical Coordinator</strong></td><td>Scripts, sync pipelines, Airtable schema, host guide, architecture decisions</td><td>Events table, script-owned fields (21 in Host Helper), Eventbrite batch ops</td><td>Kim's trackers (as import source), all Airtable tables</td></tr>
+          <tr><td><strong>Host Comms Coordinator</strong></td><td>Kim's tracker sheets, comms campaigns, host intake process</td><td>Team-editable fields (7 in Host Helper), directory contacts, venue details, comms log</td><td>Host guide pages, Eventbrite links, screening packets</td></tr>
+          <tr><td><strong>Digital Communications</strong></td><td>Eventbrite events, newsletter content, social media</td><td>Ticketing settings, access codes, published event details</td><td>Roadmap (schedule), Airtable (film/venue data for marketing)</td></tr>
+          <tr><td><strong>Creative Assets</strong></td><td>Slide decks, screening experiential flow, video production</td><td>Creative assets in Drive, presenter guides</td><td>Film screening copies, venue AV specs</td></tr>
+          <tr><td><strong>Development</strong></td><td>Sponsor relationships, grant applications</td><td>Sponsors table</td><td>Budget views, event schedule</td></tr>
+          <tr><td><strong>Marketing/Creative</strong></td><td>Brand assets, social content, press materials</td><td>Marketing assets in Drive</td><td>Film metadata, venue photos, event schedule</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ops-subsection">
+      <h3>What Persists Year-Over-Year</h3>
+      <table class="team-table">
+        <thead><tr><th>Entity / System</th><th>Lifespan</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Directory</strong> (people)</td><td><span class="badge-platform badge-yoy">Year-over-year</span></td><td>Contacts persist. Roles may change between seasons (filmmaker one year, panelist the next).</td></tr>
+          <tr><td><strong>Venues</strong></td><td><span class="badge-platform badge-yoy">Year-over-year</span></td><td>Physical spaces don't change. AV specs, accessibility data, capacity &mdash; all persistent. Contact person may rotate.</td></tr>
+          <tr><td><strong>Films</strong></td><td><span class="badge-platform badge-yoy">Year-over-year</span></td><td>Film records persist (a film may screen again). Licensing terms are season-specific.</td></tr>
+          <tr><td><strong>Sponsors</strong></td><td><span class="badge-platform badge-yoy">Year-over-year</span></td><td>Org records persist. Tier and commitment are season-specific.</td></tr>
+          <tr><td><strong>OEC Roadmap</strong></td><td><span class="badge-platform badge-yoy">Year-over-year</span></td><td>New tabs added per year. Old tabs become archive. Never deleted &mdash; historical reference.</td></tr>
+          <tr><td><strong>Events</strong></td><td><span class="badge-platform badge-seasonal">Seasonal</span></td><td>Created fresh each year. Link to persistent venues + films + contacts.</td></tr>
+          <tr><td><strong>Host Helper tables</strong></td><td><span class="badge-platform badge-seasonal">Seasonal</span></td><td>Rebuilt by script each season. 2025 tables archived, 2026 tables assembled.</td></tr>
+          <tr><td><strong>Eventbrite events</strong></td><td><span class="badge-platform badge-seasonal">Seasonal</span></td><td>New events per year. Prior year events archived (read-only).</td></tr>
+          <tr><td><strong>Comms campaigns</strong></td><td><span class="badge-platform badge-seasonal">Seasonal</span></td><td>New campaigns each year. Templates may carry over. RACI structure persists as pattern.</td></tr>
+          <tr><td><strong>Assets + Deliverables</strong></td><td><span class="badge-platform badge-seasonal">Seasonal</span></td><td>Screening copies, packets, kits &mdash; all season-specific. Some marketing assets reused.</td></tr>
+          <tr><td><strong>Kim's tracker sheets</strong></td><td><span class="badge-platform badge-seasonal">Seasonal</span></td><td>New sheets per year. Structure carries forward (template). Content is fresh.</td></tr>
+          <tr><td><strong>Scripts + tooling</strong></td><td><span class="badge-platform badge-yoy">Year-over-year</span></td><td>Maintained by Technical Coordinator. Updated between seasons. Versioned in git.</td></tr>
+          <tr><td><strong>Host guide site</strong></td><td><span class="badge-platform badge-yoy">Year-over-year</span></td><td>Infrastructure persists. Content updated per season. URL stays stable.</td></tr>
+          <tr><td><strong>Architecture decisions</strong></td><td><span class="badge-platform badge-yoy">Year-over-year</span></td><td>Git-backed markdown in ~/decisions/. Rationale persists even if implementation changes.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ops-subsection">
+      <h3>Centralized vs. Personal</h3>
+      <p class="section-context" style="margin-bottom: var(--space-sm);">Some systems are team-visible; others live on one person's machine or account. This matters for handoff resilience &mdash; if the person leaves, does the data leave too?</p>
+      <table class="team-table">
+        <thead><tr><th>System</th><th>Access Model</th><th>Handoff Risk</th></tr></thead>
+        <tbody>
+          <tr><td>Airtable base</td><td><span class="badge-platform badge-central">Centralized</span> &mdash; OEC account, multi-user</td><td>Low. Base persists in org account.</td></tr>
+          <tr><td>OEC Active Roadmap</td><td><span class="badge-platform badge-central">Centralized</span> &mdash; OEC Google Workspace</td><td>Low. Shared across team.</td></tr>
+          <tr><td>Google Drive (OEC)</td><td><span class="badge-platform badge-central">Centralized</span> &mdash; OEC Google Workspace</td><td>Low. Film files, decks, recordings accessible to team.</td></tr>
+          <tr><td>Eventbrite</td><td><span class="badge-platform badge-central">Centralized</span> &mdash; OEC account</td><td>Low. Org account, multiple admins.</td></tr>
+          <tr><td>Kim's tracker sheets</td><td><span class="badge-platform badge-personal">Personal &rarr; Team</span> &mdash; shared from personal account</td><td>Medium. Currently in Kim's Drive. Should be copied to OEC workspace for persistence.</td></tr>
+          <tr><td>Sync scripts + tooling</td><td><span class="badge-platform badge-personal">Personal infra</span> &mdash; Technical Coordinator's machine</td><td>High. Git-versioned but lives on one machine. No CI/CD. No shared access to credentials.</td></tr>
+          <tr><td>Host guide deployment</td><td><span class="badge-platform badge-personal">Personal infra</span> &mdash; Cloudflare account (Technical Coordinator)</td><td>High. Cloudflare account is personal. Domain DNS depends on this.</td></tr>
+          <tr><td>Eventbrite batch scripts</td><td><span class="badge-platform badge-personal">Personal infra</span> &mdash; API tokens on one machine</td><td>High. API keys in Technical Coordinator's environment only.</td></tr>
+          <tr><td>Architecture decisions</td><td><span class="badge-platform badge-personal">Personal infra</span> &mdash; git repo on one machine</td><td>Medium. Git-versioned, pushed to GitHub. Readable but not team-discovered.</td></tr>
+          <tr><td>Email pipelines (triage, sync)</td><td><span class="badge-platform badge-personal">Personal infra</span> &mdash; IMAP tokens, cron jobs</td><td>High. Entirely on Technical Coordinator's machine. No failover.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-synthesis">
+      <strong>The handoff pattern:</strong> Centralized platforms (Airtable, Drive, Roadmap, Eventbrite) survive role changes. Personal infrastructure (scripts, deployment, API tokens, email pipelines) is the fragile layer. The Integration Registry and Routing Rules tables proposed in the architecture are designed to make this personal infrastructure legible &mdash; not to centralize it overnight, but to document what exists so a successor can find it.
+    </div>
+  </section>
+
+  <!-- ============================================ 05. ARCHITECTURE ============================================ -->
   <section id="hierarchy" class="report-section">
-    <span class="section-label">04. Data Architecture</span>
+    <span class="section-label">05. Data Architecture</span>
     <h2>Not a Tree &mdash; A Hub with Rings</h2>
     <p class="section-context">Kim's insight: "The most specific our data will ever get is by event." But the data isn't hierarchical &mdash; Directory links to Events, Venues, Films, Assets, and Deliverables. Assets link to Films AND Events AND Venues. Deliverables draw from multiple Assets. This is a directed graph with Events at the center, not a tree with a single root.</p>
 
@@ -912,7 +1026,7 @@
 
   <!-- ============================================ 04. v1 vs v2 ============================================ -->
   <section id="v1-v2" class="report-section">
-    <span class="section-label">05. Architecture Comparison</span>
+    <span class="section-label">06. Architecture Comparison</span>
     <h2>v1 (Venue-Centric) vs v2 (Event-Centric)</h2>
     <p class="section-context">The March 13 meeting surfaced why the venue-centric model broke: multi-event venues produced concatenated values, rollup chains were uneditable, and formula fields obscured what was actually stored.</p>
     <div class="compare-grid">
@@ -950,7 +1064,7 @@
 
   <!-- ============================================ 05. DECISIONS ============================================ -->
   <section id="decisions" class="report-section">
-    <span class="section-label">06. Architecture Decisions</span>
+    <span class="section-label">07. Architecture Decisions</span>
     <h2>7 Decisions from March 13 Meeting</h2>
     <p class="section-context">Kim and Garen's 63-minute call produced 7 foundational decisions. These reshape how every downstream tool &mdash; Host Helper, sync scripts, merge sheets &mdash; relates to the data.</p>
     <div class="decision-grid">
@@ -997,7 +1111,7 @@
 
   <!-- ============================================ 06. INVENTORY ============================================ -->
   <section id="tables" class="report-section">
-    <span class="section-label">07. Current Airtable Inventory</span>
+    <span class="section-label">08. Current Airtable Inventory</span>
     <h2>16 Active Tables</h2>
     <p class="section-context">Full inventory from <code>assemble-host-helper.py --inventory</code>. Base ID: <code>app9DymWrbAQaHH0K</code>. Zero empty shell tables found.</p>
     <div class="table-grid">
@@ -1105,7 +1219,7 @@
 
   <!-- ============================================ 07. DATA FLOW ============================================ -->
   <section id="flow" class="report-section">
-    <span class="section-label">08. Data Flow</span>
+    <span class="section-label">09. Data Flow</span>
     <h2>Pipeline Architecture</h2>
     <p class="section-context">Three canonical sources feed the system. Kim's tracker sheets carry process knowledge and validated operational data. The OEC Active Roadmap carries team-facing planning decisions. Airtable holds relational structure. Scripts bridge all three.</p>
     <div class="flow-container">
@@ -1163,7 +1277,7 @@
 
   <!-- ============================================ 08. HOST HELPER SCHEMA ============================================ -->
   <section id="host-helper" class="report-section">
-    <span class="section-label">09. Host Helper 2026</span>
+    <span class="section-label">10. Host Helper 2026</span>
     <h2>28-Field Flat Table Schema</h2>
     <p class="section-context">One stakeholder output: 28 rows (one per event), 28 fields. All text/date/URL types &mdash; no formulas, no rollups, no linked records. Script-assembled from canonical data, with protected fields for operational edits.</p>
     <div class="hierarchy">
@@ -1184,7 +1298,7 @@
 
   <!-- ============================================ 09. OWNERSHIP ============================================ -->
   <section id="ownership" class="report-section">
-    <span class="section-label">10. Field Ownership</span>
+    <span class="section-label">11. Field Ownership</span>
     <h2>Script-Owned vs Team-Editable</h2>
     <p class="section-context">The assembly script overwrites 21 fields from canonical sources on every run. 7 fields are reserved for operational edits (currently Kim's responsibility) &mdash; the script reads existing values and preserves them.</p>
     <div class="ownership-grid">
@@ -1214,7 +1328,7 @@
 
   <!-- ============================================ 10. DIRECTORY ============================================ -->
   <section id="directory" class="report-section">
-    <span class="section-label">11. Unified Directory</span>
+    <span class="section-label">12. Unified Directory</span>
     <h2>Directory Table Design</h2>
     <p class="section-context">Replaces Host Contacts (52 records) + Film Contacts (14 records) with one table. ~66 records with deduplication. A person who is both a host contact and a panelist gets one record with multiple roles.</p>
     <div class="hierarchy">
@@ -1240,7 +1354,7 @@
 
   <!-- ============================================ 11. ASSET LAYER ============================================ -->
   <section id="asset-layer" class="report-section">
-    <span class="section-label">12. Asset + Delivery Tracking</span>
+    <span class="section-label">13. Asset + Delivery Tracking</span>
     <h2>Relational Tables for Media, Outreach, and QA</h2>
     <p class="section-context">These aren't a separate system &mdash; they're relational data that links to Events, Films, and Directory just like everything else. Media packets, email outreach logs, screening packet QA, and delivery confirmations all live in this layer. Some tables already exist (Deliverables, Event Media Assets, Packet QA, Comms Log). The blueprint below fills the remaining gaps.</p>
 
@@ -1339,7 +1453,7 @@
 
   <!-- ============================================ 12. PATTERNS ============================================ -->
   <section id="patterns" class="report-section">
-    <span class="section-label">13. Industry Patterns</span>
+    <span class="section-label">14. Industry Patterns</span>
     <h2>8 Patterns from Codex Research</h2>
     <p class="section-context">Cross-referenced against TIFF, Tribeca, Eventival/Eventive, Salesforce NPSP, HubSpot, VolunteerHub, Better Impact, and Eventbrite. Each pattern maps to OEFF's current or target architecture.</p>
     <div class="pattern-grid">
@@ -1399,7 +1513,7 @@
 
   <!-- ============================================ 13. ANTI-PATTERNS ============================================ -->
   <section id="anti-patterns" class="report-section">
-    <span class="section-label">14. Anti-Patterns</span>
+    <span class="section-label">15. Anti-Patterns</span>
     <h2>10 Things to Avoid</h2>
     <p class="section-context">From Codex research: failure modes seen across festival and nonprofit data architectures. Each annotated with OEFF's current exposure and mitigation.</p>
 
@@ -1447,7 +1561,7 @@
 
   <!-- ============================================ 14. CLEANUP ============================================ -->
   <section id="cleanup" class="report-section">
-    <span class="section-label">15. Cleanup Checklist</span>
+    <span class="section-label">16. Cleanup Checklist</span>
     <h2>Post-Architecture Cleanup</h2>
     <p class="section-context">Once Host Helper 2026 table exists and is validated, these legacy artifacts can be removed. The 29 rollup/formula fields on Venues are the biggest debt.</p>
     <ul class="checklist">
@@ -1469,7 +1583,7 @@
 
   <!-- ============================================ 15. TIMELINE ============================================ -->
   <section id="timeline" class="report-section">
-    <span class="section-label">16. Implementation Timeline</span>
+    <span class="section-label">17. Implementation Timeline</span>
     <h2>Path to March 20 Rollout</h2>
     <div class="timeline">
       <div class="timeline-item">
@@ -1513,7 +1627,7 @@
 
   <!-- ============================================ 16. HANDOFF ============================================ -->
   <section id="handoff" class="report-section">
-    <span class="section-label">17. Handoff Resilience</span>
+    <span class="section-label">18. Handoff Resilience</span>
     <h2>What Survives Without Garen or Kim</h2>
     <p class="section-context">OEFF's main risk is continuity, not database scale. The architecture should be self-documenting enough that a new contractor can operate it within a day.</p>
     <div class="compare-grid">
@@ -1563,7 +1677,7 @@
 
   <!-- ============================================ 17. SCALE ============================================ -->
   <section id="scale" class="report-section">
-    <span class="section-label">18. Scale Transitions</span>
+    <span class="section-label">19. Scale Transitions</span>
     <h2>When to Outgrow Airtable + Scripts</h2>
     <p class="section-context">At OEFF's current size (~30 events, ~16 films, small seasonal team), Airtable + scripts is the right core. Transition pressure appears when workforce complexity exceeds what one Airtable base can support &mdash; not when data grows.</p>
 
@@ -1583,7 +1697,7 @@
 
   <!-- ============================================ 18. OPEN QUESTIONS ============================================ -->
   <section id="questions" class="report-section">
-    <span class="section-label">19. Open Questions</span>
+    <span class="section-label">20. Open Questions</span>
     <h2>For Team Discussion</h2>
 
     <div class="question-card">
@@ -1613,7 +1727,7 @@
 
   <!-- ============================================ 19. SOURCES ============================================ -->
   <section id="sources" class="report-section">
-    <span class="section-label">20. Sources</span>
+    <span class="section-label">21. Sources</span>
     <h2>Research References</h2>
     <p class="section-context">Internal operational sources, Codex deep research across 24 external sources: film festivals, music festivals, CRMs, volunteer platforms, and event operations.</p>
     <ul class="source-list">
@@ -1636,6 +1750,7 @@
       <li>CES conference program &mdash; ces.tech/attend/conference-program/</li>
       <li>Festival Scope + Shift72 &mdash; pro.festivalscope.com</li>
       <li>Sundance volunteer ops &mdash; staff.sundance.org/hub/volunteer-scheduling/</li>
+      <li><strong>OEFF Data Architecture Spec &mdash; Research-Informed</strong> &mdash; team-facing doc synthesizing all patterns + recommendations</li>
       <li>OEFF Data Architecture Spec v2 (March 13, 2026)</li>
       <li>OEFF "Who Does What" (Feb 2026)</li>
     </ul>
