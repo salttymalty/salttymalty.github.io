@@ -174,6 +174,7 @@
       margin-bottom: var(--space-section);
     }
 
+    a { color: var(--color-primary-deep); }
     a:focus, button:focus, [tabindex]:focus {
       outline: 2px solid var(--color-accent);
       outline-offset: 3px;
@@ -229,10 +230,13 @@
       list-style: none;
       counter-reset: toc-counter;
       padding-left: 0;
+      columns: 2;
+      column-gap: var(--space-xl);
     }
     .toc li {
       counter-increment: toc-counter;
       margin-bottom: var(--space-xs);
+      break-inside: avoid;
     }
     .toc li::before {
       content: counter(toc-counter, decimal-leading-zero) ".";
@@ -279,7 +283,7 @@
       font-weight: 400;
     }
 
-    /* -- Compare Columns (v1 vs v2) -- */
+    /* -- Compare Columns -- */
     .compare-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -299,9 +303,7 @@
       background: var(--color-compare-new-bg);
       border-left: 3px solid var(--color-compare-new);
     }
-    .compare-col h3 {
-      margin-bottom: var(--space-sm);
-    }
+    .compare-col h3 { margin-bottom: var(--space-sm); }
     .compare-list {
       list-style: none;
       padding: 0;
@@ -311,11 +313,9 @@
       border-bottom: 1px solid var(--color-border);
       font-size: 0.9375rem;
     }
-    .compare-list li:last-child {
-      border-bottom: none;
-    }
+    .compare-list li:last-child { border-bottom: none; }
 
-    /* -- Table Cards -- */
+    /* -- Table / Card Grids -- */
     .table-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -362,22 +362,10 @@
       border-radius: var(--radius-sm);
       margin-top: var(--space-xs);
     }
-    .role-canonical {
-      background: var(--color-primary-light);
-      color: var(--color-primary-dark);
-    }
-    .role-assembled {
-      background: var(--color-surface-inset);
-      color: var(--color-text-soft);
-    }
-    .role-operations {
-      background: var(--color-surface-inset);
-      color: var(--color-status-active);
-    }
-    .role-new {
-      background: var(--color-primary-light);
-      color: var(--color-status-done);
-    }
+    .role-canonical { background: var(--color-primary-light); color: var(--color-primary-dark); }
+    .role-assembled { background: var(--color-surface-inset); color: var(--color-text-soft); }
+    .role-operations { background: var(--color-surface-inset); color: var(--color-status-active); }
+    .role-new { background: var(--color-primary-light); color: var(--color-status-done); }
 
     /* -- Data Flow -- */
     .flow-container {
@@ -403,31 +391,11 @@
       font-size: 13px;
       white-space: nowrap;
     }
-    .flow-node.canonical {
-      background: var(--color-primary-light);
-      border-color: var(--color-primary);
-      color: var(--color-primary-dark);
-      font-weight: 600;
-    }
-    .flow-node.assembled {
-      border-color: var(--color-status-active);
-      color: var(--color-status-active);
-      font-weight: 600;
-    }
-    .flow-node.output {
-      border-color: var(--color-status-done);
-      color: var(--color-status-done);
-      font-weight: 600;
-    }
-    .flow-arrow {
-      font-size: 1.25rem;
-      color: var(--color-text-muted);
-    }
-    .flow-arrow-label {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      color: var(--color-text-muted);
-    }
+    .flow-node.canonical { background: var(--color-primary-light); border-color: var(--color-primary); color: var(--color-primary-dark); font-weight: 600; }
+    .flow-node.assembled { border-color: var(--color-status-active); color: var(--color-status-active); font-weight: 600; }
+    .flow-node.output { border-color: var(--color-status-done); color: var(--color-status-done); font-weight: 600; }
+    .flow-arrow { font-size: 1.25rem; color: var(--color-text-muted); }
+    .flow-arrow-label { font-family: var(--font-mono); font-size: 12px; color: var(--color-text-muted); }
 
     /* -- Decision Cards -- */
     .decision-grid {
@@ -442,20 +410,9 @@
       border-radius: var(--radius-md);
       padding: var(--space-lg);
     }
-    .decision-card .decision-number {
-      font-family: var(--font-mono);
-      font-size: 13px;
-      color: var(--color-primary);
-      font-weight: 600;
-    }
-    .decision-card h3 {
-      margin-top: var(--space-xs);
-    }
-    .decision-card .detail {
-      font-size: 0.9375rem;
-      color: var(--color-text-soft);
-      margin-top: var(--space-xs);
-    }
+    .decision-card .decision-number { font-family: var(--font-mono); font-size: 13px; color: var(--color-primary); font-weight: 600; }
+    .decision-card h3 { margin-top: var(--space-xs); }
+    .decision-card .detail { font-size: 0.9375rem; color: var(--color-text-soft); margin-top: var(--space-xs); }
     .decision-card blockquote {
       font-family: var(--font-body);
       font-style: italic;
@@ -466,7 +423,7 @@
       font-size: 0.9375rem;
     }
 
-    /* -- Pattern Cards (Codex) -- */
+    /* -- Pattern Cards -- */
     .pattern-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -478,208 +435,91 @@
       border-radius: var(--radius-md);
       padding: var(--space-lg);
     }
-    .pattern-card .pattern-number {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      color: var(--color-primary);
-      font-weight: 600;
-      letter-spacing: 0.05em;
-    }
-    .pattern-card h3 {
-      margin-top: var(--space-xs);
-    }
-    .pattern-card .evidence {
-      font-size: 0.9375rem;
-      color: var(--color-text-muted);
-      margin-top: var(--space-xs);
-    }
+    .pattern-card .pattern-number { font-family: var(--font-mono); font-size: 12px; color: var(--color-primary); font-weight: 600; letter-spacing: 0.05em; }
+    .pattern-card h3 { margin-top: var(--space-xs); }
+    .pattern-card .evidence { font-size: 0.9375rem; color: var(--color-text-muted); margin-top: var(--space-xs); }
     .oeff-alignment {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--color-status-done);
-      margin-top: var(--space-sm);
-      display: inline-block;
-      background: var(--color-surface-inset);
-      padding: 2px 8px;
-      border-radius: var(--radius-sm);
+      font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+      color: var(--color-status-done); margin-top: var(--space-sm);
+      display: inline-block; background: var(--color-surface-inset);
+      padding: 2px 8px; border-radius: var(--radius-sm);
     }
 
     /* -- Field Ownership -- */
-    .ownership-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-lg);
-    }
-    .ownership-col {
-      background: var(--color-surface-raised);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-md);
-      padding: var(--space-lg);
-    }
-    .field-list {
-      list-style: none;
-      padding: 0;
-    }
-    .field-list li {
-      font-family: var(--font-mono);
-      font-size: 13px;
-      padding: 4px 0;
-      border-bottom: 1px solid var(--color-surface-inset);
-    }
+    .ownership-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg); }
+    .ownership-col { background: var(--color-surface-raised); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-lg); }
+    .field-list { list-style: none; padding: 0; }
+    .field-list li { font-family: var(--font-mono); font-size: 13px; padding: 4px 0; border-bottom: 1px solid var(--color-surface-inset); }
     .field-list li:last-child { border-bottom: none; }
-    .owner-chip {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      padding: 2px 8px;
-      border-radius: var(--radius-sm);
-    }
-    .owner-script {
-      background: var(--color-primary-light);
-      color: var(--color-primary-dark);
-    }
-    .owner-kim {
-      background: var(--color-surface-inset);
-      color: var(--color-status-active);
-    }
+    .owner-chip { font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; padding: 2px 8px; border-radius: var(--radius-sm); }
+    .owner-script { background: var(--color-primary-light); color: var(--color-primary-dark); }
+    .owner-kim { background: var(--color-surface-inset); color: var(--color-status-active); }
 
     /* -- Status Bar -- */
-    .status-bar {
-      display: flex;
-      gap: var(--space-md);
-      flex-wrap: wrap;
-      margin-bottom: var(--space-lg);
-    }
-    .status-item {
-      background: var(--color-surface-raised);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-md);
-      padding: var(--space-md) var(--space-lg);
-      text-align: center;
-      min-width: 120px;
-    }
-    .status-item .number {
-      font-family: var(--font-display);
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--color-primary-dark);
-      line-height: 1;
-    }
-    .status-item .label {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      color: var(--color-text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-top: 4px;
-    }
+    .status-bar { display: flex; gap: var(--space-md); flex-wrap: wrap; margin-bottom: var(--space-lg); }
+    .status-item { background: var(--color-surface-raised); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-md) var(--space-lg); text-align: center; min-width: 120px; }
+    .status-item .number { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--color-primary-dark); line-height: 1; }
+    .status-item .label { font-family: var(--font-mono); font-size: 12px; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; }
 
-    /* -- Cleanup Checklist -- */
-    .checklist {
-      list-style: none;
-      padding: 0;
-    }
-    .checklist li {
-      padding: var(--space-xs) 0;
-      border-bottom: 1px solid var(--color-surface-inset);
-      display: flex;
-      align-items: center;
-      gap: var(--space-sm);
-    }
+    /* -- Checklists -- */
+    .checklist { list-style: none; padding: 0; }
+    .checklist li { padding: var(--space-xs) 0; border-bottom: 1px solid var(--color-surface-inset); display: flex; align-items: center; gap: var(--space-sm); }
     .checklist li:last-child { border-bottom: none; }
-    .check-status {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: var(--radius-sm);
-      white-space: nowrap;
-    }
-    .check-done {
-      background: var(--color-surface-inset);
-      color: var(--color-status-done);
-    }
-    .check-pending {
-      background: var(--color-surface-inset);
-      color: var(--color-status-planned);
-    }
-    .check-blocked {
-      background: var(--color-surface-inset);
-      color: var(--color-status-blocked);
-    }
+    .check-status { font-family: var(--font-mono); font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: var(--radius-sm); white-space: nowrap; }
+    .check-done { background: var(--color-surface-inset); color: var(--color-status-done); }
+    .check-pending { background: var(--color-surface-inset); color: var(--color-status-planned); }
+    .check-blocked { background: var(--color-surface-inset); color: var(--color-status-blocked); }
 
     /* -- Timeline -- */
-    .timeline {
-      position: relative;
-      padding-left: var(--space-xl);
-    }
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 8px;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: var(--color-border);
-    }
-    .timeline-item {
-      position: relative;
-      margin-bottom: var(--space-lg);
-    }
-    .timeline-item::before {
-      content: '';
-      position: absolute;
-      left: calc(-1 * var(--space-xl) + 4px);
-      top: 6px;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--color-primary);
-      border: 2px solid var(--color-surface);
-    }
-    .timeline-date {
-      font-family: var(--font-mono);
-      font-size: 13px;
-      color: var(--color-primary);
-      font-weight: 600;
-    }
-    .timeline-content {
-      font-size: 0.9375rem;
-      color: var(--color-text-soft);
-      margin-top: 2px;
-    }
+    .timeline { position: relative; padding-left: var(--space-xl); }
+    .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--color-border); }
+    .timeline-item { position: relative; margin-bottom: var(--space-lg); }
+    .timeline-item::before { content: ''; position: absolute; left: calc(-1 * var(--space-xl) + 4px); top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--color-primary); border: 2px solid var(--color-surface); }
+    .timeline-date { font-family: var(--font-mono); font-size: 13px; color: var(--color-primary); font-weight: 600; }
+    .timeline-content { font-size: 0.9375rem; color: var(--color-text-soft); margin-top: 2px; }
 
     /* -- Anti-pattern cards -- */
-    .anti-pattern {
+    .anti-pattern { background: var(--color-surface-raised); border: 1px solid var(--color-border); border-left: 3px solid var(--color-status-blocked); border-radius: var(--radius-md); padding: var(--space-md) var(--space-lg); margin-bottom: var(--space-sm); }
+    .anti-pattern h3 { color: var(--color-status-blocked); }
+    .anti-pattern .mitigation { font-size: 0.9375rem; color: var(--color-text-soft); margin-top: var(--space-xs); }
+
+    /* -- Team Table -- */
+    .team-table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--color-border); margin-bottom: var(--space-lg); }
+    .team-table th { font-family: var(--font-mono); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-primary); background: var(--color-surface-inset); padding: var(--space-sm) var(--space-md); text-align: left; }
+    .team-table td { padding: var(--space-sm) var(--space-md); border-top: 1px solid var(--color-surface-inset); font-size: 0.9375rem; background: var(--color-surface-raised); }
+    .team-table .tenure { font-family: var(--font-mono); font-size: 13px; color: var(--color-text-muted); }
+
+    /* -- Asset Schema Tables -- */
+    .schema-table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--color-border); margin-bottom: var(--space-md); }
+    .schema-table th { font-family: var(--font-mono); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-primary); background: var(--color-surface-inset); padding: var(--space-xs) var(--space-md); text-align: left; }
+    .schema-table td { padding: var(--space-xs) var(--space-md); border-top: 1px solid var(--color-surface-inset); font-size: 0.9375rem; background: var(--color-surface-raised); }
+    .schema-table td:first-child { font-family: var(--font-mono); font-size: 13px; }
+    .schema-table td:nth-child(2) { font-family: var(--font-mono); font-size: 12px; color: var(--color-text-muted); }
+
+    /* -- Open Questions -- */
+    .question-card {
       background: var(--color-surface-raised);
       border: 1px solid var(--color-border);
-      border-left: 3px solid var(--color-status-blocked);
+      border-left: 3px solid var(--color-status-planned);
       border-radius: var(--radius-md);
       padding: var(--space-md) var(--space-lg);
       margin-bottom: var(--space-sm);
     }
-    .anti-pattern h3 {
-      color: var(--color-status-blocked);
-    }
-    .anti-pattern .mitigation {
-      font-size: 0.9375rem;
-      color: var(--color-text-soft);
-      margin-top: var(--space-xs);
-    }
+    .question-card .for-whom { font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--color-status-planned); text-transform: uppercase; letter-spacing: 0.05em; }
+
+    /* -- Source List -- */
+    .source-list { list-style: none; padding: 0; }
+    .source-list li { padding: var(--space-xs) 0; border-bottom: 1px solid var(--color-surface-inset); font-size: 0.9375rem; }
+    .source-list li:last-child { border-bottom: none; }
 
     /* -- Responsive -- */
     @media (max-width: 768px) {
       body { padding: var(--space-md); }
       h1 { font-size: 1.5rem; }
-      .compare-grid { grid-template-columns: 1fr; }
-      .ownership-grid { grid-template-columns: 1fr; }
-      .table-grid { grid-template-columns: 1fr; }
-      .decision-grid { grid-template-columns: 1fr; }
-      .pattern-grid { grid-template-columns: 1fr; }
+      .compare-grid, .ownership-grid { grid-template-columns: 1fr; }
+      .table-grid, .decision-grid, .pattern-grid { grid-template-columns: 1fr; }
       .status-bar { flex-direction: column; }
+      .toc ol { columns: 1; }
     }
 
     @media print {
@@ -701,28 +541,25 @@
     </filter>
   </svg>
 
-  <!-- ============================================
-       HEADER
-       ============================================ -->
+  <!-- ============================================ HEADER ============================================ -->
   <header class="page-header">
     <span class="section-label">Architecture Map</span>
     <h1>OEFF Data Architecture v2</h1>
-    <p class="subtitle">Events as the relational key. Flat assembled tables. Unified directory. Script-owned data with Kim-editable overrides.</p>
+    <p class="subtitle">Events as the relational key. Flat assembled tables. Unified directory. Script-owned data with Kim-editable overrides. Research-validated against 24 industry sources.</p>
     <div class="meta-bar">
       <span class="meta-item"><strong>Festival:</strong> April 22, 2026</span>
       <span class="meta-item"><strong>Host Helper rollout:</strong> March 20</span>
-      <span class="meta-item"><strong>Architecture source:</strong> Kim/Garen March 13 meeting</span>
+      <span class="meta-item"><strong>Source:</strong> Kim/Garen March 13 meeting + Codex research</span>
       <span class="meta-item"><strong>28</strong> assembled events</span>
     </div>
   </header>
 
-  <!-- ============================================
-       TABLE OF CONTENTS
-       ============================================ -->
+  <!-- ============================================ TOC ============================================ -->
   <nav class="toc report-section" aria-label="Table of contents">
     <h2>Contents</h2>
     <ol>
       <li><a href="#status">Data Completeness Dashboard</a></li>
+      <li><a href="#team">The Team</a></li>
       <li><a href="#hierarchy">Data Hierarchy</a></li>
       <li><a href="#v1-v2">v1 vs v2 Architecture</a></li>
       <li><a href="#decisions">7 Architecture Decisions</a></li>
@@ -731,58 +568,67 @@
       <li><a href="#host-helper">Host Helper 2026 Schema</a></li>
       <li><a href="#ownership">Field Ownership Model</a></li>
       <li><a href="#directory">Unified Directory Design</a></li>
-      <li><a href="#patterns">Industry Patterns (Codex Research)</a></li>
+      <li><a href="#asset-layer">Asset Layer Blueprint</a></li>
+      <li><a href="#patterns">Industry Patterns (Codex)</a></li>
       <li><a href="#anti-patterns">Anti-Patterns to Avoid</a></li>
       <li><a href="#cleanup">Cleanup Checklist</a></li>
       <li><a href="#timeline">Implementation Timeline</a></li>
       <li><a href="#handoff">Handoff Resilience</a></li>
+      <li><a href="#scale">Scale Transitions</a></li>
+      <li><a href="#questions">Open Questions</a></li>
+      <li><a href="#sources">Sources</a></li>
     </ol>
   </nav>
 
-  <!-- ============================================
-       01. STATUS DASHBOARD
-       ============================================ -->
+  <!-- ============================================ 01. STATUS ============================================ -->
   <section id="status" class="report-section">
     <span class="section-label">01. Data Completeness</span>
     <h2>Assembled Data Dashboard</h2>
     <p class="section-context">Current state of the 28 assembled event records from <code>assemble-host-helper.py</code>. Events with dates and films are ready for Host Helper; gaps need resolution before March 20 rollout.</p>
-
     <div class="status-bar">
-      <div class="status-item">
-        <div class="number">28</div>
-        <div class="label">Total Events</div>
-      </div>
-      <div class="status-item">
-        <div class="number">19</div>
-        <div class="label">With Dates</div>
-      </div>
-      <div class="status-item">
-        <div class="number">14</div>
-        <div class="label">With Films</div>
-      </div>
-      <div class="status-item">
-        <div class="number">16</div>
-        <div class="label">Active Tables</div>
-      </div>
-      <div class="status-item">
-        <div class="number">0</div>
-        <div class="label">Empty Shells</div>
-      </div>
+      <div class="status-item"><div class="number">28</div><div class="label">Total Events</div></div>
+      <div class="status-item"><div class="number">19</div><div class="label">With Dates</div></div>
+      <div class="status-item"><div class="number">14</div><div class="label">With Films</div></div>
+      <div class="status-item"><div class="number">16</div><div class="label">Active Tables</div></div>
+      <div class="status-item"><div class="number">0</div><div class="label">Empty Shells</div></div>
     </div>
-
     <div class="section-synthesis">
       <strong>Gap analysis:</strong> 9 events have no date. 14 events have no film assignment. These are mostly newer/unconfirmed venues (Discover Card, Loyola, Lizadro Museum, etc.). The 19 dated events span April 22&ndash;27 across 4 festival days.
     </div>
   </section>
 
-  <!-- ============================================
-       02. DATA HIERARCHY
-       ============================================ -->
+  <!-- ============================================ 02. TEAM ============================================ -->
+  <section id="team" class="report-section">
+    <span class="section-label">02. The Team</span>
+    <h2>Who Touches the Data</h2>
+    <p class="section-context">OEFF operates on contractors, part-time roles, and one part-time Executive Director. No full-time technical staff. No dedicated database administrator. The system must survive turnover.</p>
+
+    <table class="team-table">
+      <thead>
+        <tr><th>Person</th><th>Role</th><th>Year</th><th>Data Relationship</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Ana</strong></td><td>Executive Director (part-time)</td><td class="tenure">15</td><td>Strategic decisions, greenlights. Not in the data daily.</td></tr>
+        <tr><td><strong>Garen</strong></td><td>Technical Coordinator (contractor)</td><td class="tenure">7</td><td>Builds all scripts, infrastructure, data architecture. The routing hub.</td></tr>
+        <tr><td><strong>Erin</strong></td><td>Creative Assets (contractor)</td><td class="tenure">10</td><td>Video production, slide decks, screening experiential flow.</td></tr>
+        <tr><td><strong>Kim</strong></td><td>Host Comms (contractor)</td><td class="tenure">1</td><td>Primary data editor. Growing toward ops architecture.</td></tr>
+        <tr><td><strong>Josh</strong></td><td>Digital Communications</td><td class="tenure">3</td><td>Newsletter, Eventbrite, ticketing. Batch updates route through Garen.</td></tr>
+        <tr><td><strong>Michael</strong></td><td>Development</td><td class="tenure">12</td><td>Fundraising, sponsors. Out of scope for data infrastructure.</td></tr>
+        <tr><td><strong>Cesar</strong></td><td>Marketing/Creative (contractor)</td><td class="tenure">4</td><td>Brand, social media, press. Does not check shared internal systems regularly.</td></tr>
+        <tr><td><strong>Sandy</strong></td><td>YFC Coordinator</td><td class="tenure">2</td><td>Youth Film Council. Limited data touchpoints.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-synthesis">
+      <strong>Structural facts:</strong> No database administrator &mdash; Garen is architect, builder, maintainer, AND user. Institutional memory is unevenly distributed: Ana (15 yrs), Erin (10), Garen (7) hold the frame. Knowledge walks when contracts end. Routing is human, not automated: "Not sure where something goes? It starts here [Garen]."
+    </div>
+  </section>
+
+  <!-- ============================================ 03. HIERARCHY ============================================ -->
   <section id="hierarchy" class="report-section">
-    <span class="section-label">02. Data Hierarchy</span>
+    <span class="section-label">03. Data Hierarchy</span>
     <h2>Three-Layer Architecture</h2>
     <p class="section-context">Kim's insight: "The most specific our data will ever get is by event." Master tables are persistent and year-over-year. The relational layer is season-specific. The assembled layer is script-generated and Kim-editable.</p>
-
     <div class="hierarchy">
       <pre><span class="layer-label">MASTER TABLES</span> <span class="annotation">(persistent, year-over-year)</span>
   <span class="entity">Directory</span>     <span class="annotation">All people &mdash; one record per person, typed by role + priority</span>
@@ -797,22 +643,28 @@
 
 <span class="layer-label">ASSEMBLED LAYER</span> <span class="annotation">(script-generated, Kim-editable)</span>
   <span class="entity">Host Helper 2026</span>  <span class="annotation">28 flat rows with ~28 text/date/URL fields</span>
-    <span class="annotation">One row per event &rarr; one Interface Designer page per event</span></pre>
-    </div>
+    <span class="annotation">One row per event &rarr; one Interface Designer page per event</span>
 
+<span class="layer-label">ASSET LAYER</span> <span class="annotation">(proposed &mdash; fills largest current gap)</span>
+  <span class="entity">Assets</span>        <span class="annotation">Master index of all inbound/outbound/internal files</span>
+  <span class="entity">Asset Versions</span> <span class="annotation">QC history per file version</span>
+  <span class="entity">Deliverables</span>  <span class="annotation">Packaged outputs (screening packets, guides, kits)</span>
+  <span class="entity">Delivery Log</span>  <span class="annotation">Recipient-level tracking (who got what, when)</span>
+
+<span class="layer-label">RESILIENCE LAYER</span> <span class="annotation">(operational infrastructure)</span>
+  <span class="entity">Routing Rules</span>  <span class="annotation">Encodes "where does this go?" in data</span>
+  <span class="entity">Integration Registry</span> <span class="annotation">Every script/sync: owner, schedule, failure mode</span></pre>
+    </div>
     <div class="section-synthesis">
-      <strong>Why three layers:</strong> Master tables survive across festival years. The relational layer (Events) is rebuilt each season by linking master records. The assembled layer flattens everything into human-readable rows that Kim can edit directly &mdash; no formulas, no rollups, no link chains to trace.
+      <strong>Why these layers:</strong> Master tables survive across festival years. The relational layer (Events) is rebuilt each season. The assembled layer flattens everything into human-readable rows. The asset layer (proposed) fills the biggest gap: tracking what comes in from filmmakers, what goes out to hosts, and what we create internally. The resilience layer makes routing and ownership visible in data instead of in one person's head.
     </div>
   </section>
 
-  <!-- ============================================
-       03. v1 vs v2
-       ============================================ -->
+  <!-- ============================================ 04. v1 vs v2 ============================================ -->
   <section id="v1-v2" class="report-section">
-    <span class="section-label">03. Architecture Comparison</span>
+    <span class="section-label">04. Architecture Comparison</span>
     <h2>v1 (Venue-Centric) vs v2 (Event-Centric)</h2>
     <p class="section-context">The March 13 meeting surfaced why the venue-centric model broke: multi-event venues produced concatenated values, rollup chains were uneditable, and formula fields obscured what was actually stored.</p>
-
     <div class="compare-grid">
       <div class="compare-col old">
         <h3>v1 &mdash; Venue-Centric</h3>
@@ -841,20 +693,16 @@
         </ul>
       </div>
     </div>
-
     <div class="section-synthesis">
-      <strong>Core tradeoff:</strong> v2 duplicates data (every event row has its own copy of the venue address) in exchange for editability and clarity. The <code>assemble-host-helper.py</code> script can re-flatten at any time without breaking Kim's manual edits in the 8 protected fields.
+      <strong>Core tradeoff:</strong> v2 duplicates data (every event row has its own copy of the venue address) in exchange for editability and clarity. The <code>assemble-host-helper.py</code> script can re-flatten at any time without breaking Kim's manual edits in the 7 protected fields.
     </div>
   </section>
 
-  <!-- ============================================
-       04. DECISIONS
-       ============================================ -->
+  <!-- ============================================ 05. DECISIONS ============================================ -->
   <section id="decisions" class="report-section">
-    <span class="section-label">04. Architecture Decisions</span>
+    <span class="section-label">05. Architecture Decisions</span>
     <h2>7 Decisions from March 13 Meeting</h2>
     <p class="section-context">Kim and Garen's 63-minute call produced 7 foundational decisions. These reshape how every downstream tool &mdash; Host Helper, sync scripts, merge sheets &mdash; relates to the data.</p>
-
     <div class="decision-grid">
       <div class="decision-card">
         <span class="decision-number">Decision 1</span>
@@ -862,39 +710,33 @@
         <p class="detail">Events/screenings are the most specific data level. They link to master tables (venues, films, contacts) rather than the reverse.</p>
         <blockquote>"The most specific our data will ever get is by event." &mdash; Kim</blockquote>
       </div>
-
       <div class="decision-card">
         <span class="decision-number">Decision 2</span>
         <h3>Unified Directory</h3>
         <p class="detail">All people-data in one table with a Contact Type field, replacing scattered host/venue/filmmaker contact lists.</p>
         <blockquote>"What if we just called this table a directory?" &mdash; Kim</blockquote>
       </div>
-
       <div class="decision-card">
         <span class="decision-number">Decision 3</span>
         <h3>Partnership categorization</h3>
         <p class="detail">Collaborators (mission-oriented) vs. transactional contacts (business relationship where money changes hands for a deliverable).</p>
       </div>
-
       <div class="decision-card">
         <span class="decision-number">Decision 4</span>
         <h3>Members vs Partners</h3>
         <p class="detail">14k email list = members (who we work for). Active stakeholders = partners (who we work with). Different interaction levels, different data needs.</p>
         <blockquote>"Distinguish who we work with and who we work for." &mdash; Kim</blockquote>
       </div>
-
       <div class="decision-card">
         <span class="decision-number">Decision 5</span>
         <h3>Per-event interface pages</h3>
         <p class="detail">Replace 24 shared grid views with event-centric Interface Designer pages. Record-parameter deep links give Kim direct edit access per event.</p>
       </div>
-
       <div class="decision-card">
         <span class="decision-number">Decision 6</span>
         <h3>Dual venue classification</h3>
         <p class="detail">Flagship/Community (team presence level) alongside T1&ndash;T4 (technical needs). Two separate systems, not competing.</p>
       </div>
-
       <div class="decision-card">
         <span class="decision-number">Decision 7</span>
         <h3>"Events" umbrella term</h3>
@@ -903,14 +745,11 @@
     </div>
   </section>
 
-  <!-- ============================================
-       05. AIRTABLE INVENTORY
-       ============================================ -->
+  <!-- ============================================ 06. INVENTORY ============================================ -->
   <section id="tables" class="report-section">
-    <span class="section-label">05. Current Airtable Inventory</span>
+    <span class="section-label">06. Current Airtable Inventory</span>
     <h2>16 Active Tables</h2>
-    <p class="section-context">Full inventory from <code>assemble-host-helper.py --inventory</code>. Base ID: <code>app9DymWrbAQaHH0K</code>. Zero empty shell tables found (previously reported 16 shells were miscounted or already cleaned).</p>
-
+    <p class="section-context">Full inventory from <code>assemble-host-helper.py --inventory</code>. Base ID: <code>app9DymWrbAQaHH0K</code>. Zero empty shell tables found.</p>
     <div class="table-grid">
       <div class="table-card">
         <h3>Events <span class="field-count">52 fields</span></h3>
@@ -918,105 +757,90 @@
         <p class="description">Relational key &mdash; links venue + film + contacts + time. ~31 records.</p>
         <span class="role-badge role-canonical">Canonical</span>
       </div>
-
       <div class="table-card">
         <h3>Venues <span class="field-count">69 fields</span></h3>
         <p class="table-id">tblAQVT8F4jRxbRzs</p>
         <p class="description">Physical spaces, capacity, ADA, AV. 29 rollup/formula fields are debt from v1.</p>
         <span class="role-badge role-canonical">Canonical</span>
       </div>
-
       <div class="table-card">
         <h3>Films <span class="field-count">30 fields</span></h3>
         <p class="table-id">tbl6IuZe1eLcZhFYQ</p>
         <p class="description">Titles, runtimes (Runtime_Min), Director, licensing.</p>
         <span class="role-badge role-canonical">Canonical</span>
       </div>
-
       <div class="table-card">
         <h3>Host Contacts <span class="field-count">19 fields</span></h3>
         <p class="table-id">tblSLcTQ1ORN5ITvO</p>
         <p class="description">52 records. Per-venue contact people. Legacy &rarr; merge into Directory.</p>
         <span class="role-badge role-assembled">Legacy</span>
       </div>
-
       <div class="table-card">
         <h3>Film Contacts <span class="field-count">26 fields</span></h3>
         <p class="table-id">tbl4KT1RcwR8V56YZ</p>
         <p class="description">14 records. Filmmaker contacts. Legacy &rarr; merge into Directory.</p>
         <span class="role-badge role-assembled">Legacy</span>
       </div>
-
       <div class="table-card">
         <h3>Host Intake <span class="field-count">28 fields</span></h3>
         <p class="table-id">tblbNdeRf2mUp0fSD</p>
         <p class="description">Form responses: AV, WiFi, accessibility survey. Fold into Venues or Events.</p>
         <span class="role-badge role-assembled">Legacy</span>
       </div>
-
       <div class="table-card">
         <h3>Merged Timeline <span class="field-count">19 fields</span></h3>
         <p class="table-id">tblBvLDZWXm9NSu8j</p>
         <p class="description">Milestones. Phase-based project tracking used by <code>oeff-triage.py</code>.</p>
         <span class="role-badge role-operations">Operations</span>
       </div>
-
       <div class="table-card">
         <h3>Deliverables <span class="field-count">10 fields</span></h3>
         <p class="table-id">tblxqo9Iat3Td7CGP</p>
         <p class="description">Packaged outputs. Current schema is minimal.</p>
         <span class="role-badge role-operations">Operations</span>
       </div>
-
       <div class="table-card">
         <h3>Event Media Assets <span class="field-count">22 fields</span></h3>
         <p class="table-id">tblHFjYEwpvIxhj55</p>
         <p class="description">Posters, stills, press materials per event.</p>
         <span class="role-badge role-operations">Operations</span>
       </div>
-
       <div class="table-card">
         <h3>Webinar Content <span class="field-count">20 fields</span></h3>
         <p class="table-id">tblBlVyE75gcs1UC6</p>
         <p class="description">Host webinar recordings, slide decks, prep materials.</p>
         <span class="role-badge role-operations">Operations</span>
       </div>
-
       <div class="table-card">
         <h3>Sponsors <span class="field-count">39 fields</span></h3>
         <p class="table-id">tblw47st9V4nOpclp</p>
         <p class="description">Sponsor organizations, tiers, commitments.</p>
         <span class="role-badge role-canonical">Canonical</span>
       </div>
-
       <div class="table-card">
         <h3>Packet QA <span class="field-count">20 fields</span></h3>
         <p class="table-id">tblYByX2C758MBq9l</p>
         <p class="description">Quality assurance tracking for screening packets.</p>
         <span class="role-badge role-operations">Operations</span>
       </div>
-
       <div class="table-card">
         <h3>Participants <span class="field-count">8 fields</span></h3>
         <p class="table-id">tblOa81zvcd17FXag</p>
         <p class="description">Event attendee/participant data.</p>
         <span class="role-badge role-operations">Operations</span>
       </div>
-
       <div class="table-card">
         <h3>Recordings <span class="field-count">6 fields</span></h3>
         <p class="table-id">tblHneB5uu2TnascM</p>
         <p class="description">Video recordings, Vimeo links.</p>
         <span class="role-badge role-operations">Operations</span>
       </div>
-
       <div class="table-card">
         <h3>Comms Log <span class="field-count">6 fields</span></h3>
         <p class="table-id">tblU0GqHIE3uJ7Igz</p>
         <p class="description">Communication tracking. Not yet wired into sync scripts.</p>
         <span class="role-badge role-operations">Operations</span>
       </div>
-
       <div class="table-card">
         <h3>Host Confirmations <span class="field-count">13 fields</span></h3>
         <p class="table-id">tbldofIYyH5cqNT8e</p>
@@ -1024,20 +848,16 @@
         <span class="role-badge role-operations">Operations</span>
       </div>
     </div>
-
     <div class="section-synthesis">
       <strong>Target grouping:</strong> Core Data (Directory, Venues, Films, Events, Sponsors) / Operations (Host Helper 2026, Milestones, Deliverables, Media Assets) / Pipeline (Comms Log, Packet QA, Host Confirmations). Host Contacts + Film Contacts merge into Directory. Host Intake folds into Venues/Events.
     </div>
   </section>
 
-  <!-- ============================================
-       06. DATA FLOW
-       ============================================ -->
+  <!-- ============================================ 07. DATA FLOW ============================================ -->
   <section id="flow" class="report-section">
-    <span class="section-label">06. Data Flow</span>
+    <span class="section-label">07. Data Flow</span>
     <h2>Pipeline Architecture</h2>
     <p class="section-context">Dual-canonical principle: Kim's Google Sheets are canonical for validated data (she checks it). Airtable is canonical for relational data (links between tables). Sync scripts bridge them.</p>
-
     <div class="flow-container">
       <div class="flow-row">
         <span class="flow-node canonical">Kim's Tracker Sheet</span>
@@ -1046,12 +866,10 @@
         <span class="flow-arrow">&rarr;</span>
         <span class="flow-node canonical">Directory + Venues + Films</span>
       </div>
-
       <div class="flow-row">
         <span class="flow-node canonical">Events table</span>
         <span class="flow-arrow-label">links to all master tables</span>
       </div>
-
       <div class="flow-row">
         <span class="flow-node canonical">Events + Venues + Films + Contacts</span>
         <span class="flow-arrow">&rarr;</span>
@@ -1059,7 +877,6 @@
         <span class="flow-arrow">&rarr;</span>
         <span class="flow-node assembled">Host Helper 2026</span>
       </div>
-
       <div class="flow-row">
         <span class="flow-node assembled">Host Helper 2026</span>
         <span class="flow-arrow">&rarr;</span>
@@ -1067,7 +884,6 @@
         <span class="flow-arrow">&rarr;</span>
         <span class="flow-node output">Host-facing pages</span>
       </div>
-
       <div class="flow-row">
         <span class="flow-node assembled">Host Helper 2026</span>
         <span class="flow-arrow">&rarr;</span>
@@ -1076,100 +892,54 @@
         <span class="flow-node output">Mailmeteor campaigns</span>
       </div>
     </div>
-
     <div class="section-synthesis">
       <strong>Key insight:</strong> Data flows downhill. Master tables feed Events. Events feed the assembly script. The script produces flat rows. Interface Designer presents them. Merge sheets consume them for email campaigns. No data flows upstream from assembled tables to master tables.
     </div>
   </section>
 
-  <!-- ============================================
-       07. HOST HELPER SCHEMA
-       ============================================ -->
+  <!-- ============================================ 08. HOST HELPER SCHEMA ============================================ -->
   <section id="host-helper" class="report-section">
-    <span class="section-label">07. Host Helper 2026</span>
+    <span class="section-label">08. Host Helper 2026</span>
     <h2>28-Field Flat Table Schema</h2>
     <p class="section-context">One table, 28 rows (one per event), 28 fields. All text/date/URL types &mdash; no formulas, no rollups, no linked records. Created and maintained by <code>assemble-host-helper.py</code>.</p>
-
     <div class="hierarchy">
       <pre><span class="layer-label">SCRIPT-OWNED FIELDS</span> <span class="annotation">(overwritten on every re-run)</span>
-  Event Name          <span class="annotation">singleLineText</span>
-  Event ID            <span class="annotation">singleLineText (E26-001 format)</span>
-  Film Title          <span class="annotation">singleLineText</span>
-  Film Runtime        <span class="annotation">singleLineText</span>
-  Filmmaker Name      <span class="annotation">singleLineText</span>
-  Filmmaker Email     <span class="annotation">email</span>
-  Screening Date      <span class="annotation">singleLineText</span>
-  Start Time          <span class="annotation">singleLineText</span>
-  Doors Open          <span class="annotation">singleLineText</span>
-  Venue Name          <span class="annotation">singleLineText</span>
-  Venue Address       <span class="annotation">singleLineText</span>
-  Venue Capacity      <span class="annotation">number</span>
-  Contact Name        <span class="annotation">singleLineText</span>
-  Contact Email       <span class="annotation">email</span>
-  Contact Phone       <span class="annotation">phoneNumber</span>
-  Contact Role        <span class="annotation">singleLineText</span>
-  Ticket URL          <span class="annotation">url</span>
-  Ticket Price        <span class="annotation">singleLineText</span>
-  OEFF Rep            <span class="annotation">singleLineText</span>
-  Webinar Recording   <span class="annotation">url</span>
-  Host Guide Link     <span class="annotation">url</span>
+  Event Name, Event ID, Film Title, Film Runtime
+  Filmmaker Name, Filmmaker Email
+  Screening Date, Start Time, Doors Open
+  Venue Name, Venue Address, Venue Capacity
+  Contact Name, Contact Email, Contact Phone, Contact Role
+  Ticket URL, Ticket Price, OEFF Rep
+  Webinar Recording, Host Guide Link
 
 <span class="layer-label">KIM-EDITABLE FIELDS</span> <span class="annotation">(preserved on re-run)</span>
-  Parking             <span class="annotation">multilineText</span>
-  Transit             <span class="annotation">multilineText</span>
-  WiFi                <span class="annotation">multilineText</span>
-  AV Notes            <span class="annotation">multilineText</span>
-  Volunteer Needs     <span class="annotation">multilineText</span>
-  Screening Packet URL <span class="annotation">url</span>
-  Notes               <span class="annotation">multilineText</span></pre>
+  Parking, Transit, WiFi, AV Notes
+  Volunteer Needs, Screening Packet URL, Notes</pre>
     </div>
   </section>
 
-  <!-- ============================================
-       08. FIELD OWNERSHIP
-       ============================================ -->
+  <!-- ============================================ 09. OWNERSHIP ============================================ -->
   <section id="ownership" class="report-section">
-    <span class="section-label">08. Field Ownership</span>
+    <span class="section-label">09. Field Ownership</span>
     <h2>Script-Owned vs Kim-Editable</h2>
-    <p class="section-context">The assembly script overwrites 21 fields from canonical sources on every run. 7 fields are Kim's domain &mdash; the script reads existing values and preserves them. This is the core contract that makes flat tables safe for collaborative editing.</p>
-
+    <p class="section-context">The assembly script overwrites 21 fields from canonical sources on every run. 7 fields are Kim's domain &mdash; the script reads existing values and preserves them.</p>
     <div class="ownership-grid">
       <div class="ownership-col">
         <h3><span class="owner-chip owner-script">Script</span> 21 fields</h3>
         <ul class="field-list">
-          <li>Event Name</li>
-          <li>Event ID</li>
-          <li>Film Title</li>
-          <li>Film Runtime</li>
-          <li>Filmmaker Name</li>
-          <li>Filmmaker Email</li>
-          <li>Screening Date</li>
-          <li>Start Time</li>
-          <li>Doors Open</li>
-          <li>Venue Name</li>
-          <li>Venue Address</li>
-          <li>Venue Capacity</li>
-          <li>Contact Name</li>
-          <li>Contact Email</li>
-          <li>Contact Phone</li>
-          <li>Contact Role</li>
-          <li>Ticket URL</li>
-          <li>Ticket Price</li>
-          <li>OEFF Rep</li>
-          <li>Webinar Recording</li>
-          <li>Host Guide Link</li>
+          <li>Event Name</li><li>Event ID</li><li>Film Title</li><li>Film Runtime</li>
+          <li>Filmmaker Name</li><li>Filmmaker Email</li><li>Screening Date</li><li>Start Time</li>
+          <li>Doors Open</li><li>Venue Name</li><li>Venue Address</li><li>Venue Capacity</li>
+          <li>Contact Name</li><li>Contact Email</li><li>Contact Phone</li><li>Contact Role</li>
+          <li>Ticket URL</li><li>Ticket Price</li><li>OEFF Rep</li>
+          <li>Webinar Recording</li><li>Host Guide Link</li>
         </ul>
       </div>
       <div class="ownership-col">
         <h3><span class="owner-chip owner-kim">Kim</span> 7 fields</h3>
         <ul class="field-list">
-          <li>Parking</li>
-          <li>Transit</li>
-          <li>WiFi</li>
-          <li>AV Notes</li>
-          <li>Volunteer Needs</li>
-          <li>Screening Packet URL</li>
-          <li>Notes</li>
+          <li>Parking</li><li>Transit</li><li>WiFi</li><li>AV Notes</li>
+          <li>Volunteer Needs</li><li>Screening Packet URL</li><li>Notes</li>
         </ul>
         <div class="section-synthesis" style="border-top: none; padding-top: 0; margin-top: var(--space-md);">
           <strong>Contract:</strong> If Kim edits any of these 7 fields, re-running the script will not overwrite her changes. Script reads existing values first, only writes if blank.
@@ -1178,14 +948,11 @@
     </div>
   </section>
 
-  <!-- ============================================
-       09. DIRECTORY
-       ============================================ -->
+  <!-- ============================================ 10. DIRECTORY ============================================ -->
   <section id="directory" class="report-section">
-    <span class="section-label">09. Unified Directory</span>
+    <span class="section-label">10. Unified Directory</span>
     <h2>Directory Table Design</h2>
     <p class="section-context">Replaces Host Contacts (52 records) + Film Contacts (14 records) with one table. ~66 records with deduplication. A person who is both a host contact and a panelist gets one record with multiple roles.</p>
-
     <div class="hierarchy">
       <pre><span class="entity">Directory</span> <span class="annotation">(replaces Host Contacts + Film Contacts)</span>
 
@@ -1205,20 +972,112 @@
   Film Contacts    <span class="annotation">&rarr; Directory (Role=Filmmaker or Distributor)</span>
   Kim's Tracker    <span class="annotation">&rarr; Directory (validated contact list import)</span></pre>
     </div>
+  </section>
+
+  <!-- ============================================ 11. ASSET LAYER ============================================ -->
+  <section id="asset-layer" class="report-section">
+    <span class="section-label">11. Asset Layer Blueprint</span>
+    <h2>5 New Tables &mdash; Filling the Biggest Gap</h2>
+    <p class="section-context">From Codex research: OEFF's largest current gap is the asset/resource layer. No structured tracking of what comes in from filmmakers, what goes out to hosts, or what the team creates internally. Five new tables, all designed for Airtable.</p>
+
+    <h3>Table A: Assets</h3>
+    <p class="description" style="margin-bottom: var(--space-sm); color: var(--color-text-soft);">One record per logical asset. Master index of everything inbound, outbound, and internal.</p>
+    <table class="schema-table">
+      <thead><tr><th>Field</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>Asset Name</td><td>Text</td><td>Human name</td></tr>
+        <tr><td>Asset Category</td><td>Single Select</td><td>Inbound Film, Inbound Press, Outbound Host, Outbound Filmmaker, Internal Ops, Marketing</td></tr>
+        <tr><td>Asset Type</td><td>Single Select</td><td>Screening Copy, Trailer, SRT, Poster, Headshot, Slide Deck, Guide, Packet, Template</td></tr>
+        <tr><td>Status</td><td>Single Select</td><td>Requested &rarr; Received &rarr; In QC &rarr; Approved &rarr; Packaged &rarr; Sent &rarr; Archived</td></tr>
+        <tr><td>Season</td><td>Link &rarr; Seasons</td><td>Which festival year</td></tr>
+        <tr><td>Film</td><td>Link &rarr; Films</td><td>Optional</td></tr>
+        <tr><td>Event</td><td>Link &rarr; Events</td><td>Optional</td></tr>
+        <tr><td>Primary Contact</td><td>Link &rarr; Directory</td><td>Who provided or requested it</td></tr>
+        <tr><td>Owner</td><td>Link &rarr; Directory</td><td>Who's responsible for moving it forward</td></tr>
+        <tr><td>Canonical URL</td><td>URL</td><td>Where the file actually lives (Drive, etc.)</td></tr>
+        <tr><td>Storage System</td><td>Single Select</td><td>Google Drive, Eventive, Other</td></tr>
+        <tr><td>Required By</td><td>Date</td><td>Deadline</td></tr>
+        <tr><td>Received On</td><td>Date</td><td>When it arrived</td></tr>
+        <tr><td>Rights/Usage Notes</td><td>Long Text</td><td>Licensing constraints</td></tr>
+        <tr><td>Next Action</td><td>Text</td><td>What needs to happen next</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Table B: Asset Versions</h3>
+    <p class="description" style="margin-bottom: var(--space-sm); color: var(--color-text-soft);">One record per file version. Preserves QC history.</p>
+    <table class="schema-table">
+      <thead><tr><th>Field</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>Asset</td><td>Link &rarr; Assets</td><td>Parent asset</td></tr>
+        <tr><td>Version Number</td><td>Text</td><td>v1, v2, etc.</td></tr>
+        <tr><td>File URL</td><td>URL</td><td>Direct link to this version</td></tr>
+        <tr><td>File Format</td><td>Single Select</td><td>MP4, MOV, SRT, PDF, PNG, etc.</td></tr>
+        <tr><td>Uploaded By</td><td>Link &rarr; Directory</td><td>Who provided this version</td></tr>
+        <tr><td>Uploaded At</td><td>Datetime</td><td>When</td></tr>
+        <tr><td>QC Status</td><td>Single Select</td><td>Pending, Pass, Fail, Conditional</td></tr>
+        <tr><td>QC Notes</td><td>Long Text</td><td>What failed, conditions</td></tr>
+        <tr><td>Publishable</td><td>Checkbox</td><td>Cleared for external use</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Table C: Deliverables</h3>
+    <p class="description" style="margin-bottom: var(--space-sm); color: var(--color-text-soft);">One record per packaged output OEFF creates for stakeholders.</p>
+    <table class="schema-table">
+      <thead><tr><th>Field</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>Deliverable Name</td><td>Text</td><td></td></tr>
+        <tr><td>Deliverable Type</td><td>Single Select</td><td>Screening Packet, Presenter Guide, Slide Deck, Marketing Kit, Webinar Link, Screening Report</td></tr>
+        <tr><td>Audience Type</td><td>Single Select</td><td>Host, Filmmaker, Internal, Partner, Press</td></tr>
+        <tr><td>Season</td><td>Link &rarr; Seasons</td><td></td></tr>
+        <tr><td>Event</td><td>Link &rarr; Events</td><td>Optional</td></tr>
+        <tr><td>Source Assets</td><td>Link &rarr; Assets</td><td>What goes into this deliverable (multiple)</td></tr>
+        <tr><td>Owner</td><td>Link &rarr; Directory</td><td>Who's responsible</td></tr>
+        <tr><td>Due Date</td><td>Date</td><td>When it's needed</td></tr>
+        <tr><td>Final Package URL</td><td>URL</td><td>Link to the finished deliverable</td></tr>
+        <tr><td>Status</td><td>Single Select</td><td>Draft &rarr; Ready &rarr; Sent &rarr; Confirmed &rarr; Needs Update</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Table D: Delivery Log</h3>
+    <p class="description" style="margin-bottom: var(--space-sm); color: var(--color-text-soft);">Recipient-level tracking. Who received what, when, and did they confirm?</p>
+    <table class="schema-table">
+      <thead><tr><th>Field</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>Deliverable</td><td>Link &rarr; Deliverables</td><td>What was sent</td></tr>
+        <tr><td>Recipient</td><td>Link &rarr; Directory</td><td>Who received it</td></tr>
+        <tr><td>Sent By</td><td>Link &rarr; Directory</td><td>Who sent it</td></tr>
+        <tr><td>Sent At</td><td>Datetime</td><td>When</td></tr>
+        <tr><td>Channel</td><td>Single Select</td><td>Email, Portal, Shared Link</td></tr>
+        <tr><td>Confirmation Status</td><td>Single Select</td><td>Unconfirmed, Received, Bounced, Needs Follow-up</td></tr>
+        <tr><td>Notes</td><td>Long Text</td><td></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Table E: Routing Rules</h3>
+    <p class="description" style="margin-bottom: var(--space-sm); color: var(--color-text-soft);">Encodes "where does this go?" in data. Replaces tribal knowledge.</p>
+    <table class="schema-table">
+      <thead><tr><th>Field</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>Trigger Type</td><td>Single Select</td><td>New Inbound Asset, Missing Field, Host Request, Filmmaker Request, Ticketing Change, Budget Question, Creative Request</td></tr>
+        <tr><td>Condition</td><td>Text</td><td>When this rule applies</td></tr>
+        <tr><td>Primary Owner Role</td><td>Single Select</td><td>Who handles by default</td></tr>
+        <tr><td>Backup Owner Role</td><td>Single Select</td><td>Fallback if primary unavailable</td></tr>
+        <tr><td>Escalation Contact</td><td>Link &rarr; Directory</td><td>Who to escalate to</td></tr>
+        <tr><td>Target SLA (hours)</td><td>Number</td><td>Expected response time</td></tr>
+        <tr><td>Playbook URL</td><td>URL</td><td>Link to SOP / runbook</td></tr>
+      </tbody>
+    </table>
 
     <div class="section-synthesis">
-      <strong>Open question:</strong> Where do filmmakers live &mdash; Directory (recommended) or separate table? Kim raised this; not fully resolved. The Directory approach handles multi-role people cleanly (filmmaker who also attends as panelist). Decided but awaiting Kim's tracker sheet import.
+      <strong>Relationship map:</strong> Events &harr; Deliverables (1:many). Films &harr; Assets (1:many). Assets &harr; Asset Versions (1:many). Deliverables &harr; Assets (many:many). Deliverables &harr; Delivery Log (1:many). Directory links into ownership, recipient, and escalation across all new tables.
     </div>
   </section>
 
-  <!-- ============================================
-       10. INDUSTRY PATTERNS (Codex)
-       ============================================ -->
+  <!-- ============================================ 12. PATTERNS ============================================ -->
   <section id="patterns" class="report-section">
-    <span class="section-label">10. Industry Patterns</span>
+    <span class="section-label">12. Industry Patterns</span>
     <h2>8 Patterns from Codex Research</h2>
     <p class="section-context">Cross-referenced against TIFF, Tribeca, Eventival/Eventive, Salesforce NPSP, HubSpot, VolunteerHub, Better Impact, and Eventbrite. Each pattern maps to OEFF's current or target architecture.</p>
-
     <div class="pattern-grid">
       <div class="pattern-card">
         <span class="pattern-number">Pattern 1</span>
@@ -1226,49 +1085,42 @@
         <p class="evidence">Salesforce NPSP, HubSpot, Bloomerang. One person record with relationship layers, not one table per function.</p>
         <span class="oeff-alignment">OEFF: Directory table</span>
       </div>
-
       <div class="pattern-card">
         <span class="pattern-number">Pattern 2</span>
         <h3>Intake as Inbound Boundary</h3>
         <p class="evidence">TIFF (FilmFreeway), Tribeca (dual intake). Submission systems for intake, separate ops elsewhere.</p>
         <span class="oeff-alignment">OEFF: Host Intake &rarr; fold into Venues</span>
       </div>
-
       <div class="pattern-card">
         <span class="pattern-number">Pattern 3</span>
         <h3>Season/Edition as First-Class Entity</h3>
         <p class="evidence">Eventival, FilmFreeway. Edition-based sync, season archiving.</p>
         <span class="oeff-alignment">OEFF: 2027 hardening target</span>
       </div>
-
       <div class="pattern-card">
         <span class="pattern-number">Pattern 4</span>
         <h3>Event-Centric Core</h3>
         <p class="evidence">Eventive, SXSW, CES, Pitchfork. Events as atomic ops unit; sessions as optional children.</p>
         <span class="oeff-alignment">OEFF: v2 architecture (active)</span>
       </div>
-
       <div class="pattern-card">
         <span class="pattern-number">Pattern 5</span>
         <h3>Asset Registry + Version Rows</h3>
         <p class="evidence">FilmFreeway, Eventival. Separate "asset exists" from "asset was delivered to X."</p>
-        <span class="oeff-alignment">OEFF: Codex recommends 5 new tables</span>
+        <span class="oeff-alignment">OEFF: 5-table asset layer blueprint</span>
       </div>
-
       <div class="pattern-card">
         <span class="pattern-number">Pattern 6</span>
         <h3>Permission by Surface</h3>
         <p class="evidence">Airtable interface-only users, volunteer platform visibility rules. Access via views/interfaces, not cloned data.</p>
         <span class="oeff-alignment">OEFF: Interface Designer pages</span>
       </div>
-
       <div class="pattern-card">
         <span class="pattern-number">Pattern 7</span>
         <h3>Single Source + Sync Contracts</h3>
         <p class="evidence">Airtable sync docs, Eventival overwrite semantics. Source overwrites destination; ownership is explicit.</p>
         <span class="oeff-alignment">OEFF: Script ownership model</span>
       </div>
-
       <div class="pattern-card">
         <span class="pattern-number">Pattern 8</span>
         <h3>Turnover Resilience as Design Requirement</h3>
@@ -1276,122 +1128,85 @@
         <span class="oeff-alignment">OEFF: Routing Rules + Data Dictionary</span>
       </div>
     </div>
-
     <div class="section-synthesis">
-      <strong>What the research validates:</strong> OEFF's v2 architecture aligns with 6 of 8 patterns already. Pattern 3 (Seasons) and Pattern 5 (Asset Registry) are 2027 hardening targets. At ~30 events and a small seasonal team, Airtable + stdlib Python scripts remains the right core. Transition pressure comes from submission volume or multi-department workflow complexity, not data size.
+      <strong>What the research validates:</strong> OEFF's v2 architecture aligns with 6 of 8 patterns already. Pattern 3 (Seasons) and Pattern 5 (Asset Registry) are the remaining gaps &mdash; the asset layer blueprint addresses Pattern 5, and the Seasons table is a 2027 target.
     </div>
   </section>
 
-  <!-- ============================================
-       11. ANTI-PATTERNS
-       ============================================ -->
+  <!-- ============================================ 13. ANTI-PATTERNS ============================================ -->
   <section id="anti-patterns" class="report-section">
-    <span class="section-label">11. Anti-Patterns</span>
-    <h2>What to Avoid</h2>
-    <p class="section-context">From the Codex research: failure modes seen across festival and nonprofit data architectures. Each is annotated with OEFF's current exposure.</p>
+    <span class="section-label">13. Anti-Patterns</span>
+    <h2>10 Things to Avoid</h2>
+    <p class="section-context">From Codex research: failure modes seen across festival and nonprofit data architectures. Each annotated with OEFF's current exposure and mitigation.</p>
 
     <div class="anti-pattern">
-      <h3>Copy-and-edit workflows</h3>
+      <h3>1. Copy-and-edit workflows</h3>
       <p class="mitigation"><strong>Risk:</strong> Copying tables/sheets for editing creates drift. <strong>Mitigation:</strong> Host Helper is assembled, not copied. Script re-flattens from canonical sources.</p>
     </div>
-
     <div class="anti-pattern">
-      <h3>Stuffing role + priority into one field</h3>
+      <h3>2. Assembled tables treated as canonical</h3>
+      <p class="mitigation"><strong>Risk:</strong> Edits in output tables never flow back to master. <strong>Mitigation:</strong> Clear separation &mdash; canonical edits go in core tables, assembled layer is regenerated.</p>
+    </div>
+    <div class="anti-pattern">
+      <h3>3. Role explosion via separate people tables</h3>
+      <p class="mitigation"><strong>Risk:</strong> Host Contacts, Film Contacts, Panelists, Sponsors all separate. <strong>Mitigation:</strong> Unified Directory with role/context fields.</p>
+    </div>
+    <div class="anti-pattern">
+      <h3>4. Stuffing role + priority into one field</h3>
       <p class="mitigation"><strong>Risk:</strong> Semantic collision ("Primary Filmmaker" vs "Host who is Primary"). <strong>Mitigation:</strong> Directory has separate Role, Priority, and Relationship Type fields.</p>
     </div>
-
     <div class="anti-pattern">
-      <h3>Routing via memory only</h3>
-      <p class="mitigation"><strong>Risk:</strong> "Ask Garen" is the current routing table. <strong>Mitigation:</strong> Routing Rules table (2027 target). Decision log in <code>~/decisions/</code> captures rationale now.</p>
+      <h3>5. Routing via memory only</h3>
+      <p class="mitigation"><strong>Risk:</strong> "Ask Garen" is the current routing table. <strong>Mitigation:</strong> Routing Rules table. Decision log in <code>~/decisions/</code> captures rationale now.</p>
     </div>
-
     <div class="anti-pattern">
-      <h3>Silent bidirectional edits</h3>
-      <p class="mitigation"><strong>Risk:</strong> Two systems editing the same field without ownership rules. <strong>Mitigation:</strong> Script-owned vs Kim-editable split. Sync scripts have explicit direction (Airtable &rarr; Sheet, not both ways for the same field).</p>
+      <h3>6. Silent bidirectional edits</h3>
+      <p class="mitigation"><strong>Risk:</strong> Two systems editing the same field without ownership rules. <strong>Mitigation:</strong> Script-owned vs Kim-editable split. Sync scripts have explicit direction.</p>
     </div>
-
     <div class="anti-pattern">
-      <h3>No version records for assets</h3>
-      <p class="mitigation"><strong>Risk:</strong> Overwriting links with no history. <strong>Mitigation:</strong> Asset Versions table in Codex blueprint (post-festival). Current: file tracker script logs versions.</p>
+      <h3>7. No version records for assets</h3>
+      <p class="mitigation"><strong>Risk:</strong> Overwriting links with no history. <strong>Mitigation:</strong> Asset Versions table in blueprint. Current: file tracker script logs versions.</p>
     </div>
-
     <div class="anti-pattern">
-      <h3>Text filter instead of formal Season record</h3>
+      <h3>8. Text filter instead of formal Season record</h3>
       <p class="mitigation"><strong>Risk:</strong> Year-over-year ambiguity. <strong>Mitigation:</strong> Currently using "2026 Events" link field. Formal Seasons table is a 2027 target.</p>
+    </div>
+    <div class="anti-pattern">
+      <h3>9. Over-normalizing too early</h3>
+      <p class="mitigation"><strong>Risk:</strong> Many tiny tables with sparse usage. <strong>Mitigation:</strong> Add tables only for real many-to-many or independent lifecycles. Every new table must answer: "what lifecycle can't a field represent?"</p>
+    </div>
+    <div class="anti-pattern">
+      <h3>10. Permission shortcuts for interns</h3>
+      <p class="mitigation"><strong>Risk:</strong> Broad base editor access for convenience. <strong>Mitigation:</strong> Interface-only access, narrow forms, field constraints via Airtable permissions.</p>
     </div>
   </section>
 
-  <!-- ============================================
-       12. CLEANUP CHECKLIST
-       ============================================ -->
+  <!-- ============================================ 14. CLEANUP ============================================ -->
   <section id="cleanup" class="report-section">
-    <span class="section-label">12. Cleanup Checklist</span>
+    <span class="section-label">14. Cleanup Checklist</span>
     <h2>Post-Architecture Cleanup</h2>
     <p class="section-context">Once Host Helper 2026 table exists and is validated, these legacy artifacts can be removed. The 29 rollup/formula fields on Venues are the biggest debt.</p>
-
     <ul class="checklist">
-      <li>
-        <span class="check-status check-done">Done</span>
-        <span>Inventory audit &mdash; 16 active tables, 0 empty shells</span>
-      </li>
-      <li>
-        <span class="check-status check-done">Done</span>
-        <span>Identified tblBvLDZWXm9NSu8j = Merged Timeline (milestones)</span>
-      </li>
-      <li>
-        <span class="check-status check-done">Done</span>
-        <span>Built <code>assemble-host-helper.py</code> &mdash; 28 events assembled</span>
-      </li>
-      <li>
-        <span class="check-status check-pending">Pending</span>
-        <span>Run <code>--apply</code> to create Host Helper 2026 table in Airtable</span>
-      </li>
-      <li>
-        <span class="check-status check-pending">Pending</span>
-        <span>Create Interface Designer page for Host Helper 2026</span>
-      </li>
-      <li>
-        <span class="check-status check-pending">Pending</span>
-        <span>Generate per-event deep links</span>
-      </li>
-      <li>
-        <span class="check-status check-pending">Pending</span>
-        <span>Remove 29 rollup/formula fields from Venues (LKP + Host - fields)</span>
-      </li>
-      <li>
-        <span class="check-status check-pending">Pending</span>
-        <span>Disable 24 deprecated per-venue shared grid views</span>
-      </li>
-      <li>
-        <span class="check-status check-pending">Pending</span>
-        <span>Merge Host Contacts + Film Contacts &rarr; Directory</span>
-      </li>
-      <li>
-        <span class="check-status check-pending">Pending</span>
-        <span>Fold Host Intake useful fields into Events/Venues</span>
-      </li>
-      <li>
-        <span class="check-status check-pending">Pending</span>
-        <span>Apply Columbia address fix via <code>oeff-venue-sync.py</code></span>
-      </li>
-      <li>
-        <span class="check-status check-blocked">Blocked</span>
-        <span>Clear AV Notes for Uncommon Ground + Trinity Lutheran (requires Airtable UI &mdash; sync script can't write empty values)</span>
-      </li>
-      <li>
-        <span class="check-status check-pending">Pending</span>
-        <span>Update <code>shared-view-links.json</code> with new Interface Designer URLs</span>
-      </li>
+      <li><span class="check-status check-done">Done</span><span>Inventory audit &mdash; 16 active tables, 0 empty shells</span></li>
+      <li><span class="check-status check-done">Done</span><span>Identified tblBvLDZWXm9NSu8j = Merged Timeline (milestones)</span></li>
+      <li><span class="check-status check-done">Done</span><span>Built <code>assemble-host-helper.py</code> &mdash; 28 events assembled</span></li>
+      <li><span class="check-status check-pending">Pending</span><span>Run <code>--apply</code> to create Host Helper 2026 table in Airtable</span></li>
+      <li><span class="check-status check-pending">Pending</span><span>Create Interface Designer page for Host Helper 2026</span></li>
+      <li><span class="check-status check-pending">Pending</span><span>Generate per-event deep links</span></li>
+      <li><span class="check-status check-pending">Pending</span><span>Remove 29 rollup/formula fields from Venues (LKP + Host - fields)</span></li>
+      <li><span class="check-status check-pending">Pending</span><span>Disable 24 deprecated per-venue shared grid views</span></li>
+      <li><span class="check-status check-pending">Pending</span><span>Merge Host Contacts + Film Contacts &rarr; Directory</span></li>
+      <li><span class="check-status check-pending">Pending</span><span>Fold Host Intake useful fields into Events/Venues</span></li>
+      <li><span class="check-status check-pending">Pending</span><span>Apply Columbia address fix via <code>oeff-venue-sync.py</code></span></li>
+      <li><span class="check-status check-blocked">Blocked</span><span>Clear AV Notes for Uncommon Ground + Trinity Lutheran (requires Airtable UI)</span></li>
+      <li><span class="check-status check-pending">Pending</span><span>Update <code>shared-view-links.json</code> with new Interface Designer URLs</span></li>
     </ul>
   </section>
 
-  <!-- ============================================
-       13. TIMELINE
-       ============================================ -->
+  <!-- ============================================ 15. TIMELINE ============================================ -->
   <section id="timeline" class="report-section">
-    <span class="section-label">13. Implementation Timeline</span>
+    <span class="section-label">15. Implementation Timeline</span>
     <h2>Path to March 20 Rollout</h2>
-
     <div class="timeline">
       <div class="timeline-item">
         <span class="timeline-date">Mar 13 (Done)</span>
@@ -1432,14 +1247,11 @@
     </div>
   </section>
 
-  <!-- ============================================
-       14. HANDOFF RESILIENCE
-       ============================================ -->
+  <!-- ============================================ 16. HANDOFF ============================================ -->
   <section id="handoff" class="report-section">
-    <span class="section-label">14. Handoff Resilience</span>
+    <span class="section-label">16. Handoff Resilience</span>
     <h2>What Survives Without Garen or Kim</h2>
-    <p class="section-context">From Codex assessment: OEFF's main risk is continuity, not database scale. The architecture should be self-documenting enough that a new contractor can operate it within a day.</p>
-
+    <p class="section-context">OEFF's main risk is continuity, not database scale. The architecture should be self-documenting enough that a new contractor can operate it within a day.</p>
     <div class="compare-grid">
       <div class="compare-col old">
         <h3>If Garen Leaves</h3>
@@ -1461,9 +1273,104 @@
       </div>
     </div>
 
-    <div class="section-synthesis">
-      <strong>Minimum self-documentation (from Codex):</strong> Data Dictionary table, Table Purpose sheet, Script Registry, Runbook docs for top 10 workflows, Decision Log, Season Closeout checklist. Of these, the Decision Log exists (<code>~/decisions/</code>), the Script Registry exists (<code>MANIFEST.md</code>), and the architecture map (this document) covers Table Purpose. Data Dictionary and Runbooks are post-festival targets.
+    <h3>Minimum Self-Documentation (Non-Negotiable)</h3>
+    <ul class="checklist">
+      <li><span class="check-status check-done">Exists</span><span>Decision Log &mdash; <code>~/decisions/</code></span></li>
+      <li><span class="check-status check-done">Exists</span><span>Script Registry &mdash; <code>MANIFEST.md</code></span></li>
+      <li><span class="check-status check-done">Exists</span><span>Table Purpose &mdash; this architecture map</span></li>
+      <li><span class="check-status check-pending">Needed</span><span>Data Dictionary table &mdash; every field, owner, meaning, allowed values</span></li>
+      <li><span class="check-status check-pending">Needed</span><span>Top 10 Runbooks &mdash; "If X fails, do Y" for critical workflows</span></li>
+      <li><span class="check-status check-pending">Needed</span><span>Integration Registry &mdash; script path, trigger, inputs, outputs, owner, failure mode</span></li>
+      <li><span class="check-status check-pending">Needed</span><span>Season Closeout checklist &mdash; archive + validation + handoff tasks</span></li>
+    </ul>
+
+    <h3>Season-End Handoff Document Template</h3>
+    <div class="hierarchy">
+      <pre><span class="layer-label">RECOMMENDED SECTIONS</span>
+  1. Season snapshot <span class="annotation">(counts, exceptions, unresolved items)</span>
+  2. Canonical schema map <span class="annotation">(what tables matter, what is derived)</span>
+  3. Field ownership map <span class="annotation">(who can change what)</span>
+  4. Integration inventory <span class="annotation">(scripts, schedules, credentials, last run)</span>
+  5. Rehearsed recovery steps <span class="annotation">(dry-run proof)</span>
+  6. "Top 20 gotchas" <span class="annotation">(anti-footgun notes)</span>
+  7. Onboarding plan <span class="annotation">(first 2 weeks, first 30 days)</span></pre>
     </div>
+  </section>
+
+  <!-- ============================================ 17. SCALE ============================================ -->
+  <section id="scale" class="report-section">
+    <span class="section-label">17. Scale Transitions</span>
+    <h2>When to Outgrow Airtable + Scripts</h2>
+    <p class="section-context">At OEFF's current size (~30 events, ~16 films, small seasonal team), Airtable + scripts is the right core. Transition pressure appears when workforce complexity exceeds what one Airtable base can support &mdash; not when data grows.</p>
+
+    <table class="schema-table">
+      <thead><tr><th>Trigger</th><th>Tool</th><th>When</th></tr></thead>
+      <tbody>
+        <tr><td>Submission volume outgrows manual intake mapping</td><td>FilmFreeway (inbound) + Airtable (ops)</td><td>If submissions exceed ~100/year</td></tr>
+        <tr><td>Hybrid/virtual rights windows need integrated delivery</td><td>Festival Scope + Shift72</td><td>If virtual screenings become significant</td></tr>
+        <tr><td>Team grows beyond ~15 with department silos</td><td>Purpose-built platform (Eventival)</td><td>If org structure formalizes</td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-synthesis">
+      <strong>Key insight from research:</strong> Workforce complexity triggers the tool transition earlier than data size in contractor-heavy teams. OEFF's current pragmatic tool split: Google Forms for inbound submissions, Airtable for ops, stdlib Python for integration. This is the right stack for 2026.
+    </div>
+  </section>
+
+  <!-- ============================================ 18. OPEN QUESTIONS ============================================ -->
+  <section id="questions" class="report-section">
+    <span class="section-label">18. Open Questions</span>
+    <h2>For Team Discussion</h2>
+
+    <div class="question-card">
+      <span class="for-whom">For Ana</span>
+      <h3>Does the asset layer scope feel right?</h3>
+      <p class="detail" style="font-size: 0.9375rem; color: var(--color-text-soft); margin-top: var(--space-xs);">5 new tables is meaningful infrastructure 39 days before festival. Is this the right time, or should it be deferred to post-festival planning?</p>
+    </div>
+
+    <div class="question-card">
+      <span class="for-whom">For Kim</span>
+      <h3>Which self-documentation artifacts would help you most right now?</h3>
+      <p class="detail" style="font-size: 0.9375rem; color: var(--color-text-soft); margin-top: var(--space-xs);">Data Dictionary, Script Registry, Runbooks, Integration Registry &mdash; which reduces your friction the most today?</p>
+    </div>
+
+    <div class="question-card">
+      <span class="for-whom">For Team</span>
+      <h3>Should the Routing Rules table be built now or deferred to 2027?</h3>
+      <p class="detail" style="font-size: 0.9375rem; color: var(--color-text-soft); margin-top: var(--space-xs);">Currently, routing is human ("ask Garen"). Making it explicit in data reduces bus-factor risk but adds setup work.</p>
+    </div>
+
+    <div class="question-card">
+      <span class="for-whom">For Team</span>
+      <h3>Is April 11 the right schema freeze date, or should it be earlier?</h3>
+      <p class="detail" style="font-size: 0.9375rem; color: var(--color-text-soft); margin-top: var(--space-xs);">11 days before festival. Only data edits after freeze unless critical. Does the team need more buffer?</p>
+    </div>
+  </section>
+
+  <!-- ============================================ 19. SOURCES ============================================ -->
+  <section id="sources" class="report-section">
+    <span class="section-label">19. Sources</span>
+    <h2>Research References</h2>
+    <p class="section-context">Codex deep research across 24 sources: film festivals, music festivals, CRMs, volunteer platforms, and event operations.</p>
+    <ul class="source-list">
+      <li>Tribeca dual-path submissions &mdash; tribecafilm.com/festival/submissions2025</li>
+      <li>TIFF via FilmFreeway &mdash; filmfreeway.com/TIFF</li>
+      <li>FilmFreeway festival workflows &mdash; filmfreeway.com/pages/how-it-works-for-festivals</li>
+      <li>Eventive &harr; Eventival sync &mdash; help.eventive.org/en/articles/6786670</li>
+      <li>Airtable interface permissions &mdash; support.airtable.com/docs/interface-designer-permissions</li>
+      <li>Airtable multi-source sync &mdash; support.airtable.com/v1/docs/multi-source-syncing</li>
+      <li>Salesforce NPSP data model &mdash; developer.salesforce.com NPSP guide</li>
+      <li>HubSpot CRM associations &mdash; developers.hubspot.com associations-v4</li>
+      <li>Bloomerang person model &mdash; bloomerang.com/news/counting-records</li>
+      <li>VolunteerHub scheduling &mdash; volunteerhub.com/platform/volunteer-scheduling</li>
+      <li>Better Impact activity model &mdash; support.betterimpact.com</li>
+      <li>SXSW tracks &mdash; sxsw.com/tracks/</li>
+      <li>CES conference program &mdash; ces.tech/attend/conference-program/</li>
+      <li>Festival Scope + Shift72 &mdash; pro.festivalscope.com</li>
+      <li>Sundance volunteer ops &mdash; staff.sundance.org/hub/volunteer-scheduling/</li>
+      <li>OEFF Data Architecture Spec v2 (March 13, 2026)</li>
+      <li>OEFF "Who Does What" (Feb 2026)</li>
+    </ul>
   </section>
 
 </body>
