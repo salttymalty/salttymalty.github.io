@@ -25,23 +25,42 @@
 <body>
 
 <h1>Fix the Mac Mini</h1>
-<p class="subtitle">Should take about 2 minutes. Thank you!</p>
+<p class="subtitle">You'll Screen Share into the Mini from your Air, then run one command. ~3 minutes.</p>
 
 <div class="step">
   <div class="step-number">1</div>
-  <h2>Open Terminal on the Mini</h2>
-  <p>On the Mac Mini, press <strong>Command + Space</strong>, type <strong>Terminal</strong>, hit Enter.</p>
+  <h2>Connect to the Mini via Screen Sharing</h2>
+  <p>On <strong>your Air</strong>, open <strong>Finder</strong>. In the menu bar, click <strong>Go > Connect to Server</strong> (or press <strong>Command + K</strong>).</p>
+  <p>Type this and click Connect:</p>
+  <div class="code-block">vnc://Garens-Mac-mini.local</div>
+  <p>If it asks for a name and password:</p>
+  <div class="cred">
+    <strong>Username</strong>
+    garen
+  </div>
+  <div class="cred">
+    <strong>Password</strong>
+    GravelKing2026!
+  </div>
+  <p>You should now see the Mini's desktop in a window on your Air.</p>
+  <div class="warning">If it says it can't connect, try this address instead: <strong>vnc://192.168.1.167</strong></div>
 </div>
 
 <div class="step">
   <div class="step-number">2</div>
-  <h2>Paste this command</h2>
-  <p>Copy this entire block, paste it into Terminal, and hit Enter:</p>
-  <div class="code-block">tailscale up</div>
+  <h2>Open Terminal on the Mini</h2>
+  <p>Inside the Screen Sharing window (you're now controlling the Mini), press <strong>Command + Space</strong>, type <strong>Terminal</strong>, hit Enter.</p>
 </div>
 
 <div class="step">
   <div class="step-number">3</div>
+  <h2>Paste this command</h2>
+  <p>Copy this from your Air, then paste it into the Terminal inside the Screen Sharing window. Hit Enter.</p>
+  <div class="code-block">tailscale up</div>
+</div>
+
+<div class="step">
+  <div class="step-number">4</div>
   <h2>It might ask for a password</h2>
   <p>If it says "Password:", type this and hit Enter. Nothing will show while you type — that's normal.</p>
   <div class="cred">
@@ -51,18 +70,18 @@
 </div>
 
 <div class="step">
-  <div class="step-number">4</div>
+  <div class="step-number">5</div>
   <h2>Open the link it gives you</h2>
   <p>It will print a URL that starts with <strong>https://login.tailscale.com/...</strong></p>
-  <p>Hold Command and click the link in Terminal to open it in a browser. Or copy-paste it into Safari.</p>
+  <p>Hold Command and click the link in the Mini's Terminal to open it in the Mini's browser. Or copy it and paste it into Safari on <strong>your Air</strong> — either works.</p>
   <p>On the webpage, click <strong>Connect</strong> or <strong>Authorize</strong>.</p>
-  <div class="warning">If it says "Success" or just sits there with no URL, that's fine too — it means it already connected. Skip to step 5.</div>
+  <div class="warning">If it says "Success" or just sits there with no URL, that's fine — it already connected. Skip to step 6.</div>
 </div>
 
 <div class="step">
-  <div class="step-number">5</div>
+  <div class="step-number">6</div>
   <h2>Text Garen "done"</h2>
-  <p>That's it! You can close Terminal.</p>
+  <p>You can close the Screen Sharing window. That's it!</p>
 </div>
 
 <div class="done">
