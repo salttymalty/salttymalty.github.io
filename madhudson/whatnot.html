@@ -1,0 +1,519 @@
+<!-- guards: none — standalone shareable artifact, not part of design system -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mad Hudson x Whatnot — The Plan</title>
+<style>
+  :root {
+    --bg: #111111;
+    --bg-card: #1a1a1a;
+    --bg-card-alt: #1f1f1f;
+    --text: #F5F0EB;
+    --text-muted: #a09a93;
+    --accent: #C4704B;
+    --accent-dim: rgba(196, 112, 75, 0.15);
+    --color-done: #7dba6e;
+    --color-connor: #d4a24e;
+    --color-garen: #7da8c4;
+    --line: #2a2a2a;
+    --font-display: Georgia, serif;
+    --font-body: 'Source Sans 3', system-ui, -apple-system, sans-serif;
+    --radius: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    padding: 2rem 1.25rem;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.25rem;
+  }
+
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: var(--accent);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  p { margin-bottom: 1rem; }
+
+  /* BLUF block */
+  .bluf {
+    background: var(--bg-card);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+
+  .bluf-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+  }
+
+  .bluf p:last-child { margin-bottom: 0; }
+
+  /* Stats row */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 500px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .stat {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--text);
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+  }
+
+  /* Flywheel */
+  .flywheel {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    line-height: 1.8;
+  }
+
+  .flywheel .step {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .flywheel .arrow {
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* Two-channel */
+  .channels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 500px) {
+    .channels { grid-template-columns: 1fr; }
+  }
+
+  .channel {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+  }
+
+  .channel-name {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .channel p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 0;
+  }
+
+  /* Action items */
+  .action-item {
+    background: var(--bg-card-alt);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: baseline;
+  }
+
+  .action-number {
+    font-family: var(--font-display);
+    color: var(--accent);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .action-text { font-size: 0.95rem; }
+  .action-text strong { font-weight: 600; }
+  .action-text .detail {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+  }
+
+  .action-text .who {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+  }
+
+  .who-connor { color: var(--color-connor); }
+  .who-garen { color: var(--color-garen); }
+
+  /* Template box */
+  .template {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin: 0.75rem 0 1.5rem;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .template-label {
+    font-style: normal;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+
+  /* Risk table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+  }
+
+  th {
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  td {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  /* Flag */
+  .flag {
+    background: var(--accent-dim);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .flag-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .flag p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 0;
+  }
+
+  /* Status pills */
+  .done { color: var(--color-done); }
+
+  /* Collapse */
+  details {
+    margin-bottom: 1rem;
+  }
+
+  summary {
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--accent);
+    padding: 0.5rem 0;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker { display: none; }
+  summary::before {
+    content: '+ ';
+    font-family: var(--font-display);
+  }
+
+  details[open] summary::before { content: '- '; }
+
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<h1>Mad Hudson x Whatnot</h1>
+<p class="subtitle">The whole plan on one page &mdash; March 17, 2026</p>
+
+<!-- BLUF -->
+<div class="bluf">
+  <div class="bluf-label">Bottom line</div>
+  <p>Connor's Whatnot stream with Coop's Time sold 17 watches to strangers in one night for $0 in marketing spend. This isn't a fluke &mdash; it's a repeatable system. Whatnot brings the crowd, the website converts them into full-price buyers. Six moves across two people, about 5 hours total, turn this from a good night into an ongoing engine.</p>
+</div>
+
+<!-- NUMBERS -->
+<div class="stats">
+  <div class="stat">
+    <div class="stat-value">17</div>
+    <div class="stat-label">Watches sold</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">$95</div>
+    <div class="stat-label">Avg sale</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">65&ndash;100</div>
+    <div class="stat-label">Live viewers</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">$0</div>
+    <div class="stat-label">Ad spend</div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<h2>How It Works</h2>
+
+<div class="channels">
+  <div class="channel">
+    <div class="channel-name">Whatnot = the back room</div>
+    <p>Auction pricing, volume, community building. Where new people find you. Think of it like a trunk show.</p>
+  </div>
+  <div class="channel">
+    <div class="channel-name">Website = the gallery</div>
+    <p>Full price, brand story, artist narrative. Where people come back to buy at retail. This is the moat.</p>
+  </div>
+</div>
+
+<p>These two channels feed each other:</p>
+
+<div class="flywheel">
+  <div class="step"><span class="arrow">&rarr;</span> Stream attracts watch enthusiasts (65&ndash;100 per session)</div>
+  <div class="step"><span class="arrow">&rarr;</span> They Google "mad hudson watches" after the stream</div>
+  <div class="step"><span class="arrow">&rarr;</span> Website catches them with your story and full catalog</div>
+  <div class="step"><span class="arrow">&rarr;</span> Some buy at full retail (higher margin than auction)</div>
+  <div class="step"><span class="arrow">&rarr;</span> Some come back to the next stream (bigger audience)</div>
+  <div class="step"><span class="arrow">&rarr;</span> Each collab makes the next one easier &mdash; cycle continues</div>
+</div>
+
+<p style="font-size: 0.9rem; color: var(--text-muted);">On stream days, site traffic jumps from ~200 to 800&ndash;1,200 sessions. The SEO and site work we already did is catching that traffic. Without it, those searches go nowhere.</p>
+
+<!-- THE MOVES -->
+<h2>The Six Moves</h2>
+<p>Ranked by impact. Total time: ~5 hours across both of us. Every move compounds with every future stream.</p>
+
+<div class="action-item">
+  <span class="action-number">1</span>
+  <div class="action-text">
+    <span class="who who-connor">Connor &middot; 20 min</span>
+    <strong>Document one process</strong>
+    <span class="detail">Screen-record yourself packing an order while narrating. That recording becomes a step-by-step guide anyone could follow. Use Loom (free) or iPhone voice memo + paste the transcript into ChatGPT and ask for an SOP. This is how the business eventually gets bigger than one person.</span>
+  </div>
+</div>
+
+<div class="action-item">
+  <span class="action-number">2</span>
+  <div class="action-text">
+    <span class="who who-garen">Garen writes, Connor reviews &middot; 3&ndash;4 hrs</span>
+    <strong>Publish the blog article</strong>
+    <span class="detail">~800 words, first-person. "We Sold 17 Watches in One Night to People We'd Never Met." Goes on the Shopify blog. Right now, nobody searching "watches on Whatnot" finds Mad Hudson. This fixes that permanently.</span>
+  </div>
+</div>
+
+<div class="action-item">
+  <span class="action-number">3</span>
+  <div class="action-text">
+    <span class="who who-connor">Connor &middot; 10 min</span>
+    <strong>Reach out to one more seller for a collab</strong>
+    <span class="detail">One collab is an experiment. Two is a pattern. DM someone whose streams have good energy &mdash; another watch seller, or a streetwear/art print seller with overlapping audience. Or ask Coop's Time for a warm intro.</span>
+  </div>
+</div>
+
+<details>
+  <summary>Copy-paste outreach message</summary>
+  <div class="template">
+    <div class="template-label">DM template</div>
+    Hey [name] &mdash; I'm Connor from Mad Hudson Watches. We just did a collab stream with Coop's Time, moved 17 watches, our chat was fired up. Your streams have great energy and I think our audiences would mix well.<br><br>
+    Would you be down to do a collab stream? We bring the product and the story (our watches are designed by different artists). Happy to work around your schedule. No pressure either way.
+  </div>
+</details>
+
+<div class="action-item">
+  <span class="action-number">4</span>
+  <div class="action-text">
+    <span class="who who-connor">Connor &middot; 5 min</span>
+    <strong>Message your Whatnot contact</strong>
+    <span class="detail">Don't pitch yet &mdash; just open the door. Ask about seller spotlight programs and any new AI tools coming. The real pitch comes after you have the Brad video.</span>
+  </div>
+</div>
+
+<details>
+  <summary>Copy-paste message to Whatnot contact</summary>
+  <div class="template">
+    <div class="template-label">Message template</div>
+    Hey [name] &mdash; quick question. We've been having a great run on watches. Just did a collab stream with Coop's Time, moved 17 pieces in one night, held 65&ndash;100 people for 4.5 hours.<br><br>
+    Two things:<br>
+    1. Do you have a seller spotlight or partnership program? We'd love to be more involved &mdash; even open to producing content you could use.<br>
+    2. Anything coming from the AI/product team that sellers should know about?
+  </div>
+</details>
+
+<div class="action-item">
+  <span class="action-number">5</span>
+  <div class="action-text">
+    <span class="who who-connor">Connor &middot; whenever</span>
+    <strong>Shoot the Brad video</strong>
+    <span class="detail">60&ndash;90 seconds, vertical. Brad at his workbench, cut to a watch face, cut to live chat flying. iPhone is fine &mdash; good lighting matters more than camera. Record 10 minutes, edit to 60 seconds. This is the force multiplier for every press pitch and the Whatnot partnership conversation.</span>
+  </div>
+</div>
+
+<div class="action-item">
+  <span class="action-number">6</span>
+  <div class="action-text">
+    <span class="who who-garen">Garen &middot; ongoing</span>
+    <strong>SEO infrastructure</strong>
+    <span class="detail">Build a "Live Drops" page on the site, set up keyword tracking for "whatnot watches" and "mad hudson watches," and monitor search console for stream-driven traffic spikes.</span>
+  </div>
+</div>
+
+<!-- THINGS TO KNOW -->
+<h2>Three Things Worth Knowing</h2>
+
+<div class="flag">
+  <div class="flag-title">The Brad video is a conversation starter, not a bargaining chip</div>
+  <p>Whatnot doesn't have a formal "trade us content for ad placement" program. The video is still valuable &mdash; use it to tell your story when talking to your contact. Be open to whatever they offer (ambassador program, featured placement, credits). Just don't expect a direct swap.</p>
+</div>
+
+<div class="flag">
+  <div class="flag-title">Fee discounts unlock at $10K/month</div>
+  <p>Current fees: 8% commission + 2.9% + $0.30 per sale (~$13.60 per $95 watch). Not negotiable at current volume (~$3.2K/month). Sellers at $10K+ report getting promotional credits or reduced rates. That's 3&ndash;5 consistent streams/month.</p>
+</div>
+
+<div class="flag">
+  <div class="flag-title">You might be the only artist-collab watch brand on the platform</div>
+  <p>Watches aren't even a dedicated Whatnot category &mdash; they're filed under Collectibles. The platform is dominated by resellers, not original brands. Worth a quick browse to confirm, but this is a real positioning advantage.</p>
+</div>
+
+<!-- RISKS -->
+<h2>Risks and How We Handle Them</h2>
+
+<table>
+  <tr><th>Risk</th><th>How we handle it</th></tr>
+  <tr><td>Platform dependency</td><td>Always drive Whatnot viewers back to your own website</td></tr>
+  <tr><td>Price cannibalization</td><td>Full-price only on the website. Whatnot is auction pricing. Consider Whatnot-exclusive colorways to prevent comparison shopping.</td></tr>
+  <tr><td>Brand dilution</td><td>Keep streams focused on the artist story. Quality standard, not discount energy.</td></tr>
+  <tr><td>Connor bottleneck</td><td>Document processes now so you can delegate later. Move #1 is the start.</td></tr>
+</table>
+
+<!-- WHAT'S ALREADY DONE -->
+<h2>What's Already Built</h2>
+
+<table>
+  <tr><th>Asset</th><th>Status</th></tr>
+  <tr><td>Blog article draft</td><td><span class="done">Ready for Connor's review</span></td></tr>
+  <tr><td>Live Drops page prototype</td><td>Prompt ready &mdash; needs stream schedule from Connor</td></tr>
+  <tr><td>Partnership brief one-pager</td><td>Ready &mdash; needs Connor's contact info filled in</td></tr>
+  <tr><td>Whatnot market research</td><td><span class="done">Complete</span></td></tr>
+  <tr><td>SEO keyword targets</td><td><span class="done">Mapped</span></td></tr>
+</table>
+
+<!-- MARKET -->
+<details>
+  <summary>Market context &amp; press targets</summary>
+  <p style="margin-top: 1rem;">US live commerce is $9.5B today, projected to $69B by 2036 (22% annual growth). Still less than 2% of US retail vs. 30%+ in China. You're building in the early innings.</p>
+  <p><strong>Press targets, ranked by ease:</strong></p>
+  <table>
+    <tr><th>Target</th><th>Angle</th></tr>
+    <tr><td>Whatnot's own blog</td><td>Seller spotlight via your contact</td></tr>
+    <tr><td>Block Club Chicago</td><td>Chicago makers finding national audience through live commerce</td></tr>
+    <tr><td>Worn &amp; Wound</td><td>Indie watch discovery &mdash; artist-collab angle</td></tr>
+    <tr><td>Modern Retail</td><td>"Small brand finds real audience through live auctions" case study</td></tr>
+    <tr><td>Hypebeast</td><td>Art + commerce intersection (competitive, but high upside)</td></tr>
+  </table>
+  <p style="font-size: 0.9rem; color: var(--text-muted);">The Brad video makes every pitch stronger. Shoot it before reaching out to press. Each placement makes the next one easier.</p>
+  <p><strong>SEO keywords to own:</strong> <span style="color: var(--text-muted);">whatnot watches &middot; mad hudson watches &middot; live auction watches &middot; artist collaboration watches &middot; mad hudson whatnot</span></p>
+</details>
+
+<footer>
+  Mad Hudson Watches &middot; Whatnot Strategy &middot; March 17, 2026<br>
+  Prepared by Garen Hudson
+</footer>
+
+</body>
+</html>
