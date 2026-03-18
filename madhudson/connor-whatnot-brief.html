@@ -1,0 +1,663 @@
+<!-- guards: core/color, core/interaction, core/layout, core/typography -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connor's Whatnot Brief — Mad Hudson</title>
+  <link rel="stylesheet" href="madhudson-base.css">
+  <style>
+    /* ── Dark mode token overrides ── */
+    :root {
+      --color-bg: #1a1917;
+      --color-text: #f0ece6;
+      --color-text-secondary: #b8b0a6;
+      --color-text-muted: #8a8078;
+      --color-surface: #252320;
+      --color-surface-alt: #1f1d1a;
+      --color-border: rgba(240, 236, 230, 0.08);
+      --color-shadow: hsla(25, 20%, 10%, 0.3);
+      --color-primary: #5e7d68;
+      --color-primary-light: #7a9a84;
+      --color-primary-dark: #4a6654;
+    }
+
+    .page { max-width: 680px; }
+
+    /* ── Page header ── */
+    .page-header {
+      padding: 2rem 0 1.5rem;
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: 1.5rem;
+    }
+    .page-header h1 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--color-text);
+      margin-bottom: 0.25rem;
+    }
+    .page-header .meta {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+    }
+
+    /* ── BLUF block ── */
+    .bluf {
+      background: var(--color-surface);
+      border: 1px solid var(--color-primary);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .bluf .bluf-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.625rem;
+    }
+    .bluf p {
+      font-size: 1.0625rem;
+      color: var(--color-text);
+      line-height: 1.6;
+      font-weight: 500;
+      max-width: none;
+      margin-bottom: 0;
+    }
+
+    /* ── Stat row ── */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .stat-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1rem 0.875rem;
+      text-align: center;
+    }
+    .stat-card .number {
+      font-family: var(--font-display);
+      font-size: 1.625rem;
+      font-weight: 700;
+      color: var(--color-primary-light);
+      line-height: 1;
+    }
+    .stat-card .label {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      margin-top: 0.375rem;
+      line-height: 1.4;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .card h2 {
+      font-family: var(--font-display);
+      font-size: 1.125rem;
+      color: var(--color-text);
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .card h3 {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-top: 1.125rem;
+      margin-bottom: 0.5rem;
+    }
+    .card h3:first-of-type { margin-top: 0; }
+
+    /* ── Flywheel ── */
+    .flywheel {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      line-height: 1;
+      color: var(--color-text-secondary);
+    }
+    .flywheel-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.625rem;
+      padding: 0.5rem 0;
+    }
+    .flywheel-step:first-child { padding-top: 0; }
+    .flywheel-step:last-child { padding-bottom: 0; }
+    .flywheel-arrow {
+      color: var(--color-primary);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 0.0625rem;
+    }
+    .flywheel-text {
+      flex: 1;
+      line-height: 1.5;
+    }
+    .flywheel-indent-1 { padding-left: 1.125rem; }
+    .flywheel-indent-2 { padding-left: 2.25rem; }
+    .flywheel-indent-3 { padding-left: 3.375rem; }
+    .flywheel-indent-4 { padding-left: 4.5rem; }
+
+    /* ── Two channels ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.875rem;
+    }
+    .channel-card {
+      background: var(--color-surface-alt);
+      border-radius: var(--radius);
+      padding: 1.125rem 1.25rem;
+    }
+    .channel-card .channel-name {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.5rem;
+    }
+    .channel-card .channel-title {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 0.5rem;
+    }
+    .channel-card p {
+      font-size: 0.875rem;
+      color: var(--color-text-secondary);
+      max-width: none;
+      margin-bottom: 0;
+      line-height: 1.5;
+    }
+
+    /* ── Action items ── */
+    .action-list {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: 0;
+    }
+    .action-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      padding: 0.875rem 1rem;
+      background: var(--color-surface-alt);
+      border-radius: var(--radius);
+      margin-bottom: 0.5rem;
+      min-height: var(--touch-target);
+    }
+    .action-item:last-child { margin-bottom: 0; }
+    .action-num {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      flex-shrink: 0;
+      min-width: 1.25rem;
+      padding-top: 0.125rem;
+    }
+    .action-body {
+      flex: 1;
+    }
+    .action-body strong {
+      color: var(--color-text);
+      display: block;
+      font-size: 0.9375rem;
+      margin-bottom: 0.125rem;
+    }
+    .action-body .action-time {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+    }
+
+    /* ── Brad video play ── */
+    .brad-video {
+      background: var(--color-surface-alt);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.375rem;
+      margin-bottom: 1rem;
+    }
+    .brad-video .video-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.625rem;
+    }
+    .brad-video p {
+      font-size: 0.9375rem;
+      color: var(--color-text-secondary);
+      max-width: none;
+      margin-bottom: 0.625rem;
+      line-height: 1.6;
+    }
+    .brad-video p:last-child { margin-bottom: 0; }
+    .brad-video strong { color: var(--color-text); }
+
+    .ask-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.875rem;
+    }
+    .ask-pill {
+      font-size: 0.8125rem;
+      padding: 0.375rem 0.75rem;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 100px;
+      color: var(--color-text-secondary);
+    }
+
+    .why-note {
+      border-left: 3px solid var(--color-primary);
+      padding: 0.875rem 1.125rem;
+      background: var(--color-surface-alt);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      margin-top: 1rem;
+      font-size: 0.9375rem;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+    }
+    .why-note strong { color: var(--color-text); }
+
+    /* ── Risk cards ── */
+    .risk-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    .risk-card {
+      background: var(--color-surface-alt);
+      border-radius: var(--radius);
+      padding: 1rem 1.125rem;
+    }
+    .risk-card .risk-name {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 0.375rem;
+    }
+    .risk-card .risk-threat {
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      margin-bottom: 0.625rem;
+      line-height: 1.5;
+    }
+    .risk-card .risk-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.25rem;
+    }
+    .risk-card .risk-mitigation {
+      font-size: 0.8125rem;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ── Garen building ── */
+    .building-list {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: 0;
+    }
+    .building-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.625rem 0;
+      border-bottom: 1px solid var(--color-border);
+      font-size: 0.9375rem;
+      color: var(--color-text-secondary);
+    }
+    .building-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .building-item:first-child { padding-top: 0; }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .status-dot.done { background: var(--color-primary); }
+    .status-dot.progress { background: var(--color-warning); }
+    .status-dot.ready { background: var(--color-text-muted); }
+    .building-item .item-status {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    /* ── Research pending ── */
+    .research-list {
+      display: grid;
+      gap: 0.375rem;
+      margin-bottom: 0;
+    }
+    .research-item {
+      font-size: 0.875rem;
+      color: var(--color-text-secondary);
+      padding: 0.5rem 0.875rem;
+      background: var(--color-surface-alt);
+      border-radius: var(--radius);
+      line-height: 1.5;
+    }
+
+    /* ── Collapsible big picture ── */
+    details {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      margin-bottom: 1.25rem;
+    }
+    details summary {
+      padding: 1.25rem 1.75rem;
+      font-family: var(--font-display);
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--color-text);
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: var(--touch-target);
+      user-select: none;
+    }
+    details summary::-webkit-details-marker { display: none; }
+    details summary::after {
+      content: '+';
+      font-family: var(--font-mono);
+      font-size: 1.125rem;
+      color: var(--color-text-muted);
+      font-weight: 400;
+      transition: transform 0.15s ease;
+    }
+    details[open] summary::after {
+      content: '\2212';
+    }
+    details summary:hover { color: var(--color-primary-light); }
+    .details-body {
+      padding: 0 1.75rem 1.75rem;
+      border-top: 1px solid var(--color-border);
+    }
+    .details-body p {
+      font-size: 0.9375rem;
+      color: var(--color-text-secondary);
+      max-width: none;
+      margin-top: 1.25rem;
+      margin-bottom: 0.875rem;
+      line-height: 1.7;
+    }
+    .details-body p:last-child { margin-bottom: 0; }
+
+    footer {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--color-border);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      text-align: center;
+    }
+    footer p { margin-bottom: 0.25rem; max-width: none; }
+
+    @media (max-width: 600px) {
+      .stat-row { grid-template-columns: repeat(2, 1fr); }
+      .two-col { grid-template-columns: 1fr; }
+      .risk-grid { grid-template-columns: 1fr; }
+      .page-header h1 { font-size: 1.375rem; }
+      .card { padding: 1.25rem; }
+      .bluf { padding: 1.25rem; }
+      details summary { padding: 1rem 1.25rem; }
+      .details-body { padding: 0 1.25rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <div class="page-header">
+      <h1>Connor's Whatnot Brief</h1>
+      <span class="meta">Strategy session recap &middot; March 2026</span>
+    </div>
+
+    <div class="bluf">
+      <div class="bluf-label">Bottom Line Up Front</div>
+      <p>Mad Hudson found product-market fit on Whatnot. Here's the plan to maximize it without becoming platform-dependent.</p>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="number">17</div>
+        <div class="label">Watches / stream</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">$95</div>
+        <div class="label">Avg sale price</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">65–100</div>
+        <div class="label">Concurrent viewers</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">$0</div>
+        <div class="label">Customer acquisition cost</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>The Flywheel</h2>
+      <div class="flywheel">
+        <div class="flywheel-step">
+          <span class="flywheel-arrow">&rarr;</span>
+          <span class="flywheel-text">Whatnot streams &rarr; people discover the brand</span>
+        </div>
+        <div class="flywheel-step flywheel-indent-1">
+          <span class="flywheel-arrow">&rarr;</span>
+          <span class="flywheel-text">they Google "mad hudson watches"</span>
+        </div>
+        <div class="flywheel-step flywheel-indent-2">
+          <span class="flywheel-arrow">&rarr;</span>
+          <span class="flywheel-text">website catches them with brand story</span>
+        </div>
+        <div class="flywheel-step flywheel-indent-3">
+          <span class="flywheel-arrow">&rarr;</span>
+          <span class="flywheel-text">some become direct buyers (higher margin)</span>
+        </div>
+        <div class="flywheel-step flywheel-indent-3">
+          <span class="flywheel-arrow">&rarr;</span>
+          <span class="flywheel-text">some become repeat stream attendees</span>
+        </div>
+        <div class="flywheel-step flywheel-indent-4">
+          <span class="flywheel-arrow">&rarr;</span>
+          <span class="flywheel-text">more bidders = higher prices</span>
+        </div>
+        <div class="flywheel-step flywheel-indent-4">
+          <span class="flywheel-arrow">&rarr;</span>
+          <span class="flywheel-text">more collabs = bigger audience</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Two Channels</h2>
+      <div class="two-col">
+        <div class="channel-card">
+          <div class="channel-name">Whatnot</div>
+          <div class="channel-title">The Back Room</div>
+          <p>Wholesale, community, "if you know you know." Audience acquisition that costs margin, not ad spend.</p>
+        </div>
+        <div class="channel-card">
+          <div class="channel-name">Website</div>
+          <div class="channel-title">The Gallery</div>
+          <p>Full price, brand story, artist-designed timepieces. "We don't need to sell you anything" energy.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Your 4 Moves This Week</h2>
+      <ul class="action-list">
+        <li class="action-item">
+          <span class="action-num">1</span>
+          <div class="action-body">
+            <strong>Document one process</strong>
+            <span class="action-time">Screen record packing/shipping &mdash; 20 min</span>
+          </div>
+        </li>
+        <li class="action-item">
+          <span class="action-num">2</span>
+          <div class="action-body">
+            <strong>Review the blog article draft</strong>
+            <span class="action-time">Read, mark it up, send notes &mdash; 30 min</span>
+          </div>
+        </li>
+        <li class="action-item">
+          <span class="action-num">3</span>
+          <div class="action-body">
+            <strong>DM one watch seller for collab</strong>
+            <span class="action-time">Reach out, see what happens &mdash; 10 min</span>
+          </div>
+        </li>
+        <li class="action-item">
+          <span class="action-num">4</span>
+          <div class="action-body">
+            <strong>Message your Whatnot contact about a seller spotlight</strong>
+            <span class="action-time">Use the partnership brief &mdash; 5 min</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>The Brad Video Play</h2>
+      <div class="brad-video">
+        <div class="video-label">The Shot</div>
+        <p>Brad at his workbench designing the watch. Making it. Then selling it live to chat going absolutely wild. <strong>One real line from Brad, not scripted.</strong></p>
+        <p>60–90 seconds vertical, plus 30-sec and 15-sec cuts. Offer the whole package to Whatnot as ad creative.</p>
+      </div>
+      <p style="font-size: 0.9375rem; color: var(--color-text-secondary); max-width: none; margin-bottom: 0.75rem;">Ask for:</p>
+      <div class="ask-pills">
+        <span class="ask-pill">Platform credits</span>
+        <span class="ask-pill">Featured placement</span>
+        <span class="ask-pill">Co-marketing</span>
+        <span class="ask-pill">Press inclusion</span>
+      </div>
+      <div class="why-note">
+        <strong>Why it works:</strong> Whatnot has zero independent brand case studies. ZKStyles, Shoe Game Co, Backyard Breaks — all resellers. Brad IS the ad. An artist who designs watches and sells them live to strangers in Chicago is a story their marketing team dreams about.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Risks You Named</h2>
+      <div class="risk-grid">
+        <div class="risk-card">
+          <div class="risk-name">Platform Dependency</div>
+          <div class="risk-threat">All customers on Whatnot = Whatnot owns the business</div>
+          <div class="risk-label">Guard</div>
+          <div class="risk-mitigation">Own the relationship on the website. Use Whatnot for discovery, not custody.</div>
+        </div>
+        <div class="risk-card">
+          <div class="risk-name">Race to Bottom</div>
+          <div class="risk-threat">Audience conditioned to expect auction prices</div>
+          <div class="risk-label">Guard</div>
+          <div class="risk-mitigation">Website holds full-price positioning. Whatnot is explicitly the "deal" channel.</div>
+        </div>
+        <div class="risk-card">
+          <div class="risk-name">Brand Dilution</div>
+          <div class="risk-threat">Shady sellers in the watches category</div>
+          <div class="risk-label">Guard</div>
+          <div class="risk-mitigation">Brad video + press defines the quality standard. Be the reference point, not a participant.</div>
+        </div>
+        <div class="risk-card">
+          <div class="risk-name">Secret Goes Stale</div>
+          <div class="risk-threat">"Mega secret" energy fades if over-marketed</div>
+          <div class="risk-label">Guard</div>
+          <div class="risk-mitigation">Understated website presence. "Live Drops" page, not a billboard. Let discovery feel earned.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>What Garen Is Building</h2>
+      <ul class="building-list">
+        <li class="building-item">
+          <span class="status-dot done"></span>
+          Blog article draft — story of a Chicago brand finding its audience on Whatnot
+          <span class="item-status">In review</span>
+        </li>
+        <li class="building-item">
+          <span class="status-dot progress"></span>
+          Meta descriptions — SEO copy for key pages
+          <span class="item-status">In progress</span>
+        </li>
+        <li class="building-item">
+          <span class="status-dot done"></span>
+          Partnership brief — one-pager for your Whatnot contact
+          <span class="item-status">Done</span>
+        </li>
+        <li class="building-item">
+          <span class="status-dot progress"></span>
+          SEO infrastructure — catching Whatnot-related search traffic
+          <span class="item-status">In progress</span>
+        </li>
+        <li class="building-item">
+          <span class="status-dot ready"></span>
+          Live Drops page — speakeasy door, not billboard
+          <span class="item-status">Prompt ready</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Research Pending</h2>
+      <div class="research-list">
+        <div class="research-item">Live commerce market size and growth projections (2026–2028)</div>
+        <div class="research-item">Brands that built DTC pipelines out of live commerce — what worked</div>
+        <div class="research-item">Whatnot seller economics — actual fee structure and what's negotiable</div>
+        <div class="research-item">Whatnot ad pipeline — who handles creative, what specs, how to submit</div>
+        <div class="research-item">Watch category mapping — other sellers and collab opportunities</div>
+        <div class="research-item">Whatnot's AI tools — what seller-facing features are they building</div>
+        <div class="research-item">QVC-to-DTC parallels — brands that started on live TV and went direct</div>
+        <div class="research-item">Audience stacking — how cross-collab streams compound over time</div>
+      </div>
+    </div>
+
+    <details>
+      <summary>The Big Picture</summary>
+      <div class="details-body">
+        <p>The platform paradox: Whatnot is the best audience acquisition tool Mad Hudson has found. It's also a single point of failure. The move is to use the platform for discovery while building ownership elsewhere — email list, website, direct buyer relationships.</p>
+        <p>Glossier started on Instagram but moved everyone to email and DTC. Every successful Etsy seller eventually launches their own site. Every brand that found its first audience on QVC eventually asked: how do we get these people to come back without the middleman?</p>
+        <p>Live commerce in the US is where e-commerce was in 2005. The people building the infrastructure now — the case studies, the playbooks, the seller relationships — own the narrative later. Connor's instincts are sharp: the "mega secret" positioning, the early adopter framing, the Brad-as-ad insight. Those are real strategic assets, not just vibes.</p>
+        <p>The article, the website, the email list — that's where ownership lives. The streams generate the demand. Everything else captures it.</p>
+      </div>
+    </details>
+
+    <footer>
+      <p>Mad Hudson Watches &middot; March 2026</p>
+      <p>Prepared by Garen Hudson</p>
+    </footer>
+
+  </div>
+</body>
+</html>

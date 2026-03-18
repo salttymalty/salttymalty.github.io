@@ -1,0 +1,293 @@
+<!-- guards: core/color, core/interaction, core/layout, core/typography -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mad Hudson x Whatnot — Partnership Opportunity</title>
+  <link rel="stylesheet" href="madhudson-base.css">
+  <style>
+    /* ── Dark mode token overrides ── */
+    :root {
+      --color-bg: #1a1917;
+      --color-text: #f0ece6;
+      --color-text-secondary: #b8b0a6;
+      --color-text-muted: #8a8078;
+      --color-surface: #252320;
+      --color-surface-alt: #1f1d1a;
+      --color-border: rgba(240, 236, 230, 0.08);
+      --color-shadow: hsla(25, 20%, 10%, 0.3);
+      --color-primary: #5e7d68;
+      --color-primary-light: #7a9a84;
+      --color-primary-dark: #4a6654;
+    }
+
+    .page { max-width: 720px; }
+
+    .hero {
+      padding: 2.5rem 0 1.5rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      margin-bottom: 0.5rem;
+      color: var(--color-text);
+    }
+    .hero .subtitle {
+      font-size: 1rem;
+      color: var(--color-text-secondary);
+      max-width: 60ch;
+      margin-bottom: 1rem;
+    }
+    .hero .date {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+    }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.875rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1rem;
+      text-align: center;
+    }
+    .stat-card .number {
+      font-family: var(--font-display);
+      font-size: 1.875rem;
+      font-weight: 700;
+      color: var(--color-primary-light);
+      line-height: 1;
+    }
+    .stat-card .label {
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      margin-top: 0.375rem;
+      line-height: 1.4;
+    }
+
+    section {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem 2rem;
+      margin-bottom: 1.25rem;
+    }
+    section h2 {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--color-border);
+      color: var(--color-text);
+    }
+
+    .offer-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .offer-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .offer-item:first-child { padding-top: 0; }
+    .offer-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      min-width: 80px;
+      padding-top: 0.125rem;
+      flex-shrink: 0;
+    }
+    .offer-body {
+      flex: 1;
+    }
+    .offer-body p {
+      font-size: 0.9375rem;
+      color: var(--color-text-secondary);
+      margin-bottom: 0.375rem;
+      max-width: none;
+    }
+    .offer-body p:last-child { margin-bottom: 0; }
+    .offer-body strong { color: var(--color-text); }
+
+    .ask-list {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: 0;
+    }
+    .ask-list li {
+      padding: 0.75rem 1rem;
+      background: var(--color-surface-alt);
+      border-radius: var(--radius);
+      margin-bottom: 0.5rem;
+      font-size: 0.9375rem;
+      color: var(--color-text-secondary);
+    }
+    .ask-list li:last-child { margin-bottom: 0; }
+    .ask-list li strong { color: var(--color-text); display: block; margin-bottom: 0.125rem; }
+
+    .why-grid {
+      display: grid;
+      gap: 0.875rem;
+    }
+    .why-item {
+      background: var(--color-surface-alt);
+      border-radius: var(--radius);
+      padding: 1.125rem 1.25rem;
+      font-size: 0.9375rem;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+    }
+    .why-item .tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      display: block;
+      margin-bottom: 0.375rem;
+    }
+    .why-item p { max-width: none; margin-bottom: 0; }
+
+    .highlight {
+      color: var(--color-text);
+      font-weight: 600;
+    }
+
+    footer {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--color-border);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      text-align: center;
+    }
+    footer p { margin-bottom: 0.25rem; max-width: none; }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.5rem; }
+      section { padding: 1.25rem 1.25rem; }
+      .offer-item { flex-direction: column; gap: 0.375rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <div class="hero">
+      <h1>Mad Hudson x Whatnot</h1>
+      <p class="subtitle">Partnership Opportunity — we think there's something here worth exploring together.</p>
+      <span class="date">March 2026</span>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="number">17</div>
+        <div class="label">Watches sold in one stream</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">$95</div>
+        <div class="label">Average sale price</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">65–100</div>
+        <div class="label">Concurrent viewers</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">4.5 hrs</div>
+        <div class="label">Sustained engagement</div>
+      </div>
+    </div>
+
+    <section>
+      <h2>What We Can Offer</h2>
+      <div class="offer-item">
+        <div class="offer-label">Video</div>
+        <div class="offer-body">
+          <p><strong>A 60–90 second vertical promo video featuring Brad</strong> — artist at workbench designing the watch, making it, then selling it live to a chat going absolutely wild. One authentic line from Brad, not scripted.</p>
+          <p>We'll also cut a 30-second and a 15-second version. Use it however you want — ads, socials, seller spotlight, all of it. Brad on camera is a commercial that writes itself.</p>
+        </div>
+      </div>
+      <div class="offer-item">
+        <div class="offer-label">Content</div>
+        <div class="offer-body">
+          <p><strong>Ongoing authentic seller content</strong> — stream highlights, behind-the-scenes at the studio, artist spotlights. Not promotional fluff. Real stuff.</p>
+        </div>
+      </div>
+      <div class="offer-item">
+        <div class="offer-label">Story</div>
+        <div class="offer-body">
+          <p><strong>The first independent brand case study on Whatnot.</strong> Every existing case study is a reseller — ZKStyles, Shoe Game Co, Backyard Breaks. No one has documented what it looks like when an original brand with a real artist finds its audience through live commerce.</p>
+          <p>We're happy to be that story.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>What We'd Love</h2>
+      <ul class="ask-list">
+        <li>
+          <strong>Platform credits or reduced fees</strong>
+          Current transaction cost: 8% + 2.9% + $0.30 per sale. Credits or a reduced rate would let us run more streams and price more aggressively — which means more buyer activity, which looks good for everyone.
+        </li>
+        <li>
+          <strong>Featured placement in the watches category</strong>
+          Exposure to the 1.2K viewers browsing Jewelry &amp; Watches. We stand out because we're not a reseller or liquidator — we're an original brand.
+        </li>
+        <li>
+          <strong>Co-marketing</strong>
+          If Whatnot promotes Mad Hudson streams to its audience, both sides win. We bring the content; you amplify it.
+        </li>
+        <li>
+          <strong>Early access to seller tools or AI features</strong>
+          Connor mentioned your AI team is building. We'd be interested in being part of any pilot programs for sellers.
+        </li>
+        <li>
+          <strong>Inclusion in press or marketing materials</strong>
+          If Brad's video ends up in a campaign, great. If there's a press story about independent brands on Whatnot, we'd love to be part of it.
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Why This Works for Both Sides</h2>
+      <div class="why-grid">
+        <div class="why-item">
+          <span class="tag">Context</span>
+          <p>Whatnot ran full-page print ads in the New York Times, Washington Post, LA Times, and Chicago Tribune during the TikTok shutdown. Had <span class="highlight">three of its biggest user acquisition days ever</span>. You're actively looking for ways to tell the authentic seller story.</p>
+        </div>
+        <div class="why-item">
+          <span class="tag">Gap in the Market</span>
+          <p>Every Whatnot case study is a reseller. <span class="highlight">No independent brand has been featured.</span> Mad Hudson is three guys in Chicago who make watches with artists and sell them live to strangers. That's a different kind of story.</p>
+        </div>
+        <div class="why-item">
+          <span class="tag">Category Opportunity</span>
+          <p>The watches category on Whatnot is mostly resellers and liquidators. Mad Hudson's artist-collaboration model is distinct. Being featured as the <span class="highlight">quality standard in a category that needs one</span> is good for the platform.</p>
+        </div>
+        <div class="why-item">
+          <span class="tag">Premier Shop Path</span>
+          <p>We're tracking toward Premier Shop Program eligibility. Accelerating that path — through featured placement, co-marketing, or seller support — would make the trajectory visible and keep us invested in the platform long-term.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>Connor Hudson &mdash; Mad Hudson Watches</p>
+      <p>[contact info]</p>
+      <p>March 2026</p>
+    </footer>
+
+  </div>
+</body>
+</html>
