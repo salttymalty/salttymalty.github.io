@@ -1,0 +1,212 @@
+/* ═══════════════════════════════════════════════════════════════
+   MADHUDSON BASE — Shared styles for Mad Hudson SEO deliverable
+   Canonical tokens + topbar + typography + footer
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Design Tokens ── */
+:root {
+  --color-primary: #5e7d68;
+  --color-primary-light: #7a9a84;
+  --color-primary-dark: #4a6654;
+  --color-success: #6ba167;
+  --color-warning: #c4934a;
+  --color-info: #5a8fa6;
+  --color-surface: #ffffff;
+  --color-surface-alt: #fafaf8;
+  --color-bg: #f6f5f3;
+  --color-text: #2e2a27;
+  --color-text-secondary: #5e5854;
+  --color-text-muted: #827b77;
+  --color-border: rgba(45, 42, 39, 0.10);
+  --color-shadow: hsla(25, 20%, 30%, 0.06);
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Source Sans 3', system-ui, sans-serif;
+  --font-mono: 'Source Code Pro', monospace;
+  --radius: 8px;
+  --touch-target: 44px;
+}
+
+/* ── Reset ── */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ── Base ── */
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-text);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4 {
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+h1 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+}
+
+h2 {
+  font-family: var(--font-body);
+  font-size: 1.1875rem;
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  margin-bottom: 0.75rem;
+  margin-top: 1.5rem;
+  font-weight: 600;
+}
+
+h4 {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+p {
+  margin-bottom: 1rem;
+  max-width: 72ch;
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--color-surface-alt);
+  padding: 0.125rem 0.375rem;
+  border-radius: 4px;
+}
+
+ul, ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+li {
+  margin-bottom: 0.5rem;
+}
+
+strong {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ── Page Container ── */
+.page {
+  margin: 0 auto;
+  padding: 2.5rem 2rem 4rem;
+}
+
+/* ── Topbar ── */
+.topbar {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.topbar-brand {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--color-text);
+  padding-right: 1.5rem;
+  margin-right: 0.5rem;
+  border-right: 1px solid var(--color-border);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.topbar-brand:hover { text-decoration: none; }
+
+.topbar-nav { display: flex; height: 100%; }
+
+.topbar-link {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s ease;
+  min-height: 44px;
+  white-space: nowrap;
+}
+
+.topbar-link:hover {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.topbar-link.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* ── Footer ── */
+footer {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+footer p { margin-bottom: 0.25rem; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .topbar {
+    padding: 0 1rem;
+    overflow-x: auto;
+  }
+
+  .topbar-link {
+    padding: 0 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  .page {
+    padding: 1.5rem 1rem;
+  }
+
+  h1 {
+    font-size: 1.375rem;
+  }
+}
+
+/* ── Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

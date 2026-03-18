@@ -1,0 +1,430 @@
+<!-- guards: core/color, core/interaction, core/layout, core/typography -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whatnot Live Commerce Strategy — Mad Hudson Watches</title>
+  <link rel="stylesheet" href="madhudson-base.css">
+  <style>
+    .page { max-width: 860px; }
+    .hero {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    .hero h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
+    .hero .subtitle {
+      font-size: 1.0625rem;
+      color: var(--color-text-secondary);
+      margin-bottom: 1rem;
+    }
+    .hero .date {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+    }
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      text-align: center;
+    }
+    .stat-card .number {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      line-height: 1;
+    }
+    .stat-card .label {
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      margin-top: 0.375rem;
+    }
+    section {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem 2rem;
+      margin-bottom: 1.25rem;
+    }
+    section h2 {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 640px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+    .channel-card {
+      background: var(--color-surface-alt);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+    }
+    .channel-card h3 {
+      margin-top: 0;
+      font-size: 1rem;
+      color: var(--color-primary-dark);
+    }
+    .channel-card p { font-size: 0.9375rem; }
+    .flywheel {
+      background: var(--color-surface-alt);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      line-height: 2;
+      color: var(--color-text-secondary);
+      overflow-x: auto;
+    }
+    .flywheel .step {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .flywheel .arrow {
+      color: var(--color-primary);
+      font-weight: 700;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.9375rem;
+    }
+    th {
+      text-align: left;
+      font-weight: 600;
+      padding: 0.625rem 0.75rem;
+      border-bottom: 2px solid var(--color-border);
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-text-muted);
+    }
+    td {
+      padding: 0.625rem 0.75rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+    tr:last-child td { border-bottom: none; }
+    .risk-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.125rem 0.5rem;
+      border-radius: 100px;
+      background: var(--color-surface-alt);
+      color: var(--color-warning);
+    }
+    .action-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+    @media (max-width: 640px) {
+      .action-grid { grid-template-columns: 1fr; }
+    }
+    .action-lane {
+      background: var(--color-surface-alt);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+    }
+    .action-lane h3 {
+      margin-top: 0;
+      font-size: 1rem;
+      margin-bottom: 0.75rem;
+    }
+    .action-lane ol {
+      padding-left: 1.25rem;
+      margin-bottom: 0;
+    }
+    .action-lane li {
+      font-size: 0.9375rem;
+      margin-bottom: 0.375rem;
+    }
+    .quote-block {
+      border-left: 3px solid var(--color-primary);
+      padding: 1rem 1.25rem;
+      background: var(--color-surface-alt);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      margin: 1rem 0;
+      font-style: italic;
+      color: var(--color-text-secondary);
+    }
+    .insight-box {
+      background: var(--color-surface-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      margin: 1rem 0;
+    }
+    .insight-box strong {
+      color: var(--color-primary-dark);
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .thread-list {
+      list-style: none;
+      padding-left: 0;
+    }
+    .thread-list li {
+      padding: 0.75rem 1rem;
+      background: var(--color-surface-alt);
+      border-radius: var(--radius);
+      margin-bottom: 0.5rem;
+      font-size: 0.9375rem;
+    }
+    .thread-list li strong {
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+  <nav class="topbar">
+    <a href="#" class="topbar-brand">Mad Hudson SEO</a>
+    <div class="topbar-nav">
+      <a href="#" class="topbar-link">Summary</a>
+      <a href="#" class="topbar-link">Dashboard</a>
+      <a href="whatnot-strategy.html" class="topbar-link active">Strategy</a>
+      <a href="whatnot-toolkit.html" class="topbar-link">Toolkit</a>
+    </div>
+  </nav>
+
+  <div class="page">
+    <div class="hero">
+      <h1>Whatnot Live Commerce Strategy</h1>
+      <p class="subtitle">How Mad Hudson turns live auction streams into a brand-building flywheel</p>
+      <span class="date">March 17, 2026 &middot; Strategy Session with Connor</span>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="number">17</div>
+        <div class="label">Watches sold in one stream</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">$95</div>
+        <div class="label">Average sale price</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">65–100</div>
+        <div class="label">Concurrent viewers (4.5 hrs)</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">$0</div>
+        <div class="label">Customer acquisition cost</div>
+      </div>
+    </div>
+
+    <section>
+      <h2>The Catalyst</h2>
+      <p>A top Whatnot reseller, <strong>Coop's Time</strong>, reached out to collaborate with Mad Hudson. She's pivoted from selling her own product to collaborating with other sellers — bringing her established audience to partner streams.</p>
+      <p>The result: 65–100 concurrent viewers for 4.5 hours. People from Coop's Time chat migrated into Mad Hudson's chat. 17 watches found new homes. Connor's take:</p>
+      <div class="quote-block">
+        "This is the first stream that felt like a self-sustaining ecosystem. It's at the onset of this — live commerce."
+      </div>
+      <p>These aren't passive eyeballs. Every person in the room is holding their wallet. That's deeper engagement than any influencer post will ever generate.</p>
+    </section>
+
+    <section>
+      <h2>Two Channels, Two Jobs</h2>
+      <div class="two-col">
+        <div class="channel-card">
+          <h3>Whatnot = The Back Room</h3>
+          <p>Wholesale pricing. Volume. Community building. Audience acquisition that costs margin, not ad spend. "If you know, you know" energy.</p>
+          <p><strong>The job:</strong> Get watches into the world. Build a community of enthusiasts who keep coming back.</p>
+        </div>
+        <div class="channel-card">
+          <h3>Website = The Gallery</h3>
+          <p>Full price. Brand story. Artist-designed timepieces. "We don't need to sell you anything" energy.</p>
+          <p><strong>The job:</strong> Own the brand identity (GOAL A) independent of any platform.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>The Flywheel</h2>
+      <div class="flywheel">
+        <div class="step"><span class="arrow">&rarr;</span> Whatnot streams attract watch enthusiasts</div>
+        <div class="step"><span class="arrow">&rarr;</span> Viewers discover Mad Hudson, Google the brand</div>
+        <div class="step"><span class="arrow">&rarr;</span> Website catches them with brand story (GOAL A)</div>
+        <div class="step"><span class="arrow">&rarr;</span> Some become direct buyers (higher margin)</div>
+        <div class="step"><span class="arrow">&rarr;</span> Some become repeat stream attendees</div>
+        <div class="step"><span class="arrow">&rarr;</span> More bidders = higher prices = more revenue</div>
+        <div class="step"><span class="arrow">&rarr;</span> More collabs = bigger audience = cycle continues</div>
+      </div>
+      <div class="insight-box">
+        <strong>Key Insight</strong>
+        <p style="margin-top: 0.5rem; margin-bottom: 0;">Connor doesn't have to choose between Whatnot revenue and brand building. They feed each other. The streams generate search demand for the brand. The brand content converts searchers into stream regulars.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>The Old Model vs. What Connor Has</h2>
+      <table>
+        <thead>
+          <tr><th>Influencer Agency ($10–30K)</th><th>Whatnot Streams ($0)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Broad audience, low intent</td><td>Every viewer is a buyer</td></tr>
+          <tr><td>One-time exposure</td><td>Recurring streams build community</td></tr>
+          <tr><td>No data on who watched</td><td>Whatnot analytics built in</td></tr>
+          <tr><td>Agency middleman</td><td>Direct contact at Whatnot</td></tr>
+          <tr><td>Audience belongs to influencer</td><td>Audience belongs to Mad Hudson</td></tr>
+          <tr><td>Pay per campaign</td><td>Platform is free to sell on</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>The Brad Video Play</h2>
+      <p>Connor's sharpest move: <strong>shoot a promo video featuring Brad and offer it to Whatnot as ad creative.</strong> Whatnot runs ads constantly and needs authentic content. Brad — an actual artist making a watch, then selling it live to strangers — is a commercial that writes itself.</p>
+      <table>
+        <thead>
+          <tr><th>Mad Hudson Gives</th><th>Mad Hudson Asks For</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Polished promo video featuring Brad</td><td>Platform credits (reduce fees per sale)</td></tr>
+          <tr><td>Authentic "artist sells live" story</td><td>Better rev share or promotional pricing</td></tr>
+          <tr><td>Content for Whatnot's channels</td><td>Featured placement in watches category</td></tr>
+          <tr><td>A face for their brand campaigns</td><td>Co-marketing (Whatnot promotes MH streams)</td></tr>
+        </tbody>
+      </table>
+      <div class="insight-box">
+        <strong>Platform Strategy</strong>
+        <p style="margin-top: 0.5rem; margin-bottom: 0;">If Whatnot uses Brad's face in their ads, Mad Hudson becomes synonymous with "this is what great looks like on Whatnot." Shopify did this with Allbirds. Etsy did it with a handful of makers. The brand that becomes the platform's poster child gets outsized returns forever.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Risks &amp; Guardrails</h2>
+      <table>
+        <thead>
+          <tr><th>Risk</th><th>Mitigation</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="risk-tag">Platform Dependency</span><br>All customers on Whatnot = Whatnot owns the business</td>
+            <td>Use Whatnot for discovery, own the relationship on the website. Every stream should create website visitors.</td>
+          </tr>
+          <tr>
+            <td><span class="risk-tag">Race to Bottom</span><br>Audience conditioned to expect auction prices</td>
+            <td>Website maintains full-price positioning. Whatnot is explicitly the "deal" channel. Wholesale pricing is strategy, not default.</td>
+          </tr>
+          <tr>
+            <td><span class="risk-tag">Brand Dilution</span><br>Shady sellers in watches category</td>
+            <td>Become the quality standard through Brad video + press. Define the category before someone else does.</td>
+          </tr>
+          <tr>
+            <td><span class="risk-tag">Secret to Stale</span><br>"Mega secret" energy fades if over-marketed</td>
+            <td>Understated presence on website. "Live Drops" page, not "WATCH US ON WHATNOT." Let discovery feel organic.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>The Story to Tell</h2>
+      <p>Not "live shopping is a trend." The article is Mad Hudson's actual story:</p>
+      <div class="quote-block">
+        Small Chicago watch brand partners with artists to design timepieces. Finds its real audience not through ads or retail, but through live auction streams where 100 strangers show up at 9pm on a Tuesday to bid on art you wear on your wrist.
+      </div>
+      <p>This story is <strong>true</strong>, which is why it works. One article on madhudsonwatches.com/blog — first-person energy, not corporate — ranks for every query about Whatnot + watches + independent brands naturally. Connor's observation that the articles don't exist yet is exactly the point: whoever tells this story first owns it.</p>
+
+      <h3>Press Targets</h3>
+      <table>
+        <thead>
+          <tr><th>Outlet</th><th>Angle</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Block Club Chicago</td><td>Local brand finding national audience through live shopping</td></tr>
+          <tr><td>Worn &amp; Wound</td><td>Independent microbrand discovery piece</td></tr>
+          <tr><td>Hypebeast</td><td>Artist collaboration + live commerce trend intersection</td></tr>
+          <tr><td>Modern Retail / Glossy</td><td>Live shopping case study — Whatnot success story</td></tr>
+          <tr><td>Whatnot's own blog</td><td>Featured seller spotlight (Connor's contact = warm ask)</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>SEO Opportunity</h2>
+      <p>Nobody owns "Whatnot watches" in Google. Results are Whatnot's own pages and generic guides. No watch brand is targeting the searcher who discovered watches through a stream and is now Googling to learn more.</p>
+      <table>
+        <thead>
+          <tr><th>Query Cluster</th><th>Content That Ranks</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>whatnot watches</code></td><td>Blog article (the story)</td><td>Category ownership</td></tr>
+          <tr><td><code>mad hudson watches</code></td><td>Homepage + About</td><td>Brand story</td></tr>
+          <tr><td><code>mad hudson whatnot</code></td><td>"Live Drops" page</td><td>Stream schedule</td></tr>
+          <tr><td><code>artist collaboration watches</code></td><td>Product pages + blog</td><td>GOAL A identity</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Action Items</h2>
+      <div class="action-grid">
+        <div class="action-lane">
+          <h3>Garen's Lane</h3>
+          <ol>
+            <li>Write the article for madhudsonwatches.com/blog</li>
+            <li>Draft the Whatnot partnership brief (one-pager for Connor's contact)</li>
+            <li>Build the "Live Drops" page (speakeasy door, not billboard)</li>
+            <li>Wire SEO infrastructure to catch traffic</li>
+            <li>Monitor GSC for Whatnot-related query impressions</li>
+          </ol>
+        </div>
+        <div class="action-lane">
+          <h3>Connor's Lane</h3>
+          <ol>
+            <li>Ask Whatnot contact about seller spotlight / press program</li>
+            <li>Ask Whatnot contact about their AI team and seller tools</li>
+            <li>Continue Coop's Time-style collaborations</li>
+            <li>Shoot the Brad video (authentic, not overproduced)</li>
+            <li>Send one pitch email to press (story sells itself)</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Research Threads</h2>
+      <ul class="thread-list">
+        <li><strong>Live Commerce Market</strong> US live commerce market size and growth projections (2026–2028). Where is this going?</li>
+        <li><strong>Brand-on-Platform Playbooks</strong> Case studies of brands that used live commerce as acquisition channel into DTC pipeline successfully</li>
+        <li><strong>Whatnot Seller Economics</strong> Actual rev share / fee structure, and what's negotiable in partnership deals</li>
+        <li><strong>Whatnot Ad Pipeline</strong> Who handles creative, what formats, what specs? What does a seller-produced ad submission look like?</li>
+        <li><strong>Watch Community Mapping</strong> Who are the other sellers/brands in Whatnot's watch category? Where are the collaboration opportunities?</li>
+        <li><strong>Whatnot AI Tools</strong> What is their AI team building? Any seller-facing tools Connor should know about?</li>
+        <li><strong>QVC to DTC Parallels</strong> Brands that started on QVC/HSN and successfully transitioned to direct. Lessons for Whatnot era.</li>
+        <li><strong>Audience Stacking</strong> Twitch raid mechanics applied to live commerce. How do cross-pollination collabs compound over time?</li>
+      </ul>
+    </section>
+
+    <footer>
+      <p>Mad Hudson Watches &middot; Strategy Session March 17, 2026</p>
+      <p>Prepared by Garen Hudson</p>
+    </footer>
+  </div>
+</body>
+</html>
