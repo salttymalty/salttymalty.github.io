@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Call Cheatsheet — SmartSource</title>
+<style>
+  :root {
+    --bg: #1a1a1a;
+    --surface: #242424;
+    --surface-raised: #2e2e2e;
+    --text: #e8e4df;
+    --text-muted: #9a9590;
+    --accent: #e89a5e;
+    --accent-dim: rgba(232, 154, 94, 0.15);
+    --green: #7ec89a;
+    --red: #d96a6a;
+    --radius: 10px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    padding: 20px 16px 80px;
+    max-width: 640px;
+    margin: 0 auto;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  header {
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--surface-raised);
+  }
+
+  h1 {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  .role-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 24px;
+    border-left: 3px solid var(--accent);
+  }
+
+  .role-card .label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+  }
+
+  .role-card .value {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+
+  .role-card .value:last-child { margin-bottom: 0; }
+
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .tag {
+    background: var(--accent-dim);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  section {
+    margin-bottom: 28px;
+  }
+
+  h2 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .checklist {
+    list-style: none;
+    padding: 0;
+  }
+
+  .checklist li {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    font-size: 15px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .checklist li::before {
+    content: "—";
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  .strength-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: var(--accent);
+    color: var(--bg);
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .strengths li::before { content: none; }
+
+  .strengths li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .strengths strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .match-box {
+    background: var(--accent-dim);
+    border-radius: var(--radius);
+    padding: 14px;
+    font-size: 14px;
+    color: var(--text);
+    margin-top: 12px;
+    line-height: 1.5;
+  }
+
+  .match-box strong { color: var(--accent); }
+
+  .script-block {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+
+  .script-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .script-text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    font-style: italic;
+  }
+
+  .gap-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 16px;
+    border-left: 3px solid var(--accent);
+  }
+
+  .gap-card p {
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+
+  .gap-card p:last-child { margin-bottom: 0; }
+
+  .gap-card strong { color: var(--text); }
+
+  .questions li {
+    color: var(--text);
+    font-size: 14px;
+  }
+
+  .do-dont {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  @media (max-width: 480px) {
+    .do-dont { grid-template-columns: 1fr; }
+  }
+
+  .do-col, .dont-col {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 14px;
+  }
+
+  .do-col { border-top: 3px solid var(--green); }
+  .dont-col { border-top: 3px solid var(--red); }
+
+  .do-col h3 { color: var(--green); }
+  .dont-col h3 { color: var(--red); }
+
+  .do-col h3, .dont-col h3 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 10px;
+  }
+
+  .do-col ul, .dont-col ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .do-col li, .dont-col li {
+    font-size: 14px;
+    padding: 4px 0;
+    line-height: 1.45;
+  }
+
+  .do-col li::before {
+    content: "+ ";
+    color: var(--green);
+    font-weight: 700;
+  }
+
+  .dont-col li::before {
+    content: "- ";
+    color: var(--red);
+    font-weight: 700;
+  }
+
+  .bottom-note {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--surface-raised);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Call Cheatsheet</h1>
+  <div class="subtitle">SmartSource — IT/AV Technical Specialist</div>
+</header>
+
+<div class="role-card">
+  <div class="label">Company</div>
+  <div class="value">SmartSource (ABCOM Technology Group)</div>
+  <div class="label">Role</div>
+  <div class="value">IT/AV Technical Specialist &middot; Req 1209</div>
+  <div class="label">Location</div>
+  <div class="value">Englewood, NJ + 3 others &middot; 70% travel (~20-25 events)</div>
+  <div class="tag-row">
+    <span class="tag">Full-time</span>
+    <span class="tag">Path to PM</span>
+    <span class="tag">Regional</span>
+  </div>
+</div>
+
+<section>
+  <h2>Before You Dial</h2>
+  <ul class="checklist">
+    <li>Have your resume open in front of you</li>
+    <li>Know who recommended you &mdash; be ready to name them</li>
+    <li>Pick your strongest area (audio / video / LED / IT)</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Your 3 Strengths</h2>
+  <ul class="checklist strengths">
+    <li><span class="strength-num">1</span><span><strong>No-ego generalist</strong> &mdash; push cases, drive trucks, climb ladders, stay for troubleshooting</span></li>
+    <li><span class="strength-num">2</span><span><strong>Second career energy</strong> &mdash; came in with transferable skills, hungry to grow, not jaded</span></li>
+    <li><span class="strength-num">3</span><span><strong>Range of event types</strong> &mdash; not pigeonholed, adaptable on-site</span></li>
+  </ul>
+</section>
+
+<section>
+  <h2>Their 3 Priorities</h2>
+  <ul class="checklist">
+    <li>Independent on-site execution in a specialty area</li>
+    <li>Support sales with technically sound proposals</li>
+    <li>Someone growing toward Project Management</li>
+  </ul>
+  <div class="match-box">
+    <strong>Connect your stuff to theirs:</strong> your range + work ethic = reliable on-site. Second career skills = client-facing polish. Wanting to specialize = PM trajectory.
+  </div>
+</section>
+
+<section>
+  <h2>The Script</h2>
+
+  <div class="script-block">
+    <div class="script-label">Opening</div>
+    <div class="script-text">"Hi, my name is Joe [Last Name] &mdash; I was recommended to reach out about the IT/AV Technical Specialist position, Requisition 1209. Do you have a couple minutes, or is there a better time?"</div>
+  </div>
+
+  <div class="script-block">
+    <div class="script-label">If they ask who recommended</div>
+    <div class="script-text">"[Name] suggested I get in touch. They thought my background would be a good fit for what you're building out regionally."</div>
+  </div>
+
+  <div class="script-block">
+    <div class="script-label">The Pitch (~45 sec, keep conversational)</div>
+    <div class="script-text">"I've been working in events for a couple years now and I'm a generalist &mdash; audio, video, LED, IT, I've touched all of it across a range of event types. I'm the guy who's happy to push cases, pack a truck, drive it to the venue, get up on a ladder, and then stay to troubleshoot when something goes sideways. I don't have a line between 'my job' and 'not my job' on site.<br><br>AV is actually a second career for me, which I think works in my favor &mdash; I came in with a whole set of skills from before and it's made me a better tech. Problem-solving, working with clients, staying calm when things go fast. Coming into this industry has honestly been one of the most exciting things I've done, and I want to keep going deeper. That's what drew me to this role &mdash; the chance to specialize and grow toward PM."</div>
+  </div>
+
+  <div class="script-block">
+    <div class="script-label">The Ask</div>
+    <div class="script-text">"I know the listing mentions three years &mdash; I'm close but not quite there on paper. What I do bring is range, a strong work ethic, and the fact that I don't need hand-holding on a job site. Is that something worth a conversation, or is the three years a hard line?"</div>
+  </div>
+
+  <div class="script-block">
+    <div class="script-label">If yes</div>
+    <div class="script-text">"Great &mdash; what works on your end? I can send over my resume today and make myself available whenever."</div>
+  </div>
+
+  <div class="script-block">
+    <div class="script-label">If they push back</div>
+    <div class="script-text">"I totally understand. Would it make sense to submit my resume anyway so you have me on file? I'm not going anywhere in this industry and I'd love to be on your radar."</div>
+  </div>
+
+  <div class="script-block">
+    <div class="script-label">Close (either way)</div>
+    <div class="script-text">"I appreciate your time. Is there a direct email I should send my resume to?"</div>
+  </div>
+</section>
+
+<section>
+  <h2>The Experience Gap</h2>
+  <div class="gap-card">
+    <p>They want <strong>3 years</strong>. You have <strong>~2</strong>. Don't hide it.</p>
+    <p>"I'm close but not quite there on paper."</p>
+    <p>Referral + attitude + willingness to do the unglamorous work covers the gap. If they push back, ask to stay on file.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Questions to Ask Them</h2>
+  <ul class="checklist questions">
+    <li>"What does the ramp-up look like for new hires &mdash; is there a certification path?"</li>
+    <li>"Which regions are you staffing for right now?"</li>
+    <li>"What's the split between event types &mdash; corporate, tradeshow, entertainment?"</li>
+    <li>"What's the team structure on a typical event?"</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Quick Reference</h2>
+  <div class="do-dont">
+    <div class="do-col">
+      <h3>Do</h3>
+      <ul>
+        <li>Name the referral early</li>
+        <li>Say you're happy to travel</li>
+        <li>Show you know the role (specialty &rarr; PM)</li>
+        <li>Be warm and direct</li>
+      </ul>
+    </div>
+    <div class="dont-col">
+      <h3>Don't</h3>
+      <ul>
+        <li>Apologize for the experience gap</li>
+        <li>List every piece of gear</li>
+        <li>Ask about salary on this call</li>
+        <li>Ramble &mdash; pitch under a minute</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="bottom-note">Good luck, Joe.</div>
+
+</body>
+</html>
