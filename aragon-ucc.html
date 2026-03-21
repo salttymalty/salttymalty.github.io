@@ -26,6 +26,59 @@
     --radius: 10px;
   }
 
+  /* ── Light mode ── */
+  @media (prefers-color-scheme: light) {
+    :root {
+      --color-bg: oklch(0.97 0.005 80);
+      --color-surface: oklch(0.93 0.005 80);
+      --color-surface-raised: oklch(0.90 0.005 80);
+      --color-border: oklch(0.84 0.01 80);
+      --color-text: oklch(0.20 0.01 260);
+      --color-text-muted: oklch(0.45 0.01 260);
+      --color-accent: oklch(0.55 0.14 65);
+      --color-accent-dim: oklch(0.55 0.14 65 / 0.10);
+      --color-success: oklch(0.45 0.14 150);
+      --color-success-dim: oklch(0.45 0.14 150 / 0.08);
+      --color-danger: oklch(0.50 0.18 25);
+      --color-danger-dim: oklch(0.50 0.18 25 / 0.08);
+      --color-info: oklch(0.48 0.10 240);
+      --color-info-dim: oklch(0.48 0.10 240 / 0.08);
+    }
+  }
+  /* Manual override classes */
+  .force-dark {
+    --color-bg: oklch(0.18 0.01 260);
+    --color-surface: oklch(0.22 0.01 260);
+    --color-surface-raised: oklch(0.26 0.01 260);
+    --color-border: oklch(0.34 0.01 260);
+    --color-text: oklch(0.92 0.01 80);
+    --color-text-muted: oklch(0.68 0.01 80);
+    --color-accent: oklch(0.78 0.14 65);
+    --color-accent-dim: oklch(0.78 0.14 65 / 0.15);
+    --color-success: oklch(0.72 0.14 150);
+    --color-success-dim: oklch(0.72 0.14 150 / 0.12);
+    --color-danger: oklch(0.65 0.18 25);
+    --color-danger-dim: oklch(0.65 0.18 25 / 0.12);
+    --color-info: oklch(0.70 0.10 240);
+    --color-info-dim: oklch(0.70 0.10 240 / 0.12);
+  }
+  .force-light {
+    --color-bg: oklch(0.97 0.005 80);
+    --color-surface: oklch(0.93 0.005 80);
+    --color-surface-raised: oklch(0.90 0.005 80);
+    --color-border: oklch(0.84 0.01 80);
+    --color-text: oklch(0.20 0.01 260);
+    --color-text-muted: oklch(0.45 0.01 260);
+    --color-accent: oklch(0.55 0.14 65);
+    --color-accent-dim: oklch(0.55 0.14 65 / 0.10);
+    --color-success: oklch(0.45 0.14 150);
+    --color-success-dim: oklch(0.45 0.14 150 / 0.08);
+    --color-danger: oklch(0.50 0.18 25);
+    --color-danger-dim: oklch(0.50 0.18 25 / 0.08);
+    --color-info: oklch(0.48 0.10 240);
+    --color-info-dim: oklch(0.48 0.10 240 / 0.08);
+  }
+
   html { font-size: 16px; }
   body {
     font-family: system-ui, -apple-system, sans-serif;
@@ -346,6 +399,27 @@
   details[open] summary::before { content: '- '; }
   details > div { padding-top: 12px; }
 
+  /* ── Theme toggle ── */
+  .theme-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 200;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text-muted);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px oklch(0.15 0 0 / 0.3);
+    -webkit-tap-highlight-color: transparent;
+  }
+
   @media (min-width: 500px) {
     body { max-width: 480px; margin: 0 auto; }
   }
@@ -617,7 +691,7 @@
 
 <!-- ══════════════ BAND ══════════════ -->
 <details id="band">
-  <summary>Band &amp; iPads</summary>
+  <summary>Band Config</summary>
   <div>
     <div class="kv">
       <dt>Vocals</dt>
@@ -632,17 +706,6 @@
       <dd>All special dances to track</dd>
       <dt>Other</dt>
       <dd>Bagpipers at some point (not us)</dd>
-    </div>
-    <div class="kv" style="margin-top: 16px;">
-      <dt>iPad 1-5</dt><dd>Vocals</dd>
-      <dt>iPad 6</dt><dd>Sax</dd>
-      <dt>iPad 7</dt><dd>Trumpet</dd>
-      <dt>iPad 8</dt><dd>MD</dd>
-      <dt>iPad 9</dt><dd>Keys</dd>
-      <dt>iPad 10</dt><dd>Ceremony Recessional</dd>
-      <dt>iPad 11</dt><dd>Reception Tracks</dd>
-      <dt>iPad 12-14</dt><dd>Production</dd>
-      <dt>iPad 15</dt><dd>Extra</dd>
     </div>
   </div>
 </details>
@@ -721,7 +784,10 @@
   Sources: Morgan Day (Mar 17) + Mike Bruno (Mar 18) + Planner Timeline
 </div>
 
-<!-- ══════════════ TIME-AWARE SCRIPT ══════════════ -->
+<!-- ══════════════ THEME TOGGLE ══════════════ -->
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode"></button>
+
+<!-- ══════════════ SCRIPTS ══════════════ -->
 <script>
 (function() {
   const EVENT_DATE = '2026-03-21';
@@ -804,6 +870,30 @@
 
   update();
   setInterval(update, 30000);
+})();
+
+// ── Theme toggle ──
+(function() {
+  const toggle = document.getElementById('themeToggle');
+  const body = document.body;
+  const states = ['auto', 'force-dark', 'force-light'];
+  const icons = { auto: 'A', 'force-dark': '\u263D', 'force-light': '\u2600' };
+  let current = localStorage.getItem('theme') || 'auto';
+
+  function apply(mode) {
+    body.classList.remove('force-dark', 'force-light');
+    if (mode !== 'auto') body.classList.add(mode);
+    toggle.textContent = icons[mode];
+    localStorage.setItem('theme', mode);
+    current = mode;
+  }
+
+  toggle.addEventListener('click', function() {
+    const next = states[(states.indexOf(current) + 1) % states.length];
+    apply(next);
+  });
+
+  apply(current);
 })();
 </script>
 
