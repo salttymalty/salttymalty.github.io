@@ -399,6 +399,100 @@
   details[open] summary::before { content: '- '; }
   details > div { padding-top: 12px; }
 
+  /* ── Band overview ── */
+  .band-overview { margin-bottom: 12px; }
+  .band-section {
+    background: var(--color-surface);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 6px;
+  }
+  .band-section-label {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--color-text);
+  }
+  .band-section-detail {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin-top: 2px;
+  }
+
+  /* ── Patch table ── */
+  .patch-note {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-bottom: 10px;
+  }
+  .patch-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.85rem;
+  }
+  .patch-table th {
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    background: var(--color-bg);
+  }
+  .patch-table td {
+    padding: 8px;
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: top;
+  }
+  .patch-table .ch-num {
+    font-weight: 700;
+    color: var(--color-accent);
+    text-align: center;
+    min-width: 36px;
+    width: 36px;
+    cursor: pointer;
+    border-radius: 6px;
+  }
+  .patch-table .ch-num:focus {
+    outline: 2px solid var(--color-accent);
+    background: var(--color-accent-dim);
+  }
+  .patch-table .patch-notes {
+    color: var(--color-text-muted);
+    min-width: 80px;
+    cursor: pointer;
+    border-radius: 6px;
+  }
+  .patch-table .patch-notes:focus {
+    outline: 2px solid var(--color-accent);
+    background: var(--color-accent-dim);
+    color: var(--color-text);
+  }
+  .patch-table .patch-notes:empty::before {
+    content: '...';
+    color: var(--color-border);
+  }
+  .patch-divider td {
+    padding: 2px;
+    border-bottom: 2px solid var(--color-accent);
+    opacity: 0.3;
+  }
+  .patch-btn {
+    background: var(--color-surface);
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    min-height: 44px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
   /* ── Theme toggle ── */
   .theme-toggle {
     position: fixed;
@@ -696,22 +790,76 @@
 </details>
 
 <!-- ══════════════ BAND ══════════════ -->
-<details id="band">
-  <summary>Band Config</summary>
+<details id="band" open>
+  <summary>Band &amp; Patch</summary>
   <div>
-    <div class="kv">
-      <dt>Vocals</dt>
-      <dd>6 singers &mdash; 3 guys, 3 girls</dd>
-      <dt>Horns</dt>
-      <dd>Sax + Trumpet</dd>
-      <dt>Rhythm</dt>
-      <dd>Drums, Bass, Guitar (x2), Keys</dd>
-      <dt>Stands</dt>
-      <dd>4 tall band stands (horns, bass, guitar)</dd>
-      <dt>Dances</dt>
-      <dd>All special dances to track</dd>
-      <dt>Other</dt>
-      <dd>Bagpipers at some point (not us)</dd>
+    <div class="band-overview">
+      <div class="band-section">
+        <div class="band-section-label">Vocals (6)</div>
+        <div class="band-section-detail">3M / 3F &mdash; wireless handhelds (ULXD)</div>
+      </div>
+      <div class="band-section">
+        <div class="band-section-label">Horns (2)</div>
+        <div class="band-section-detail">Sax + Trumpet &mdash; 4 tall band stands</div>
+      </div>
+      <div class="band-section">
+        <div class="band-section-label">Rhythm</div>
+        <div class="band-section-detail">Drums (Pearl 5pc) &middot; Bass (Fender amp) &middot; Guitar x2 (Deluxe Reverb + Hot Rod Deluxe)</div>
+      </div>
+      <div class="band-section">
+        <div class="band-section-label">Keys (2)</div>
+        <div class="band-section-detail">Montage 8 (ceremony + reception) &middot; Roland JUNO DS &middot; Apex stand</div>
+      </div>
+      <div class="band-section">
+        <div class="band-section-label">Other</div>
+        <div class="band-section-detail">Shannon Rovers (bagpipers, not us) &middot; All special dances to track</div>
+      </div>
+    </div>
+
+    <h3 style="color: var(--color-accent); font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin: 20px 0 10px; padding-bottom: 4px; border-bottom: 1px solid var(--color-border);">Patch &mdash; Tap Ch# to Assign</h3>
+    <div class="patch-note">Tap any channel number to edit. Saves to your phone automatically.</div>
+    <table class="patch-table" id="patchTable">
+      <thead>
+        <tr><th>Ch</th><th>Input</th><th>Source</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="ch-num" contenteditable>1</td><td>Vox 1</td><td>ULXD</td><td contenteditable class="patch-notes"></td></tr>
+        <tr><td class="ch-num" contenteditable>2</td><td>Vox 2</td><td>ULXD</td><td contenteditable class="patch-notes"></td></tr>
+        <tr><td class="ch-num" contenteditable>3</td><td>Vox 3</td><td>ULXD</td><td contenteditable class="patch-notes"></td></tr>
+        <tr><td class="ch-num" contenteditable>4</td><td>Vox 4</td><td>ULXD</td><td contenteditable class="patch-notes"></td></tr>
+        <tr><td class="ch-num" contenteditable>5</td><td>Vox 5</td><td>ULXD</td><td contenteditable class="patch-notes"></td></tr>
+        <tr><td class="ch-num" contenteditable>6</td><td>Vox 6</td><td>ULXD</td><td contenteditable class="patch-notes"></td></tr>
+        <tr class="patch-divider"><td colspan="4"></td></tr>
+        <tr><td class="ch-num" contenteditable>7</td><td>Kick</td><td>Mic</td><td contenteditable class="patch-notes"></td></tr>
+        <tr><td class="ch-num" contenteditable>8</td><td>Snare</td><td>Mic</td><td contenteditable class="patch-notes"></td></tr>
+        <tr><td class="ch-num" contenteditable>9</td><td>Tom 1</td><td>Mic</td><td contenteditable class="patch-notes"></td></tr>
+        <tr><td class="ch-num" contenteditable>10</td><td>Tom 2</td><td>Mic</td><td contenteditable class="patch-notes"></td></tr>
+        <tr><td class="ch-num" contenteditable>11</td><td>Tom 3</td><td>Mic</td><td contenteditable class="patch-notes"></td></tr>
+        <tr><td class="ch-num" contenteditable>12</td><td>OH L</td><td>Mic</td><td contenteditable class="patch-notes"></td></tr>
+        <tr><td class="ch-num" contenteditable>13</td><td>OH R</td><td>Mic</td><td contenteditable class="patch-notes"></td></tr>
+        <tr><td class="ch-num" contenteditable>14</td><td>Hi-Hat</td><td>Mic</td><td contenteditable class="patch-notes"></td></tr>
+        <tr class="patch-divider"><td colspan="4"></td></tr>
+        <tr><td class="ch-num" contenteditable>15</td><td>Bass DI</td><td>DI</td><td contenteditable class="patch-notes"></td></tr>
+        <tr><td class="ch-num" contenteditable>16</td><td>Guitar 1</td><td>Mic</td><td contenteditable class="patch-notes">Deluxe Reverb</td></tr>
+        <tr><td class="ch-num" contenteditable>17</td><td>Guitar 2</td><td>Mic</td><td contenteditable class="patch-notes">Hot Rod Deluxe</td></tr>
+        <tr class="patch-divider"><td colspan="4"></td></tr>
+        <tr><td class="ch-num" contenteditable>18</td><td>Keys 1 L</td><td>DI</td><td contenteditable class="patch-notes">Montage 8</td></tr>
+        <tr><td class="ch-num" contenteditable>19</td><td>Keys 1 R</td><td>DI</td><td contenteditable class="patch-notes">Montage 8</td></tr>
+        <tr><td class="ch-num" contenteditable>20</td><td>Keys 2 L</td><td>DI</td><td contenteditable class="patch-notes">JUNO DS</td></tr>
+        <tr><td class="ch-num" contenteditable>21</td><td>Keys 2 R</td><td>DI</td><td contenteditable class="patch-notes">JUNO DS</td></tr>
+        <tr class="patch-divider"><td colspan="4"></td></tr>
+        <tr><td class="ch-num" contenteditable>22</td><td>Sax</td><td>Mic</td><td contenteditable class="patch-notes"></td></tr>
+        <tr><td class="ch-num" contenteditable>23</td><td>Trumpet</td><td>Mic</td><td contenteditable class="patch-notes"></td></tr>
+        <tr class="patch-divider"><td colspan="4"></td></tr>
+        <tr><td class="ch-num" contenteditable>24</td><td>Officiant</td><td>ULXD</td><td contenteditable class="patch-notes">Ceremony only</td></tr>
+        <tr><td class="ch-num" contenteditable>25</td><td>Speech</td><td>ULXD</td><td contenteditable class="patch-notes">Toast / announcements</td></tr>
+        <tr><td class="ch-num" contenteditable>26</td><td>Track L</td><td>Playback</td><td contenteditable class="patch-notes">Special dances</td></tr>
+        <tr><td class="ch-num" contenteditable>27</td><td>Track R</td><td>Playback</td><td contenteditable class="patch-notes">Special dances</td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top: 8px; display: flex; gap: 8px;">
+      <button class="patch-btn" id="patchReset">Reset</button>
+      <button class="patch-btn" id="patchAdd">+ Row</button>
     </div>
   </div>
 </details>
@@ -876,6 +1024,66 @@
 
   update();
   setInterval(update, 30000);
+})();
+
+// ── Patch table persistence ──
+(function() {
+  var table = document.getElementById('patchTable');
+  var KEY = 'aragon-ucc-patch';
+
+  function save() {
+    var data = [];
+    table.querySelectorAll('tbody tr:not(.patch-divider)').forEach(function(row) {
+      var cells = row.querySelectorAll('td');
+      data.push({
+        ch: cells[0].textContent.trim(),
+        input: cells[1].textContent.trim(),
+        source: cells[2].textContent.trim(),
+        notes: cells[3].textContent.trim()
+      });
+    });
+    localStorage.setItem(KEY, JSON.stringify(data));
+  }
+
+  function load() {
+    var raw = localStorage.getItem(KEY);
+    if (!raw) return;
+    try {
+      var data = JSON.parse(raw);
+      var rows = table.querySelectorAll('tbody tr:not(.patch-divider)');
+      data.forEach(function(d, i) {
+        if (rows[i]) {
+          var cells = rows[i].querySelectorAll('td');
+          cells[0].textContent = d.ch;
+          cells[3].textContent = d.notes;
+        }
+      });
+    } catch(e) {}
+  }
+
+  table.addEventListener('input', function() {
+    clearTimeout(table._saveTimer);
+    table._saveTimer = setTimeout(save, 500);
+  });
+
+  document.getElementById('patchReset').addEventListener('click', function() {
+    if (confirm('Reset all patch edits?')) {
+      localStorage.removeItem(KEY);
+      location.reload();
+    }
+  });
+
+  document.getElementById('patchAdd').addEventListener('click', function() {
+    var tbody = table.querySelector('tbody');
+    var rows = tbody.querySelectorAll('tr:not(.patch-divider)');
+    var nextCh = rows.length + 1;
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td class="ch-num" contenteditable>' + nextCh + '</td><td contenteditable></td><td contenteditable></td><td contenteditable class="patch-notes"></td>';
+    tbody.appendChild(tr);
+    save();
+  });
+
+  load();
 })();
 
 // ── Theme toggle ──
