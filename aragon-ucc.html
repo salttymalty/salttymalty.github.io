@@ -816,44 +816,11 @@
       </div>
     </div>
 
-    <h3 style="color: var(--color-accent); font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin: 20px 0 10px; padding-bottom: 4px; border-bottom: 1px solid var(--color-border);">Patch &mdash; Tap Ch# to Assign</h3>
-    <div class="patch-note">Tap any channel number to edit. Saves to your phone automatically.</div>
+    <h3 style="color: var(--color-accent); font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin: 20px 0 10px; padding-bottom: 4px; border-bottom: 1px solid var(--color-border);">Patch &mdash; Tap to Edit</h3>
+    <div class="patch-note">All cells editable. Saves to your phone. Share the link &mdash; others get the base patch.</div>
     <table class="patch-table" id="patchTable">
-      <thead>
-        <tr><th>Ch</th><th>Input</th><th>Source</th><th>Notes</th></tr>
-      </thead>
-      <tbody>
-        <tr><td class="ch-num" contenteditable>1</td><td>Vox 1</td><td>ULXD</td><td contenteditable class="patch-notes"></td></tr>
-        <tr><td class="ch-num" contenteditable>2</td><td>Vox 2</td><td>ULXD</td><td contenteditable class="patch-notes"></td></tr>
-        <tr><td class="ch-num" contenteditable>3</td><td>Vox 3</td><td>ULXD</td><td contenteditable class="patch-notes"></td></tr>
-        <tr><td class="ch-num" contenteditable>4</td><td>Vox 4</td><td>ULXD</td><td contenteditable class="patch-notes"></td></tr>
-        <tr><td class="ch-num" contenteditable>5</td><td>Vox 5</td><td>ULXD</td><td contenteditable class="patch-notes"></td></tr>
-        <tr><td class="ch-num" contenteditable>6</td><td>Vox 6</td><td>ULXD</td><td contenteditable class="patch-notes"></td></tr>
-        <tr class="patch-divider"><td colspan="4"></td></tr>
-        <tr><td class="ch-num" contenteditable>7</td><td>Kick</td><td>Mic</td><td contenteditable class="patch-notes"></td></tr>
-        <tr><td class="ch-num" contenteditable>8</td><td>Snare</td><td>Mic</td><td contenteditable class="patch-notes"></td></tr>
-        <tr><td class="ch-num" contenteditable>9</td><td>Tom 1</td><td>Mic</td><td contenteditable class="patch-notes"></td></tr>
-        <tr><td class="ch-num" contenteditable>10</td><td>Tom 2</td><td>Mic</td><td contenteditable class="patch-notes"></td></tr>
-        <tr><td class="ch-num" contenteditable>11</td><td>Tom 3</td><td>Mic</td><td contenteditable class="patch-notes"></td></tr>
-        <tr><td class="ch-num" contenteditable>12</td><td>OH</td><td>Mic</td><td contenteditable class="patch-notes">Single overhead</td></tr>
-        <tr class="patch-divider"><td colspan="4"></td></tr>
-        <tr><td class="ch-num" contenteditable>13</td><td>Bass DI</td><td>DI</td><td contenteditable class="patch-notes"></td></tr>
-        <tr><td class="ch-num" contenteditable>14</td><td>Guitar 1</td><td>Mic</td><td contenteditable class="patch-notes">Deluxe Reverb</td></tr>
-        <tr><td class="ch-num" contenteditable>15</td><td>Guitar 2</td><td>Mic</td><td contenteditable class="patch-notes">Hot Rod Deluxe</td></tr>
-        <tr class="patch-divider"><td colspan="4"></td></tr>
-        <tr><td class="ch-num" contenteditable>16</td><td>Keys 1 L</td><td>DI</td><td contenteditable class="patch-notes">Montage 8</td></tr>
-        <tr><td class="ch-num" contenteditable>17</td><td>Keys 1 R</td><td>DI</td><td contenteditable class="patch-notes">Montage 8</td></tr>
-        <tr><td class="ch-num" contenteditable>18</td><td>Keys 2 L</td><td>DI</td><td contenteditable class="patch-notes">JUNO DS</td></tr>
-        <tr><td class="ch-num" contenteditable>19</td><td>Keys 2 R</td><td>DI</td><td contenteditable class="patch-notes">JUNO DS</td></tr>
-        <tr class="patch-divider"><td colspan="4"></td></tr>
-        <tr><td class="ch-num" contenteditable>20</td><td>Sax</td><td>Mic</td><td contenteditable class="patch-notes"></td></tr>
-        <tr><td class="ch-num" contenteditable>21</td><td>Trumpet</td><td>Mic</td><td contenteditable class="patch-notes"></td></tr>
-        <tr class="patch-divider"><td colspan="4"></td></tr>
-        <tr><td class="ch-num" contenteditable>22</td><td>Officiant</td><td>ULXD</td><td contenteditable class="patch-notes">Ceremony only</td></tr>
-        <tr><td class="ch-num" contenteditable>23</td><td>Speech</td><td>ULXD</td><td contenteditable class="patch-notes">Toast / announcements</td></tr>
-        <tr><td class="ch-num" contenteditable>24</td><td>Track L</td><td>Playback</td><td contenteditable class="patch-notes">Special dances</td></tr>
-        <tr><td class="ch-num" contenteditable>25</td><td>Track R</td><td>Playback</td><td contenteditable class="patch-notes">Special dances</td></tr>
-      </tbody>
+      <thead><tr><th>Ch</th><th>Input</th><th>Source</th><th>Notes</th></tr></thead>
+      <tbody></tbody>
     </table>
     <div style="margin-top: 8px; display: flex; gap: 8px;">
       <button class="patch-btn" id="patchReset">Reset</button>
@@ -862,24 +829,10 @@
     </div>
 
     <h3 style="color: var(--color-accent); font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin: 20px 0 10px; padding-bottom: 4px; border-bottom: 1px solid var(--color-border);">IEM / Monitor Outputs</h3>
-    <div class="patch-note">4 wireless IEM TX + wired IEMs in peli. Tap to assign who gets what.</div>
+    <div class="patch-note">4 wireless IEM TX + wired IEMs in peli. Tap to assign.</div>
     <table class="patch-table" id="iemTable">
-      <thead>
-        <tr><th>Bus</th><th>Type</th><th>Who</th><th>Notes</th></tr>
-      </thead>
-      <tbody>
-        <tr><td class="ch-num">IEM 1</td><td>Wireless</td><td contenteditable class="patch-notes"></td><td contenteditable class="patch-notes"></td></tr>
-        <tr><td class="ch-num">IEM 2</td><td>Wireless</td><td contenteditable class="patch-notes"></td><td contenteditable class="patch-notes"></td></tr>
-        <tr><td class="ch-num">IEM 3</td><td>Wireless</td><td contenteditable class="patch-notes"></td><td contenteditable class="patch-notes"></td></tr>
-        <tr><td class="ch-num">IEM 4</td><td>Wireless</td><td contenteditable class="patch-notes"></td><td contenteditable class="patch-notes"></td></tr>
-        <tr class="patch-divider"><td colspan="4"></td></tr>
-        <tr><td class="ch-num">W 1</td><td>Wired</td><td contenteditable class="patch-notes"></td><td contenteditable class="patch-notes"></td></tr>
-        <tr><td class="ch-num">W 2</td><td>Wired</td><td contenteditable class="patch-notes"></td><td contenteditable class="patch-notes"></td></tr>
-        <tr><td class="ch-num">W 3</td><td>Wired</td><td contenteditable class="patch-notes"></td><td contenteditable class="patch-notes"></td></tr>
-        <tr><td class="ch-num">W 4</td><td>Wired</td><td contenteditable class="patch-notes"></td><td contenteditable class="patch-notes"></td></tr>
-        <tr><td class="ch-num">W 5</td><td>Wired</td><td contenteditable class="patch-notes"></td><td contenteditable class="patch-notes"></td></tr>
-        <tr><td class="ch-num">W 6</td><td>Wired</td><td contenteditable class="patch-notes"></td><td contenteditable class="patch-notes"></td></tr>
-      </tbody>
+      <thead><tr><th>Bus</th><th>Type</th><th>Who</th><th>Notes</th></tr></thead>
+      <tbody></tbody>
     </table>
   </div>
 </details>
@@ -1046,101 +999,176 @@
   setInterval(update, 30000);
 })();
 
-// ── Patch table persistence ──
-(function() {
-  var table = document.getElementById('patchTable');
-  var iemTable = document.getElementById('iemTable');
-  var PATCH_KEY = 'aragon-ucc-patch';
-  var IEM_KEY = 'aragon-ucc-iem';
+// ── Base patch data (single source of truth) ──
+var BASE_PATCH = [
+  [1,  'Vox 1',    'ULXD',     ''],
+  [2,  'Vox 2',    'ULXD',     ''],
+  [3,  'Vox 3',    'ULXD',     ''],
+  [4,  'Vox 4',    'ULXD',     ''],
+  [5,  'Vox 5',    'ULXD',     ''],
+  [6,  'Vox 6',    'ULXD',     ''],
+  '---',
+  [7,  'Kick',     'Mic',      ''],
+  [8,  'Snare',    'Mic',      ''],
+  [9,  'Tom 1',    'Mic',      ''],
+  [10, 'Tom 2',    'Mic',      ''],
+  [11, 'Tom 3',    'Mic',      ''],
+  [12, 'OH',       'Mic',      'Single overhead'],
+  '---',
+  [13, 'Bass DI',  'DI',       ''],
+  [14, 'Guitar 1', 'Mic',      'Deluxe Reverb'],
+  [15, 'Guitar 2', 'Mic',      'Hot Rod Deluxe'],
+  '---',
+  [16, 'Keys 1 L', 'DI',       'Montage 8'],
+  [17, 'Keys 1 R', 'DI',       'Montage 8'],
+  [18, 'Keys 2 L', 'DI',       'JUNO DS'],
+  [19, 'Keys 2 R', 'DI',       'JUNO DS'],
+  '---',
+  [20, 'Sax',      'Mic',      ''],
+  [21, 'Trumpet',  'Mic',      ''],
+  '---',
+  [22, 'Officiant', 'ULXD',    'Ceremony only'],
+  [23, 'Speech',    'ULXD',    'Toast / announcements'],
+  [24, 'Track L',   'Playback','Special dances'],
+  [25, 'Track R',   'Playback','Special dances']
+];
 
-  function saveTable(tbl, key) {
+var BASE_IEM = [
+  ['IEM 1', 'Wireless', '', ''],
+  ['IEM 2', 'Wireless', '', ''],
+  ['IEM 3', 'Wireless', '', ''],
+  ['IEM 4', 'Wireless', '', ''],
+  '---',
+  ['W 1', 'Wired', '', ''],
+  ['W 2', 'Wired', '', ''],
+  ['W 3', 'Wired', '', ''],
+  ['W 4', 'Wired', '', ''],
+  ['W 5', 'Wired', '', ''],
+  ['W 6', 'Wired', '', '']
+];
+
+// ── Patch engine ──
+(function() {
+  var PATCH_KEY = 'aragon-ucc-patch-v2';
+  var IEM_KEY = 'aragon-ucc-iem-v2';
+
+  function renderTable(tbl, baseData, savedData) {
+    var tbody = tbl.querySelector('tbody');
+    tbody.innerHTML = '';
+    var dataRows = baseData.filter(function(r) { return r !== '---'; });
+    var rows = savedData || dataRows;
+
+    var baseIdx = 0;
+    baseData.forEach(function(item) {
+      if (item === '---') {
+        var div = document.createElement('tr');
+        div.className = 'patch-divider';
+        div.innerHTML = '<td colspan="4"></td>';
+        tbody.appendChild(div);
+      } else {
+        var d = (savedData && savedData[baseIdx]) ? savedData[baseIdx] : item;
+        var tr = document.createElement('tr');
+        for (var i = 0; i < d.length; i++) {
+          var td = document.createElement('td');
+          td.textContent = d[i];
+          td.contentEditable = 'true';
+          if (i === 0) td.className = 'ch-num';
+          if (i === d.length - 1) td.className = 'patch-notes';
+          tr.appendChild(td);
+        }
+        tbody.appendChild(tr);
+        baseIdx++;
+      }
+    });
+
+    // Append extra saved rows beyond base length
+    if (savedData && savedData.length > dataRows.length) {
+      for (var j = dataRows.length; j < savedData.length; j++) {
+        var tr = document.createElement('tr');
+        savedData[j].forEach(function(val, i) {
+          var td = document.createElement('td');
+          td.textContent = val;
+          td.contentEditable = 'true';
+          if (i === 0) td.className = 'ch-num';
+          if (i === savedData[j].length - 1) td.className = 'patch-notes';
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      }
+    }
+  }
+
+  function readTable(tbl) {
     var data = [];
     tbl.querySelectorAll('tbody tr:not(.patch-divider)').forEach(function(row) {
       var cells = row.querySelectorAll('td');
-      var rowData = [];
-      for (var i = 0; i < cells.length; i++) {
-        rowData.push(cells[i].textContent.trim());
-      }
-      data.push(rowData);
+      var r = [];
+      for (var i = 0; i < cells.length; i++) r.push(cells[i].textContent.trim());
+      data.push(r);
     });
-    localStorage.setItem(key, JSON.stringify(data));
+    return data;
   }
 
-  function loadTable(tbl, key) {
+  function save(tbl, key) {
+    localStorage.setItem(key, JSON.stringify(readTable(tbl)));
+  }
+
+  function loadSaved(key) {
     var raw = localStorage.getItem(key);
-    if (!raw) return;
-    try {
-      var data = JSON.parse(raw);
-      var rows = tbl.querySelectorAll('tbody tr:not(.patch-divider)');
-      data.forEach(function(d, i) {
-        if (rows[i]) {
-          var cells = rows[i].querySelectorAll('td');
-          for (var j = 0; j < Math.min(d.length, cells.length); j++) {
-            cells[j].textContent = d[j];
-          }
-        }
-      });
-    } catch(e) {}
+    if (!raw) return null;
+    try { return JSON.parse(raw); } catch(e) { return null; }
   }
 
-  function sortByChannel() {
-    var tbody = table.querySelector('tbody');
-    var rows = Array.from(tbody.querySelectorAll('tr:not(.patch-divider)'));
-    var dividers = Array.from(tbody.querySelectorAll('tr.patch-divider'));
+  // ── Init tables ──
+  var patchTbl = document.getElementById('patchTable');
+  var iemTbl = document.getElementById('iemTable');
 
-    // Remove all dividers
-    dividers.forEach(function(d) { d.remove(); });
+  renderTable(patchTbl, BASE_PATCH, loadSaved(PATCH_KEY));
+  renderTable(iemTbl, BASE_IEM, loadSaved(IEM_KEY));
 
-    // Sort rows by channel number
+  // ── Auto-save on edit ──
+  patchTbl.addEventListener('input', function() {
+    clearTimeout(patchTbl._t);
+    patchTbl._t = setTimeout(function() { save(patchTbl, PATCH_KEY); }, 500);
+  });
+  iemTbl.addEventListener('input', function() {
+    clearTimeout(iemTbl._t);
+    iemTbl._t = setTimeout(function() { save(iemTbl, IEM_KEY); }, 500);
+  });
+
+  // ── Sort ──
+  document.getElementById('patchSort').addEventListener('click', function() {
+    var tbody = patchTbl.querySelector('tbody');
+    // Remove dividers
+    tbody.querySelectorAll('.patch-divider').forEach(function(d) { d.remove(); });
+    // Sort
+    var rows = Array.from(tbody.querySelectorAll('tr'));
     rows.sort(function(a, b) {
-      var aNum = parseFloat(a.querySelector('.ch-num').textContent) || 999;
-      var bNum = parseFloat(b.querySelector('.ch-num').textContent) || 999;
-      return aNum - bNum;
+      return (parseFloat(a.cells[0].textContent) || 999) - (parseFloat(b.cells[0].textContent) || 999);
     });
-
-    // Re-append sorted rows
-    rows.forEach(function(row) { tbody.appendChild(row); });
-    saveTable(table, PATCH_KEY);
-  }
-
-  function save() {
-    saveTable(table, PATCH_KEY);
-  }
-
-  table.addEventListener('input', function() {
-    clearTimeout(table._saveTimer);
-    table._saveTimer = setTimeout(save, 500);
+    rows.forEach(function(r) { tbody.appendChild(r); });
+    save(patchTbl, PATCH_KEY);
   });
 
-  iemTable.addEventListener('input', function() {
-    clearTimeout(iemTable._saveTimer);
-    iemTable._saveTimer = setTimeout(function() {
-      saveTable(iemTable, IEM_KEY);
-    }, 500);
+  // ── Add row ──
+  document.getElementById('patchAdd').addEventListener('click', function() {
+    var tbody = patchTbl.querySelector('tbody');
+    var count = tbody.querySelectorAll('tr:not(.patch-divider)').length;
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td class="ch-num" contenteditable>' + (count + 1) + '</td><td contenteditable></td><td contenteditable></td><td contenteditable class="patch-notes"></td>';
+    tbody.appendChild(tr);
+    save(patchTbl, PATCH_KEY);
   });
 
-  document.getElementById('patchSort').addEventListener('click', sortByChannel);
-
+  // ── Reset to base ──
   document.getElementById('patchReset').addEventListener('click', function() {
-    if (confirm('Reset all patch and IEM edits?')) {
+    if (confirm('Reset patch and IEMs to base?')) {
       localStorage.removeItem(PATCH_KEY);
       localStorage.removeItem(IEM_KEY);
-      location.reload();
+      renderTable(patchTbl, BASE_PATCH, null);
+      renderTable(iemTbl, BASE_IEM, null);
     }
   });
-
-  document.getElementById('patchAdd').addEventListener('click', function() {
-    var tbody = table.querySelector('tbody');
-    var rows = tbody.querySelectorAll('tr:not(.patch-divider)');
-    var nextCh = rows.length + 1;
-    var tr = document.createElement('tr');
-    tr.innerHTML = '<td class="ch-num" contenteditable>' + nextCh + '</td><td contenteditable></td><td contenteditable></td><td contenteditable class="patch-notes"></td>';
-    tbody.appendChild(tr);
-    save();
-  });
-
-  loadTable(table, PATCH_KEY);
-  loadTable(iemTable, IEM_KEY);
 })();
 
 // ── Theme toggle ──
