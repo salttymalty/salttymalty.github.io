@@ -816,8 +816,11 @@
       </div>
     </div>
 
-    <h3 style="color: var(--color-accent); font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin: 20px 0 10px; padding-bottom: 4px; border-bottom: 1px solid var(--color-border);">Patch &mdash; Tap to Edit</h3>
-    <div class="patch-note">All cells editable. Saves to your phone. Share the link &mdash; others get the base patch.</div>
+    <h3 style="color: var(--color-accent); font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin: 20px 0 10px; padding-bottom: 4px; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center;">
+      Patch &mdash; Tap to Edit
+      <span id="syncStatus" style="font-size: 0.7rem; font-weight: 600; letter-spacing: 0.04em; color: var(--color-text-muted);">Connecting...</span>
+    </h3>
+    <div class="patch-note">All cells editable. Syncs to server &mdash; edits visible to anyone with the link.</div>
     <table class="patch-table" id="patchTable">
       <thead><tr><th>Ch</th><th>Input</th><th>Source</th><th>Notes</th></tr></thead>
       <tbody></tbody>
@@ -999,7 +1002,11 @@
   setInterval(update, 30000);
 })();
 
-// ── Base patch data (single source of truth) ──
+// ── Config ──
+var GIG_ID = 'aragon-ucc-2026-03-21';
+var API_BASE = 'http://100.124.172.108:8077';
+
+// ── Base patch data (default when no server state exists) ──
 var BASE_PATCH = [
   [1,  'Vox 1',    'ULXD',     ''],
   [2,  'Vox 2',    'ULXD',     ''],
@@ -1047,16 +1054,16 @@ var BASE_IEM = [
   ['W 6', 'Wired', '', '']
 ];
 
-// ── Patch engine ──
+// ── Patch engine (API + localStorage fallback) ──
 (function() {
-  var PATCH_KEY = 'aragon-ucc-patch-v2';
-  var IEM_KEY = 'aragon-ucc-iem-v2';
+  var PATCH_KEY = 'aragon-ucc-patch-v3';
+  var IEM_KEY = 'aragon-ucc-iem-v3';
+  var apiOk = false;
 
   function renderTable(tbl, baseData, savedData) {
     var tbody = tbl.querySelector('tbody');
     tbody.innerHTML = '';
     var dataRows = baseData.filter(function(r) { return r !== '---'; });
-    var rows = savedData || dataRows;
 
     var baseIdx = 0;
     baseData.forEach(function(item) {
@@ -1081,7 +1088,6 @@ var BASE_IEM = [
       }
     });
 
-    // Append extra saved rows beyond base length
     if (savedData && savedData.length > dataRows.length) {
       for (var j = dataRows.length; j < savedData.length; j++) {
         var tr = document.createElement('tr');
@@ -1109,45 +1115,109 @@ var BASE_IEM = [
     return data;
   }
 
-  function save(tbl, key) {
-    localStorage.setItem(key, JSON.stringify(readTable(tbl)));
+  // ── API helpers ──
+  function apiGet() {
+    return fetch(API_BASE + '/patch/' + GIG_ID)
+      .then(function(r) { return r.json(); })
+      .then(function(d) { apiOk = true; return d; })
+      .catch(function() { apiOk = false; return null; });
   }
 
-  function loadSaved(key) {
+  function apiPost(patch, iem) {
+    return fetch(API_BASE + '/patch/' + GIG_ID, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ patch: patch, iem: iem })
+    }).then(function(r) { return r.json(); })
+      .catch(function() { apiOk = false; });
+  }
+
+  function saveLocal(patchData, iemData) {
+    localStorage.setItem(PATCH_KEY, JSON.stringify(patchData));
+    localStorage.setItem(IEM_KEY, JSON.stringify(iemData));
+  }
+
+  function loadLocal(key) {
     var raw = localStorage.getItem(key);
     if (!raw) return null;
     try { return JSON.parse(raw); } catch(e) { return null; }
   }
 
-  // ── Init tables ──
+  // ── Status indicator ──
+  function setStatus(connected) {
+    var el = document.getElementById('syncStatus');
+    if (el) {
+      el.textContent = connected ? 'Synced' : 'Offline';
+      el.style.color = connected ? 'var(--color-success)' : 'var(--color-text-muted)';
+    }
+  }
+
+  // ── Init ──
   var patchTbl = document.getElementById('patchTable');
   var iemTbl = document.getElementById('iemTable');
 
-  renderTable(patchTbl, BASE_PATCH, loadSaved(PATCH_KEY));
-  renderTable(iemTbl, BASE_IEM, loadSaved(IEM_KEY));
+  // Render from localStorage first (instant), then upgrade from API
+  renderTable(patchTbl, BASE_PATCH, loadLocal(PATCH_KEY));
+  renderTable(iemTbl, BASE_IEM, loadLocal(IEM_KEY));
 
-  // ── Auto-save on edit ──
-  patchTbl.addEventListener('input', function() {
+  apiGet().then(function(state) {
+    if (state && state.patch) {
+      renderTable(patchTbl, BASE_PATCH, state.patch);
+      renderTable(iemTbl, BASE_IEM, state.iem);
+      saveLocal(state.patch, state.iem);
+      setStatus(true);
+    } else if (state) {
+      // API reachable but empty — push local state up
+      var p = readTable(patchTbl);
+      var m = readTable(iemTbl);
+      apiPost(p, m);
+      setStatus(true);
+    } else {
+      setStatus(false);
+    }
+  });
+
+  // ── Save on edit (debounced) ──
+  function onEdit() {
     clearTimeout(patchTbl._t);
-    patchTbl._t = setTimeout(function() { save(patchTbl, PATCH_KEY); }, 500);
-  });
-  iemTbl.addEventListener('input', function() {
-    clearTimeout(iemTbl._t);
-    iemTbl._t = setTimeout(function() { save(iemTbl, IEM_KEY); }, 500);
-  });
+    patchTbl._t = setTimeout(function() {
+      var p = readTable(patchTbl);
+      var m = readTable(iemTbl);
+      saveLocal(p, m);
+      apiPost(p, m).then(function() { setStatus(true); });
+    }, 800);
+  }
+
+  patchTbl.addEventListener('input', onEdit);
+  iemTbl.addEventListener('input', onEdit);
+
+  // ── Poll for updates from others (every 15s) ──
+  setInterval(function() {
+    if (!document.hasFocus()) return; // save battery when backgrounded
+    apiGet().then(function(state) {
+      if (!state || !state.patch) { setStatus(false); return; }
+      setStatus(true);
+      // Only re-render if data actually changed
+      var current = JSON.stringify(readTable(patchTbl));
+      var remote = JSON.stringify(state.patch);
+      if (current !== remote) {
+        renderTable(patchTbl, BASE_PATCH, state.patch);
+        renderTable(iemTbl, BASE_IEM, state.iem);
+        saveLocal(state.patch, state.iem);
+      }
+    });
+  }, 15000);
 
   // ── Sort ──
   document.getElementById('patchSort').addEventListener('click', function() {
     var tbody = patchTbl.querySelector('tbody');
-    // Remove dividers
     tbody.querySelectorAll('.patch-divider').forEach(function(d) { d.remove(); });
-    // Sort
     var rows = Array.from(tbody.querySelectorAll('tr'));
     rows.sort(function(a, b) {
       return (parseFloat(a.cells[0].textContent) || 999) - (parseFloat(b.cells[0].textContent) || 999);
     });
     rows.forEach(function(r) { tbody.appendChild(r); });
-    save(patchTbl, PATCH_KEY);
+    onEdit();
   });
 
   // ── Add row ──
@@ -1157,7 +1227,7 @@ var BASE_IEM = [
     var tr = document.createElement('tr');
     tr.innerHTML = '<td class="ch-num" contenteditable>' + (count + 1) + '</td><td contenteditable></td><td contenteditable></td><td contenteditable class="patch-notes"></td>';
     tbody.appendChild(tr);
-    save(patchTbl, PATCH_KEY);
+    onEdit();
   });
 
   // ── Reset to base ──
@@ -1167,6 +1237,10 @@ var BASE_IEM = [
       localStorage.removeItem(IEM_KEY);
       renderTable(patchTbl, BASE_PATCH, null);
       renderTable(iemTbl, BASE_IEM, null);
+      apiPost(
+        BASE_PATCH.filter(function(r) { return r !== '---'; }),
+        BASE_IEM.filter(function(r) { return r !== '---'; })
+      ).then(function() { setStatus(true); });
     }
   });
 })();
