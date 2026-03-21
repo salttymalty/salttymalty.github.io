@@ -6,8 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>3/21 Aragon @ UCC — Gig Cheat Sheet</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap');
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
@@ -16,7 +14,7 @@
     --color-surface-raised: oklch(0.26 0.01 260);
     --color-border: oklch(0.34 0.01 260);
     --color-text: oklch(0.92 0.01 80);
-    --color-text-muted: oklch(0.65 0.01 80);
+    --color-text-muted: oklch(0.68 0.01 80);
     --color-accent: oklch(0.78 0.14 65);
     --color-accent-dim: oklch(0.78 0.14 65 / 0.15);
     --color-success: oklch(0.72 0.14 150);
@@ -30,64 +28,135 @@
 
   html { font-size: 16px; }
   body {
-    font-family: 'Source Sans 3', system-ui, sans-serif;
+    font-family: system-ui, -apple-system, sans-serif;
     background: var(--color-bg);
     color: var(--color-text);
-    padding: 16px;
-    padding-bottom: 80px;
+    padding: 0 16px 80px;
     -webkit-font-smoothing: antialiased;
   }
+
+  /* ── Sticky NOW bar ── */
+  .now-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+    padding: 10px 0;
+    margin: 0 -16px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .now-bar .now-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-accent);
+    margin-bottom: 2px;
+  }
+  .now-bar .now-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .now-bar .now-track {
+    font-size: 0.95rem;
+    color: var(--color-danger);
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  .now-bar .now-next {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-top: 2px;
+  }
+  .now-bar.hidden { display: none; }
 
   /* ── Header ── */
   .header {
     text-align: center;
-    padding: 20px 0 12px;
+    padding: 16px 0 12px;
     border-bottom: 1px solid var(--color-border);
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
   .header h1 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 700;
     letter-spacing: -0.02em;
     margin-bottom: 4px;
   }
   .header .venue-line {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: var(--color-text-muted);
   }
   .header .date-line {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: var(--color-accent);
     font-weight: 600;
     margin-top: 4px;
   }
 
-  /* ── Nav dots ── */
+  /* ── Nav ── */
   .nav {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
     justify-content: center;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
   .nav a {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     color: var(--color-accent);
     text-decoration: none;
     background: var(--color-accent-dim);
-    padding: 6px 12px;
+    padding: 8px 14px;
     border-radius: 20px;
     min-height: 44px;
     display: flex;
     align-items: center;
   }
 
-  /* ── Sections ── */
-  section {
-    margin-bottom: 24px;
+  /* ── Quick contacts bar ── */
+  .quick-contacts {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
   }
+  .quick-contacts a {
+    flex-shrink: 0;
+    background: var(--color-surface);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    text-decoration: none;
+    min-height: 52px;
+    min-width: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .quick-contacts .qc-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+  .quick-contacts .qc-role {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+  }
+  .quick-contacts .qc-action {
+    font-size: 0.8rem;
+    color: var(--color-accent);
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  /* ── Sections ── */
+  section { margin-bottom: 24px; }
   section h2 {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 700;
     color: var(--color-accent);
     text-transform: uppercase;
@@ -97,29 +166,37 @@
     border-bottom: 1px solid var(--color-border);
   }
 
-  /* ── Cards ── */
+  /* ── Timeline cards ── */
   .card {
     background: var(--color-surface);
     border-radius: var(--radius);
     padding: 14px 16px;
     margin-bottom: 10px;
     border-left: 3px solid var(--color-border);
+    transition: border-color 0.3s, background 0.3s;
   }
-  .card.now { border-left-color: var(--color-accent); background: var(--color-accent-dim); }
+  .card.active { border-left-color: var(--color-accent); background: var(--color-accent-dim); }
   .card.go { border-left-color: var(--color-success); }
-  .card.warn { border-left-color: var(--color-danger); background: var(--color-danger-dim); }
+  .card.cue { border-left-color: var(--color-danger); }
   .card.info { border-left-color: var(--color-info); }
+  .card.done { opacity: 0.5; }
 
   .card .time {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: var(--color-accent);
-    margin-bottom: 4px;
+    margin-bottom: 2px;
   }
   .card .label {
     font-size: 1rem;
     font-weight: 600;
     margin-bottom: 4px;
+  }
+  .card .track {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--color-danger);
+    margin: 4px 0;
   }
   .card .detail {
     font-size: 0.9rem;
@@ -135,17 +212,10 @@
     font-size: 0.95rem;
     line-height: 1.6;
   }
-  .kv dt {
-    color: var(--color-text-muted);
-    font-weight: 400;
-    white-space: nowrap;
-  }
-  .kv dd {
-    color: var(--color-text);
-    font-weight: 600;
-  }
+  .kv dt { color: var(--color-text-muted); white-space: nowrap; }
+  .kv dd { color: var(--color-text); font-weight: 600; }
 
-  /* ── Contact list ── */
+  /* ── Contacts ── */
   .contact {
     background: var(--color-surface);
     border-radius: var(--radius);
@@ -156,14 +226,8 @@
     align-items: center;
     min-height: 52px;
   }
-  .contact .name {
-    font-weight: 600;
-    font-size: 0.95rem;
-  }
-  .contact .role {
-    font-size: 0.8rem;
-    color: var(--color-text-muted);
-  }
+  .contact .name { font-weight: 600; font-size: 0.95rem; }
+  .contact .role { font-size: 0.85rem; color: var(--color-text-muted); }
   .contact a {
     color: var(--color-accent);
     text-decoration: none;
@@ -178,11 +242,8 @@
     align-items: center;
   }
 
-  /* ── Pack checklist ── */
-  .checklist {
-    list-style: none;
-    padding: 0;
-  }
+  /* ── Checklist ── */
+  .checklist { list-style: none; padding: 0; }
   .checklist li {
     background: var(--color-surface);
     border-radius: 8px;
@@ -206,12 +267,12 @@
   .flip-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 12px;
   }
   .flip-grid .step {
     background: var(--color-surface);
     border-radius: var(--radius);
-    padding: 12px;
+    padding: 16px;
   }
   .flip-grid .step .num {
     font-size: 1.4rem;
@@ -225,7 +286,7 @@
     margin-top: 4px;
   }
 
-  /* ── RF reminder ── */
+  /* ── RF box ── */
   .rf-box {
     background: var(--color-danger-dim);
     border: 1px solid oklch(0.65 0.18 25 / 0.3);
@@ -233,41 +294,23 @@
     padding: 14px 16px;
     margin-bottom: 12px;
   }
-  .rf-box .title {
-    font-weight: 700;
-    color: var(--color-danger);
-    margin-bottom: 6px;
-  }
-  .rf-box p {
-    font-size: 0.9rem;
-    line-height: 1.5;
-    color: var(--color-text-muted);
-  }
+  .rf-box .title { font-weight: 700; color: var(--color-danger); margin-bottom: 6px; }
+  .rf-box p { font-size: 0.9rem; line-height: 1.5; color: var(--color-text-muted); }
 
-  /* ── iPad grid ── */
-  .ipad-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 6px;
+  /* ── Links ── */
+  .ref-link {
+    display: flex;
+    align-items: center;
+    background: var(--color-info-dim);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    text-decoration: none;
+    color: var(--color-info);
+    font-weight: 600;
+    font-size: 0.95rem;
+    min-height: 52px;
   }
-  .ipad-grid .ipad {
-    background: var(--color-surface);
-    border-radius: 8px;
-    padding: 8px;
-    text-align: center;
-    font-size: 0.75rem;
-  }
-  .ipad-grid .ipad .num {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--color-accent);
-  }
-  .ipad-grid .ipad .assign {
-    color: var(--color-text-muted);
-    margin-top: 2px;
-  }
-
-  /* ── Playlists ── */
   .playlist-link {
     display: flex;
     align-items: center;
@@ -282,19 +325,26 @@
     min-height: 52px;
   }
 
-  .ref-link {
+  /* ── Collapsible ── */
+  details { margin-bottom: 24px; }
+  details summary {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--color-border);
+    cursor: pointer;
+    list-style: none;
+    min-height: 44px;
     display: flex;
     align-items: center;
-    background: var(--color-info-dim);
-    border-radius: var(--radius);
-    padding: 14px 16px;
-    margin-bottom: 8px;
-    text-decoration: none;
-    color: var(--color-info);
-    font-weight: 600;
-    font-size: 0.95rem;
-    min-height: 52px;
+    gap: 8px;
   }
+  details summary::before { content: '+ '; }
+  details[open] summary::before { content: '- '; }
+  details > div { padding-top: 12px; }
 
   @media (min-width: 500px) {
     body { max-width: 480px; margin: 0 auto; }
@@ -303,354 +353,459 @@
 </head>
 <body>
 
+<!-- ══════════════ STICKY NOW BAR ══════════════ -->
+<div class="now-bar hidden" id="nowBar">
+  <div class="now-label" id="nowLabel">Next Up</div>
+  <div class="now-title" id="nowTitle"></div>
+  <div class="now-track" id="nowTrack"></div>
+  <div class="now-next" id="nowNext"></div>
+</div>
+
+<!-- ══════════════ HEADER ══════════════ -->
 <div class="header">
   <h1>Aragon @ University Club</h1>
   <div class="venue-line">76 E Monroe St, Chicago &middot; Cathedral Hall, 9th Floor</div>
   <div class="date-line">Saturday, March 21 &middot; Load-in 12:00 PM</div>
 </div>
 
+<!-- ══════════════ QUICK CONTACTS ══════════════ -->
+<div class="quick-contacts">
+  <a href="tel:+14059243222"><span class="qc-name">Kim Pham</span><span class="qc-role">Aragon Prod</span><span class="qc-action">Call</span></a>
+  <a href="tel:+14065488587"><span class="qc-name">Emma Olson</span><span class="qc-role">Aragon Prod</span><span class="qc-action">Call</span></a>
+  <a href="tel:+18479758245"><span class="qc-name">Brie Vainisi</span><span class="qc-role">Planner</span><span class="qc-action">Call</span></a>
+  <a href="tel:+18478633875"><span class="qc-name">Jack Wiley</span><span class="qc-role">Sound Crew</span><span class="qc-action">Call</span></a>
+  <a href="tel:+17733697278"><span class="qc-name">Mike Bruno</span><span class="qc-role">Boss / CSB</span><span class="qc-action">Call</span></a>
+  <a href="tel:+18478776227"><span class="qc-name">Becky Stipek</span><span class="qc-role">Aragon Prod</span><span class="qc-action">Call</span></a>
+</div>
+
+<!-- ══════════════ NAV ══════════════ -->
 <nav class="nav" id="top">
   <a href="#timeline">Timeline</a>
   <a href="#venue">Venue</a>
-  <a href="#flip">Flip Plan</a>
+  <a href="#flip">Flip</a>
   <a href="#rf">RF</a>
-  <a href="#ipads">iPads</a>
-  <a href="#contacts">Contacts</a>
+  <a href="#band">Band</a>
   <a href="#pack">Pack</a>
+  <a href="#links">Links</a>
 </nav>
 
-<!-- ══════════════ TIMELINE ══════════════ -->
+<!-- ══════════════ UNIFIED TIMELINE ══════════════ -->
 <section id="timeline">
-  <h2>Timeline</h2>
+  <h2>Timeline &amp; Cues</h2>
 
-  <div class="card now">
+  <div class="card go" data-time="12:00" data-label="Sound Load-In">
     <div class="time">12:00 PM</div>
     <div class="label">Sound Load-In</div>
     <div class="detail">Garen, Jack, Matt. Monroe Alley loading dock &rarr; security badge &rarr; freight elevator to 9th. All black + Aragon T-shirt.</div>
   </div>
 
-  <div class="card go">
-    <div class="time">12:00 &ndash; ~2:00</div>
+  <div class="card" data-time="12:00" data-label="Ceremony Setup">
+    <div class="time">12:00 &ndash; 2:00</div>
     <div class="label">Ceremony Setup</div>
     <div class="detail">Piano &amp; Guitar duo in Cathedral Hall. FOH near duo/keys. Montage for ceremony keys. Set Syvas on ground against wall with room for stage between. Pre-set backline behind curtains.</div>
   </div>
 
-  <div class="card info">
+  <div class="card info" data-time="14:00" data-label="Production Arrives &mdash; RF Window">
     <div class="time">2:00 PM</div>
-    <div class="label">Aragon Production Team Arrives</div>
-    <div class="detail">Kim, Emma, Becky on-site. Use downtime to dial in RF.</div>
+    <div class="label">Production Arrives &mdash; RF Window</div>
+    <div class="detail">Kim, Emma, Becky on-site. <strong>Use 2:00&ndash;4:00 to dial in RF.</strong> Power up ULXD4Qs, scan, assign frequencies, walk-test stage to back wall.</div>
   </div>
 
-  <div class="card">
+  <div class="card" data-time="16:30" data-label="Guest Arrival">
     <div class="time">4:30 PM</div>
     <div class="label">Guest Arrival</div>
     <div class="detail">194 guests. Ceremony seating in Cathedral Hall.</div>
   </div>
 
-  <div class="card">
+  <div class="card cue" data-time="17:00" data-label="Ceremony Processional" data-track="Unchained Melody &rarr; Can't Help Falling in Love">
     <div class="time">5:00 PM</div>
     <div class="label">Ceremony Processional</div>
-    <div class="detail">Piano &amp; guitar duo. Processional: "Unchained Melody" (Elvis). Song change for flower girl: "Can't Help Falling in Love" (Elvis). Recessional: "Burning Love" (Elvis).</div>
+    <div class="track">"Unchained Melody" &mdash; Elvis</div>
+    <div class="detail">Piano &amp; guitar duo plays through 10 entries. Song change at flower girl (#9):</div>
+    <div class="track">"Can't Help Falling in Love" &mdash; Elvis</div>
+    <div class="detail">Bride enters on new song with FOB (Timothy McLaughlin Sr.).</div>
   </div>
 
-  <div class="card">
+  <div class="card cue" data-time="17:30" data-label="Recessional" data-track="Burning Love &mdash; Elvis">
     <div class="time">5:30 PM</div>
-    <div class="label">Ceremony Ends &mdash; Cocktails Begin</div>
-    <div class="detail">Immediate family photos in Cathedral Hall. Guests to Library (8th floor) for cocktails. No sound needed in Library.</div>
+    <div class="label">Ceremony Ends &mdash; Recessional</div>
+    <div class="track">"Burning Love" &mdash; Elvis</div>
+    <div class="detail">Immediate family photos in Cathedral Hall after. Guests to Library (8th floor) for cocktails. No sound needed in Library.</div>
   </div>
 
-  <div class="card warn">
+  <div class="card" data-time="17:15" data-label="Room Flip Starts">
     <div class="time">5:15 &ndash; 5:30 PM</div>
     <div class="label">Henry Arrives &mdash; Room Flip Starts</div>
-    <div class="detail">90-minute true room flip. Stage goes in. Slide Syvas into position. Backline from behind curtains onto stage. Henry helps, then leaves.</div>
+    <div class="detail">90-minute true room flip. See <a href="#flip" style="color: var(--color-accent);">Flip Plan</a> below. Henry helps then leaves.</div>
   </div>
 
-  <div class="card">
+  <div class="card" data-time="18:15" data-label="Vendor Buffet">
     <div class="time">6:15 PM</div>
     <div class="label">Vendor Buffet</div>
-    <div class="detail">College Hall (8th floor). Eat while you can &mdash; closes at 8:15.</div>
+    <div class="detail">College Hall (8th floor). Eat in rotation during flip &mdash; don't all leave at once. Closes at 8:15.</div>
   </div>
 
-  <div class="card go">
+  <div class="card go" data-time="18:45" data-label="B&amp;G Room Reveal">
     <div class="time">6:45 PM</div>
     <div class="label">B&amp;G Reception Room Reveal</div>
     <div class="detail">Bride &amp; Groom see room, then parents. B&amp;G tucked away for intros after.</div>
   </div>
 
-  <div class="card">
+  <div class="card" data-time="19:00" data-label="Shannon Rovers Arrive">
     <div class="time">7:00 PM</div>
-    <div class="label">Shannon Rovers Arrive (Bagpipers)</div>
-    <div class="detail">They follow B&amp;G entrance onto dance floor. Cocktail hour ends, bar closes, guests seated.</div>
+    <div class="label">Cocktail Hour Ends &mdash; Shannon Rovers Arrive</div>
+    <div class="detail">Bar closes. Guests seated for dinner. Bagpipers standing by for B&amp;G entrance.</div>
   </div>
 
-  <div class="card warn">
+  <div class="card cue" data-time="19:15" data-label="B&amp;G Entrance" data-track="Heaven is a Place on Earth &mdash; Belinda Carlisle">
     <div class="time">7:15 PM</div>
-    <div class="label">Introductions</div>
-    <div class="detail"><strong>B&amp;G ONLY:</strong> "Heaven is a Place on Earth" (Belinda Carlisle). Announce: "Mr. and Mrs. Tyler Ward." Shannon Rovers immediately follow on dance floor. Then cake cut: "Nothing's Gonna Stop Us Now" (Starship).</div>
+    <div class="label">Introductions &mdash; B&amp;G Entrance</div>
+    <div class="track">"Heaven is a Place on Earth" &mdash; Belinda Carlisle</div>
+    <div class="detail">Announce: <em>"Ladies and gentlemen, please rise and put your hands together as we introduce for the first time as husband and wife, Mr. and Mrs. Tyler Ward."</em><br>Shannon Rovers immediately follow B&amp;G on dance floor.</div>
   </div>
 
-  <div class="card warn">
+  <div class="card cue" data-time="19:17" data-label="Cake Cut" data-track="Nothing's Gonna Stop Us Now &mdash; Starship">
+    <div class="time">After Rovers</div>
+    <div class="label">Cake Cut</div>
+    <div class="track">"Nothing's Gonna Stop Us Now" &mdash; Starship</div>
+    <div class="detail">Cut into top tier. Toasting flutes provided by MOB.</div>
+  </div>
+
+  <div class="card cue" data-time="19:20" data-label="First Dance" data-track="Pledging My Love &mdash; Elvis">
     <div class="time">7:20 PM</div>
-    <div class="label">Special Dances (TO TRACK)</div>
-    <div class="detail">
-      1. First dance: "Pledging My Love" (Elvis)<br>
-      2. Father/Bride: "Forever Young" (Rod Stewart)<br>
-      3. Groom/Mother: "You'll Be In My Heart" (Phil Collins)
-    </div>
+    <div class="label">First Dance</div>
+    <div class="track">"Pledging My Love" &mdash; Elvis</div>
   </div>
 
-  <div class="card">
+  <div class="card cue" data-time="19:24" data-label="Father / Bride Dance" data-track="Forever Young &mdash; Rod Stewart">
+    <div class="time">Immediately after</div>
+    <div class="label">Father / Bride Dance</div>
+    <div class="track">"Forever Young" &mdash; Rod Stewart</div>
+    <div class="detail">FOB: Timothy McLaughlin Sr.</div>
+  </div>
+
+  <div class="card cue" data-time="19:28" data-label="Groom / Mother Dance" data-track="You'll Be In My Heart &mdash; Phil Collins">
+    <div class="time">Immediately after</div>
+    <div class="label">Groom / Mother Dance</div>
+    <div class="track">"You'll Be In My Heart" &mdash; Phil Collins</div>
+  </div>
+
+  <div class="card info" data-time="19:25" data-label="Welcome Toast">
     <div class="time">7:25 PM</div>
     <div class="label">Welcome Toast</div>
-    <div class="detail">Timothy McLaughlin Sr. (Father of Bride). Then first course served at 7:40.</div>
+    <div class="detail"><strong>Wireless mic needed.</strong> Timothy McLaughlin Sr. (Father of Bride).</div>
   </div>
 
-  <div class="card">
+  <div class="card" data-time="19:40" data-label="First Course &mdash; Dinner Music">
+    <div class="time">7:40 PM</div>
+    <div class="label">First Course Served &mdash; Dinner Music</div>
+    <div class="detail">Crab Cake. <strong>Confirm with Brie:</strong> background music during dinner? If yes, load a soft playlist and run at low level through mains. Bride bustles dress at 7:40.</div>
+  </div>
+
+  <div class="card info" data-time="20:05" data-label="Speeches">
     <div class="time">8:05 PM</div>
     <div class="label">Speeches</div>
-    <div class="detail">After salad course served. MOH: Caitlin then Madison McLaughlin. Best Men: George Ward Jr. then Donny Ward. Separate speeches.</div>
+    <div class="detail"><strong>Wireless mic handoff &mdash; 4 speakers, separate speeches:</strong><br>
+    1. Caitlin McLaughlin (MOH)<br>
+    2. Madison McLaughlin (MOH)<br>
+    3. George Ward Jr. (Best Man)<br>
+    4. Donny Ward (Best Man)<br>
+    Cut/fade dinner music before speeches begin. Get "speeches starting" signal from Brie/Kim.</div>
   </div>
 
-  <div class="card go">
+  <div class="card" data-time="20:30" data-label="Bar Reopens">
+    <div class="time">8:30 PM</div>
+    <div class="label">Bar Reopens</div>
+    <div class="detail">Entree served at 8:35 (Chicken / Short Rib / Mushroom Ravioli). Wedding cake served at 9:00.</div>
+  </div>
+
+  <div class="card go" data-time="21:00" data-label="Dance Floor Opens &mdash; Affinity 12">
     <div class="time">9:00 PM</div>
     <div class="label">Dance Floor Opens &mdash; Affinity 12</div>
-    <div class="detail">5-hour reception set begins. 6 singers (3M/3F), 2 horns, drums, bass, 2 guitars, keys. Bar reopens at 8:30.</div>
+    <div class="detail">12-piece band live. 6 singers (3M/3F), 2 horns, drums, bass, 2 guitars, keys. Brie's end time is 9:00. Snapbooth open since 8:30.</div>
   </div>
 
-  <div class="card">
+  <div class="card" data-time="22:15" data-label="Photo/Video End Time">
+    <div class="time">10:15 PM</div>
+    <div class="label">Photo/Video Contracted End</div>
+    <div class="detail">Fox + Ivory wraps. Snapbooth closes at 11:30.</div>
+  </div>
+
+  <div class="card" data-time="24:00" data-label="Event Ends &mdash; Strike">
     <div class="time">12:00 AM</div>
     <div class="label">Event Ends &mdash; Strike</div>
-    <div class="detail">Henry returns for load-out. Vendors begin strike.</div>
+    <div class="detail">Henry returns for load-out. All vendors begin strike. Monroe Alley dock out. Return security badges.</div>
   </div>
 </section>
 
 <!-- ══════════════ VENUE ══════════════ -->
-<section id="venue">
-  <h2>Venue Access</h2>
-
-  <div class="card warn">
-    <div class="label">Load-In Route</div>
-    <div class="detail">Monroe Alley &rarr; west of main entrance &rarr; first door on right in alley. Check in at Security Office. Get badge + lanyard. Wear all day, return on exit. Freight elevator inside &rarr; all floors.</div>
+<details id="venue">
+  <summary>Venue Access</summary>
+  <div>
+    <div class="card cue">
+      <div class="label">Load-In Route</div>
+      <div class="detail">Monroe Alley &rarr; west of main entrance &rarr; first door on right in alley. Check in at Security Office. Get badge + lanyard. Wear all day, return on exit. Freight elevator inside &rarr; all floors.</div>
+    </div>
+    <div class="kv" style="margin-top: 12px;">
+      <dt>Ceremony</dt>
+      <dd>Cathedral Hall &mdash; 9th Floor</dd>
+      <dt>Cocktails</dt>
+      <dd>Library &mdash; 8th Floor (no sound)</dd>
+      <dt>Reception</dt>
+      <dd>Cathedral Hall &mdash; 9th Floor</dd>
+      <dt>Green Room</dt>
+      <dd>College Hall &mdash; 8th Floor (SHARED)</dd>
+      <dt>Parking</dt>
+      <dd>Valet vouchers from planner. If truck rejected: SpotHero + save receipt for invoice.</dd>
+      <dt>Attire</dt>
+      <dd>All black + Aragon T-shirt. No graphics, logos, ripped/light jeans.</dd>
+    </div>
   </div>
-
-  <div class="kv" style="margin-top: 12px;">
-    <dt>Ceremony</dt>
-    <dd>Cathedral Hall &mdash; 9th Floor</dd>
-    <dt>Cocktails</dt>
-    <dd>Library &mdash; 8th Floor (no sound)</dd>
-    <dt>Reception</dt>
-    <dd>Cathedral Hall &mdash; 9th Floor</dd>
-    <dt>Green Room</dt>
-    <dd>College Hall &mdash; 8th Floor (SHARED)</dd>
-    <dt>Parking</dt>
-    <dd>Valet vouchers from planner. If truck rejected: SpotHero + save receipt for invoice.</dd>
-  </div>
-</section>
+</details>
 
 <!-- ══════════════ FLIP PLAN ══════════════ -->
-<section id="flip">
-  <h2>Room Flip Plan (90 min)</h2>
-
-  <div class="flip-grid">
-    <div class="step">
-      <div class="num">1</div>
-      <p>Ceremony ends ~5:00. Guests to 8th floor. Henry arrives 5:15.</p>
+<details id="flip">
+  <summary>Room Flip Plan (90 min)</summary>
+  <div>
+    <div class="flip-grid">
+      <div class="step">
+        <div class="num">1</div>
+        <p>Ceremony ends ~5:30. Guests to 8th floor. Henry arrives 5:15.</p>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <p>Stage goes in between Syvas. Slide Syvas into reception position.</p>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <p>Pull backline from behind curtains onto stage. Drums, amps, stands.</p>
+      </div>
+      <div class="step">
+        <div class="num">4</div>
+        <p>Montage stays in place. Load reception scene. Henry splits after flip.</p>
+      </div>
     </div>
-    <div class="step">
-      <div class="num">2</div>
-      <p>Stage goes in between Syvas. Slide Syvas into reception position.</p>
-    </div>
-    <div class="step">
-      <div class="num">3</div>
-      <p>Pull backline from behind curtains onto stage. Drums, amps, stands.</p>
-    </div>
-    <div class="step">
-      <div class="num">4</div>
-      <p>Montage stays in place. Line check Affinity 12. Henry splits after flip.</p>
+    <div class="card info" style="margin-top: 12px;">
+      <div class="label">Mike's Key Advice</div>
+      <div class="detail">"Set Syvas on the ground against the wall with plenty of room for them to put the stage in between. Use them for both ceremony and reception &mdash; just slide into place after stage is set."</div>
     </div>
   </div>
-
-  <div class="card info" style="margin-top: 12px;">
-    <div class="label">Mike's Key Advice</div>
-    <div class="detail">"Set Syvas on the ground against the wall with plenty of room for them to put the stage in between. Use them for both ceremony and reception &mdash; just slide into place after stage is set."</div>
-  </div>
-</section>
+</details>
 
 <!-- ══════════════ RF ══════════════ -->
-<section id="rf">
-  <h2>RF &amp; Wireless</h2>
+<details id="rf">
+  <summary>RF &amp; Wireless</summary>
+  <div>
+    <div class="rf-box">
+      <div class="title">Lessons from Previous Gigs</div>
+      <p><strong>Antenna separation:</strong> Keep ULXD4Q receivers away from any venue PA transmitters or wireless systems. At Holy Family, intermod + audience RF absorption caused dropouts.<br><br>
+      <strong>Pre-prep:</strong> At Egan-Michelle you lost 35 min to on-site RF coordination. On-site = verify scan + adjust only.<br><br>
+      <strong>Use 2:00&ndash;4:00 PM</strong> to scan, assign frequencies, and walk-test. Mount helical antenna HIGH with line-of-sight to stage, AWAY from LA4X amp.</p>
+    </div>
+    <div class="kv">
+      <dt>Wireless</dt>
+      <dd>3&ndash;4x Shure ULXD Quad packs</dd>
+      <dt>IEM</dt>
+      <dd>IEM rack (4 transmitters) + wired IEMs in mic case</dd>
+      <dt>Antennas</dt>
+      <dd>Helical antenna in battery kit peli</dd>
+      <dt>Channel needs</dt>
+      <dd>6 vocal + 1&ndash;2 speech = 8 wireless min</dd>
+    </div>
+  </div>
+</details>
 
-  <div class="rf-box">
-    <div class="title">Lessons from Previous Gigs</div>
-    <p><strong>Antenna separation:</strong> Keep ULXD4Q receivers away from any venue PA transmitters or wireless systems. At Holy Family, intermod + audience RF absorption caused dropouts.<br><br>
-    <strong>Pre-prep:</strong> At Egan-Michelle you lost 35 min to on-site RF coordination. Program packs before arriving. On-site = verify scan + adjust only.<br><br>
-    <strong>Use the downtime</strong> between ceremony setup and ceremony start (~2:00&ndash;3:30) to scan, assign frequencies, and test.</p>
+<!-- ══════════════ BAND ══════════════ -->
+<details id="band">
+  <summary>Band &amp; iPads</summary>
+  <div>
+    <div class="kv">
+      <dt>Vocals</dt>
+      <dd>6 singers &mdash; 3 guys, 3 girls</dd>
+      <dt>Horns</dt>
+      <dd>Sax + Trumpet</dd>
+      <dt>Rhythm</dt>
+      <dd>Drums, Bass, Guitar (x2), Keys</dd>
+      <dt>Stands</dt>
+      <dd>4 tall band stands (horns, bass, guitar)</dd>
+      <dt>Dances</dt>
+      <dd>All special dances to track</dd>
+      <dt>Other</dt>
+      <dd>Bagpipers at some point (not us)</dd>
+    </div>
+    <div class="kv" style="margin-top: 16px;">
+      <dt>iPad 1-5</dt><dd>Vocals</dd>
+      <dt>iPad 6</dt><dd>Sax</dd>
+      <dt>iPad 7</dt><dd>Trumpet</dd>
+      <dt>iPad 8</dt><dd>MD</dd>
+      <dt>iPad 9</dt><dd>Keys</dd>
+      <dt>iPad 10</dt><dd>Ceremony Recessional</dd>
+      <dt>iPad 11</dt><dd>Reception Tracks</dd>
+      <dt>iPad 12-14</dt><dd>Production</dd>
+      <dt>iPad 15</dt><dd>Extra</dd>
+    </div>
   </div>
-
-  <div class="kv">
-    <dt>Wireless</dt>
-    <dd>3&ndash;4x Shure ULXD Quad packs</dd>
-    <dt>IEM</dt>
-    <dd>IEM rack (4 transmitters) + wired IEMs in mic case</dd>
-    <dt>Antennas</dt>
-    <dd>Helical antenna in battery kit peli</dd>
-  </div>
-</section>
-
-<!-- ══════════════ iPADS ══════════════ -->
-<section id="ipads">
-  <h2>iPad Assignments</h2>
-
-  <div class="ipad-grid">
-    <div class="ipad"><div class="num">1-5</div><div class="assign">Vocals</div></div>
-    <div class="ipad"><div class="num">6</div><div class="assign">Sax</div></div>
-    <div class="ipad"><div class="num">7</div><div class="assign">Trumpet</div></div>
-    <div class="ipad"><div class="num">8</div><div class="assign">MD</div></div>
-    <div class="ipad"><div class="num">9</div><div class="assign">Keys</div></div>
-    <div class="ipad"><div class="num">10</div><div class="assign">Cer. Recess.</div></div>
-    <div class="ipad"><div class="num">11</div><div class="assign">Recep. Trx</div></div>
-    <div class="ipad"><div class="num">12-14</div><div class="assign">Production</div></div>
-    <div class="ipad"><div class="num">15</div><div class="assign">Extra</div></div>
-  </div>
-
-  <h2 style="margin-top: 20px;">Band Config</h2>
-  <div class="kv">
-    <dt>Vocals</dt>
-    <dd>6 singers &mdash; 3 guys, 3 girls</dd>
-    <dt>Horns</dt>
-    <dd>Sax + Trumpet</dd>
-    <dt>Rhythm</dt>
-    <dd>Drums, Bass, Guitar (x2), Keys</dd>
-    <dt>Stands</dt>
-    <dd>4 tall band stands (horns, bass, guitar)</dd>
-    <dt>Dances</dt>
-    <dd>All special dances to track</dd>
-    <dt>Other</dt>
-    <dd>Bagpipers at some point (not us)</dd>
-  </div>
-</section>
-
-<!-- ══════════════ CUES ══════════════ -->
-<section id="cues">
-  <h2>Track Cues &mdash; Critical Moments</h2>
-
-  <div class="card warn">
-    <div class="time">5:00 PM &mdash; CEREMONY</div>
-    <div class="label">Processional</div>
-    <div class="detail">"Unchained Melody" &mdash; Elvis<br>Plays through full processional (10 entries). Song change at flower girl (#9): "Can't Help Falling in Love" &mdash; Elvis. Bride enters on song change.</div>
-  </div>
-
-  <div class="card warn">
-    <div class="time">5:30 PM &mdash; CEREMONY</div>
-    <div class="label">Recessional</div>
-    <div class="detail">"Burning Love" &mdash; Elvis</div>
-  </div>
-
-  <div class="card warn">
-    <div class="time">7:15 PM &mdash; RECEPTION</div>
-    <div class="label">B&amp;G Entrance</div>
-    <div class="detail">"Heaven is a Place on Earth" &mdash; Belinda Carlisle<br>Announce: <em>"Ladies and gentlemen, please rise&hellip; Mr. and Mrs. Tyler Ward."</em><br>Shannon Rovers (bagpipers) immediately follow on dance floor.</div>
-  </div>
-
-  <div class="card warn">
-    <div class="time">After Rovers</div>
-    <div class="label">Cake Cut</div>
-    <div class="detail">"Nothing's Gonna Stop Us Now" &mdash; Starship</div>
-  </div>
-
-  <div class="card warn">
-    <div class="time">7:20 PM</div>
-    <div class="label">First Dance</div>
-    <div class="detail">"Pledging My Love" &mdash; Elvis</div>
-  </div>
-
-  <div class="card warn">
-    <div class="time">Immediately after</div>
-    <div class="label">Father / Bride Dance</div>
-    <div class="detail">"Forever Young" &mdash; Rod Stewart</div>
-  </div>
-
-  <div class="card warn">
-    <div class="time">Immediately after</div>
-    <div class="label">Groom / Mother Dance</div>
-    <div class="detail">"You'll Be In My Heart" &mdash; Phil Collins</div>
-  </div>
-</section>
-
-<!-- ══════════════ PLAYLISTS ══════════════ -->
-<section>
-  <h2>Playlists</h2>
-  <a class="playlist-link" href="https://open.spotify.com/playlist/0P7URV8L6CDR3WgtBjd2DB?si=38533ecba5b74864">Ceremony Recessional &rarr;</a>
-  <a class="playlist-link" href="https://open.spotify.com/playlist/4R86dhSmtROn20pYJGY9vM?si=422ded63dd554a40">Reception Tracks &rarr;</a>
-</section>
-
-<!-- ══════════════ CONTACTS ══════════════ -->
-<section id="contacts">
-  <h2>Contacts</h2>
-
-  <div class="contact">
-    <div><div class="name">Kim Pham</div><div class="role">Aragon Production</div></div>
-    <a href="tel:+14059243222">Call</a>
-  </div>
-  <div class="contact">
-    <div><div class="name">Emma Olson</div><div class="role">Aragon Production</div></div>
-    <a href="tel:+14065488587">Call</a>
-  </div>
-  <div class="contact">
-    <div><div class="name">Becky Stipek</div><div class="role">Aragon Production</div></div>
-    <a href="tel:+18478776227">Call</a>
-  </div>
-  <div class="contact">
-    <div><div class="name">Brie Vainisi</div><div class="role">Planner (Shannon Gail)</div></div>
-    <a href="tel:+18479758245">Call</a>
-  </div>
-  <div class="contact">
-    <div><div class="name">Jack Wiley</div><div class="role">Sound Crew</div></div>
-    <a href="tel:+18478633875">Call</a>
-  </div>
-  <div class="contact">
-    <div><div class="name">Mike Bruno</div><div class="role">Boss / CSB</div></div>
-    <a href="tel:+17733697278">Call</a>
-  </div>
-</section>
+</details>
 
 <!-- ══════════════ PACK LIST ══════════════ -->
-<section id="pack">
-  <h2>Pack Verification</h2>
-
-  <ul class="checklist">
-    <li><span class="cat">Console</span> dLive C1500 + CDM48 rack</li>
-    <li><span class="cat">Mains</span> L'Acoustics Syva &times;2 tops, &times;2 bottoms</li>
-    <li><span class="cat">Amp</span> L'Acoustics LA4X + NL4 cables</li>
-    <li><span class="cat">Subs</span> RCF subs &times;2 + sub snakes</li>
-    <li><span class="cat">Delays</span> EV Evolve 30M &times;2</li>
-    <li><span class="cat">RF</span> 3&ndash;4&times; ULXD Quad packs</li>
-    <li><span class="cat">IEM</span> IEM rack (4 TX) + wireless IEM/ULXD1</li>
-    <li><span class="cat">Peli</span> Helical antenna + battery kit</li>
-    <li><span class="cat">Peli</span> Wired IEMs (mic case / workbox)</li>
-    <li><span class="cat">Mics</span> Mic Case 1</li>
-    <li><span class="cat">Cable</span> XLR 1 + A/C 1</li>
-    <li><span class="cat">Stage</span> DJ Facade (black) + 4&times; band stands</li>
-    <li><span class="cat">Stands</span> Boom mic stand bag + 10 straight stands</li>
-    <li><span class="cat">Drums</span> Pearl 5pc + cymbal bag + hardware bag (2 tom arms, tom legs)</li>
-    <li><span class="cat">Keys</span> Montage 8 + Roland JUNO DS + Apex stand</li>
-    <li><span class="cat">Amps</span> Fender bass amp + Deluxe Reverb + Hot Rod Deluxe</li>
-    <li><span class="cat">Guitar</span> Guitar stands &times;3&ndash;4</li>
-    <li><span class="cat" style="color: var(--color-danger);">!!!</span> BATTERIES! (charge check)</li>
-  </ul>
-</section>
+<details id="pack">
+  <summary>Pack Verification</summary>
+  <div>
+    <ul class="checklist">
+      <li><span class="cat">Console</span> dLive C1500 + CDM48 rack</li>
+      <li><span class="cat">Mains</span> L'Acoustics Syva &times;2 tops, &times;2 bottoms</li>
+      <li><span class="cat">Amp</span> L'Acoustics LA4X + NL4 cables</li>
+      <li><span class="cat">Subs</span> RCF subs &times;2 + sub snakes</li>
+      <li><span class="cat">Delays</span> EV Evolve 30M &times;2</li>
+      <li><span class="cat">RF</span> 3&ndash;4&times; ULXD Quad packs</li>
+      <li><span class="cat">IEM</span> IEM rack (4 TX) + wireless IEM/ULXD1</li>
+      <li><span class="cat">Peli</span> Helical antenna + battery kit</li>
+      <li><span class="cat">Peli</span> Wired IEMs (mic case / workbox)</li>
+      <li><span class="cat">Mics</span> Mic Case 1</li>
+      <li><span class="cat">Cable</span> XLR 1 + A/C 1</li>
+      <li><span class="cat">Stage</span> DJ Facade (black) + 4&times; band stands</li>
+      <li><span class="cat">Stands</span> Boom mic stand bag + 10 straight stands</li>
+      <li><span class="cat">Drums</span> Pearl 5pc + cymbal bag + hardware bag (2 tom arms, tom legs)</li>
+      <li><span class="cat">Keys</span> Montage 8 + Roland JUNO DS + Apex stand</li>
+      <li><span class="cat">Amps</span> Fender bass amp + Deluxe Reverb + Hot Rod Deluxe</li>
+      <li><span class="cat">Guitar</span> Guitar stands &times;3&ndash;4</li>
+      <li><span class="cat" style="color: var(--color-danger);">!!!</span> BATTERIES! (charge check)</li>
+    </ul>
+  </div>
+</details>
 
 <!-- ══════════════ LINKS ══════════════ -->
-<section>
-  <h2>Reference Links</h2>
-  <a class="ref-link" href="https://drive.google.com/drive/folders/10pVpH5wUyl6bdAA3E33Vdg_X98JKhcgq?usp=sharing">Final Documents Folder &rarr;</a>
-  <a class="ref-link" href="https://docs.google.com/document/d/1Eu-KdZeHdRTHzyB1H-1zt5CYrkxFwADmRJi27BXyrZo/edit?tab=t.0">Planner Timeline &rarr;</a>
-  <a class="ref-link" href="https://docs.google.com/spreadsheets/d/1yBXM3hsDoPI7c04S6s0s2o2v9FgYZLWxtNRd8Va8BKo/edit">Packing Manifest (Aragon) &rarr;</a>
-</section>
+<details id="links">
+  <summary>Playlists &amp; Reference Links</summary>
+  <div>
+    <a class="playlist-link" href="https://open.spotify.com/playlist/0P7URV8L6CDR3WgtBjd2DB?si=38533ecba5b74864">Ceremony Recessional Playlist &rarr;</a>
+    <a class="playlist-link" href="https://open.spotify.com/playlist/4R86dhSmtROn20pYJGY9vM?si=422ded63dd554a40">Reception Tracks Playlist &rarr;</a>
+    <a class="ref-link" href="https://drive.google.com/drive/folders/10pVpH5wUyl6bdAA3E33Vdg_X98JKhcgq?usp=sharing">Final Documents Folder &rarr;</a>
+    <a class="ref-link" href="https://docs.google.com/document/d/1Eu-KdZeHdRTHzyB1H-1zt5CYrkxFwADmRJi27BXyrZo/edit?tab=t.0">Planner Timeline &rarr;</a>
+    <a class="ref-link" href="https://docs.google.com/spreadsheets/d/1yBXM3hsDoPI7c04S6s0s2o2v9FgYZLWxtNRd8Va8BKo/edit">Packing Manifest (Aragon) &rarr;</a>
+  </div>
+</details>
+
+<!-- ══════════════ FULL CONTACTS ══════════════ -->
+<details id="contacts">
+  <summary>All Contacts</summary>
+  <div>
+    <div class="contact">
+      <div><div class="name">Kim Pham</div><div class="role">Aragon Production</div></div>
+      <a href="tel:+14059243222">Call</a>
+    </div>
+    <div class="contact">
+      <div><div class="name">Emma Olson</div><div class="role">Aragon Production</div></div>
+      <a href="tel:+14065488587">Call</a>
+    </div>
+    <div class="contact">
+      <div><div class="name">Becky Stipek</div><div class="role">Aragon Production</div></div>
+      <a href="tel:+18478776227">Call</a>
+    </div>
+    <div class="contact">
+      <div><div class="name">Brie Vainisi</div><div class="role">Planner (Shannon Gail)</div></div>
+      <a href="tel:+18479758245">Call</a>
+    </div>
+    <div class="contact">
+      <div><div class="name">Jack Wiley</div><div class="role">Sound Crew</div></div>
+      <a href="tel:+18478633875">Call</a>
+    </div>
+    <div class="contact">
+      <div><div class="name">Mike Bruno</div><div class="role">Boss / CSB</div></div>
+      <a href="tel:+17733697278">Call</a>
+    </div>
+  </div>
+</details>
 
 <div style="text-align: center; padding: 24px 0; color: var(--color-text-muted); font-size: 0.8rem;">
-  Built from Morgan Day email (Mar 17) + Mike Bruno details (Mar 18)
+  Sources: Morgan Day (Mar 17) + Mike Bruno (Mar 18) + Planner Timeline
 </div>
+
+<!-- ══════════════ TIME-AWARE SCRIPT ══════════════ -->
+<script>
+(function() {
+  const EVENT_DATE = '2026-03-21';
+  const cards = document.querySelectorAll('.card[data-time]');
+
+  function parseTime(t) {
+    const parts = t.split(':');
+    return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+  }
+
+  function update() {
+    const now = new Date();
+    const todayStr = now.toISOString().slice(0, 10);
+    const nowBar = document.getElementById('nowBar');
+
+    // Only activate on event day
+    if (todayStr !== EVENT_DATE) {
+      nowBar.classList.add('hidden');
+      return;
+    }
+
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    let activeIdx = -1;
+    let nextIdx = -1;
+
+    // Find current and next card
+    const times = [];
+    cards.forEach((card, i) => {
+      const t = parseTime(card.dataset.time);
+      times.push(t);
+      card.classList.remove('active', 'done');
+    });
+
+    for (let i = times.length - 1; i >= 0; i--) {
+      if (currentMinutes >= times[i]) {
+        activeIdx = i;
+        break;
+      }
+    }
+
+    if (activeIdx >= 0) {
+      // Mark past cards
+      for (let i = 0; i < activeIdx; i++) {
+        cards[i].classList.add('done');
+      }
+      // Highlight current
+      cards[activeIdx].classList.add('active');
+      nextIdx = activeIdx + 1 < cards.length ? activeIdx + 1 : -1;
+    } else if (times.length > 0 && currentMinutes < times[0]) {
+      activeIdx = -1;
+      nextIdx = 0;
+    }
+
+    // Update sticky bar
+    if (activeIdx >= 0 || nextIdx >= 0) {
+      nowBar.classList.remove('hidden');
+      const current = activeIdx >= 0 ? cards[activeIdx] : null;
+      const next = nextIdx >= 0 ? cards[nextIdx] : null;
+
+      if (current) {
+        document.getElementById('nowLabel').textContent = 'Now';
+        document.getElementById('nowTitle').textContent = current.dataset.label;
+        document.getElementById('nowTrack').textContent = current.dataset.track || '';
+        if (next) {
+          document.getElementById('nowNext').textContent = 'Next: ' + next.dataset.label +
+            (next.dataset.track ? ' — ' + next.dataset.track : '');
+        } else {
+          document.getElementById('nowNext').textContent = '';
+        }
+      } else if (next) {
+        document.getElementById('nowLabel').textContent = 'Next Up';
+        document.getElementById('nowTitle').textContent = next.dataset.label;
+        document.getElementById('nowTrack').textContent = next.dataset.track || '';
+        document.getElementById('nowNext').textContent = '';
+      }
+    } else {
+      nowBar.classList.add('hidden');
+    }
+  }
+
+  update();
+  setInterval(update, 30000);
+})();
+</script>
 
 </body>
 </html>
