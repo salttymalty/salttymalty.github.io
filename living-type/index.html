@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone art gallery, not part of a design system -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Living Type — Variable Font Experiments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-bg: #0f0e0c;
+  --color-surface: #1a1816;
+  --color-text: #e8e4de;
+  --color-text-secondary: #8a7e72;
+  --color-accent: #b8652a;
+  --color-accent-hover: #d4783a;
+  --color-border: oklch(0.22 0.01 55);
+  --color-cursor-bg: #f9f8f6;
+  --color-cursor-text: #1a1714;
+  --color-code-bg: #0d1117;
+  --color-code-blue: #58a6ff;
+  --color-code-text: #c9d1d9;
+  --color-code-green: #7ee787;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  min-height: 100vh;
+  padding: 6vh 6vw;
+}
+
+header {
+  margin-bottom: 6vh;
+}
+
+h1 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 300;
+  font-variation-settings: 'SOFT' 80, 'WONK' 1, 'opsz' 72;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  animation: title-breathe 10s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+@keyframes title-breathe {
+  0%   { font-variation-settings: 'SOFT' 80, 'WONK' 1, 'opsz' 72, 'wght' 300; }
+  50%  { font-variation-settings: 'SOFT' 20, 'WONK' 0, 'opsz' 144, 'wght' 500; }
+  100% { font-variation-settings: 'SOFT' 80, 'WONK' 1, 'opsz' 72, 'wght' 300; }
+}
+
+.subtitle {
+  color: var(--color-text-secondary);
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+  line-height: 1.6;
+  max-width: 50ch;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
+  gap: 3vw;
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.card:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+}
+
+.card-preview {
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+.card-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  font-variation-settings: 'SOFT' 40, 'opsz' 48;
+  margin-bottom: 0.5rem;
+}
+
+.card-desc {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.card-meta {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--color-accent);
+}
+
+/* Live preview thumbnails */
+
+.preview-categories {
+  background: var(--color-bg);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Fraunces', Georgia, serif;
+}
+
+.preview-categories .pw1 {
+  font-size: 2.2rem;
+  color: var(--color-text);
+  opacity: 0.8;
+  animation: p-bones 8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  line-height: 1;
+}
+
+.preview-categories .pw2 {
+  font-size: 3rem;
+  color: var(--color-accent);
+  opacity: 0.9;
+  animation: p-bodies 11s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  line-height: 1;
+}
+
+.preview-categories .pw3 {
+  font-size: 1.8rem;
+  color: var(--color-text);
+  opacity: 0.6;
+  animation: p-animals 14s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  line-height: 1;
+}
+
+.preview-categories .pw4 {
+  font-size: 1.2rem;
+  color: var(--color-text-secondary);
+  opacity: 0.35;
+  letter-spacing: 0.15em;
+  animation: p-abstract 19s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  line-height: 1;
+}
+
+@keyframes p-bones {
+  0%   { font-variation-settings: 'wght' 800, 'opsz' 144, 'SOFT' 0, 'WONK' 0; }
+  50%  { font-variation-settings: 'wght' 200, 'opsz' 9, 'SOFT' 100, 'WONK' 1; }
+  100% { font-variation-settings: 'wght' 800, 'opsz' 144, 'SOFT' 0, 'WONK' 0; }
+}
+
+@keyframes p-bodies {
+  0%   { font-variation-settings: 'wght' 400, 'opsz' 72, 'SOFT' 100, 'WONK' 1; }
+  50%  { font-variation-settings: 'wght' 900, 'opsz' 144, 'SOFT' 0, 'WONK' 0; }
+  100% { font-variation-settings: 'wght' 400, 'opsz' 72, 'SOFT' 100, 'WONK' 1; }
+}
+
+@keyframes p-animals {
+  0%   { font-variation-settings: 'wght' 500, 'opsz' 48, 'SOFT' 50, 'WONK' 0; }
+  50%  { font-variation-settings: 'wght' 800, 'opsz' 144, 'SOFT' 10, 'WONK' 1; }
+  100% { font-variation-settings: 'wght' 500, 'opsz' 48, 'SOFT' 50, 'WONK' 0; }
+}
+
+@keyframes p-abstract {
+  0%   { font-variation-settings: 'wght' 300, 'opsz' 24, 'SOFT' 60, 'WONK' 0; }
+  50%  { font-variation-settings: 'wght' 400, 'opsz' 48, 'SOFT' 80, 'WONK' 1; }
+  100% { font-variation-settings: 'wght' 300, 'opsz' 24, 'SOFT' 60, 'WONK' 0; }
+}
+
+.preview-poem {
+  background: var(--color-bg);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1.5rem 2rem;
+  font-family: 'Fraunces', Georgia, serif;
+}
+
+.preview-poem .pv1 {
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--color-text);
+  opacity: 0.7;
+  animation: pd-1 9s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  margin-bottom: 0.5rem;
+}
+
+.preview-poem .pv2 {
+  font-size: 1.8rem;
+  color: var(--color-accent);
+  animation: pd-2 13s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  margin-bottom: 0.3rem;
+}
+
+.preview-poem .pv3 {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  opacity: 0.5;
+  margin-bottom: 1.2rem;
+}
+
+.preview-poem .pv4 {
+  font-size: 2.5rem;
+  font-style: italic;
+  color: var(--color-text);
+  animation: pd-4 22s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+@keyframes pd-1 {
+  0%   { font-variation-settings: 'wght' 300, 'opsz' 24, 'SOFT' 80, 'WONK' 1; }
+  50%  { font-variation-settings: 'wght' 500, 'opsz' 72, 'SOFT' 30, 'WONK' 0; }
+  100% { font-variation-settings: 'wght' 300, 'opsz' 24, 'SOFT' 80, 'WONK' 1; }
+}
+
+@keyframes pd-2 {
+  0%   { font-variation-settings: 'wght' 700, 'opsz' 144, 'SOFT' 0, 'WONK' 0; }
+  50%  { font-variation-settings: 'wght' 400, 'opsz' 48, 'SOFT' 100, 'WONK' 1; }
+  100% { font-variation-settings: 'wght' 700, 'opsz' 144, 'SOFT' 0, 'WONK' 0; }
+}
+
+@keyframes pd-4 {
+  0%   { font-variation-settings: 'wght' 200, 'opsz' 9, 'SOFT' 100, 'WONK' 1; }
+  50%  { font-variation-settings: 'wght' 800, 'opsz' 144, 'SOFT' 0, 'WONK' 0; }
+  100% { font-variation-settings: 'wght' 200, 'opsz' 9, 'SOFT' 100, 'WONK' 1; }
+}
+
+.preview-cursor {
+  background: var(--color-cursor-bg);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fraunces', Georgia, serif;
+}
+
+.preview-cursor span {
+  font-size: 4rem;
+  color: var(--color-cursor-text);
+  font-variation-settings: 'wght' 700, 'opsz' 96, 'SOFT' 50, 'WONK' 0;
+  animation: pc-drift 6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+@keyframes pc-drift {
+  0%   { font-variation-settings: 'wght' 200, 'opsz' 9, 'SOFT' 0, 'WONK' 0; }
+  33%  { font-variation-settings: 'wght' 900, 'opsz' 144, 'SOFT' 0, 'WONK' 0; }
+  66%  { font-variation-settings: 'wght' 900, 'opsz' 144, 'SOFT' 100, 'WONK' 1; }
+  100% { font-variation-settings: 'wght' 200, 'opsz' 9, 'SOFT' 0, 'WONK' 0; }
+}
+
+.preview-recursive {
+  background: var(--color-code-bg);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  font-family: 'Source Sans 3', monospace;
+}
+
+.preview-recursive .pr1 {
+  font-size: 1.1rem;
+  color: var(--color-code-blue);
+  font-style: italic;
+}
+
+.preview-recursive .pr2 {
+  font-size: 2rem;
+  color: var(--color-code-text);
+}
+
+.preview-recursive .pr3 {
+  font-size: 0.85rem;
+  color: var(--color-code-green);
+  font-style: italic;
+}
+
+footer {
+  margin-top: 6vh;
+  padding-top: 3vh;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+footer a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: var(--color-accent-hover);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  h1, .pw1, .pw2, .pw3, .pw4, .pv1, .pv2, .pv4, .preview-cursor span {
+    animation-play-state: paused;
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Living Type</h1>
+  <p class="subtitle">Variable font experiments. CSS animation driving weight, optical size, softness, and quirk axes in real time. Each piece is a self-contained HTML file under 5KB. Click to enter, click inside to freeze.</p>
+</header>
+
+<div class="grid">
+
+  <a href="categories.html" class="card">
+    <div class="card-preview">
+      <div class="preview-categories">
+        <span class="pw1">bones</span>
+        <span class="pw2">bodies</span>
+        <span class="pw3">animals</span>
+        <span class="pw4">abstract</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">bones bodies animals abstract</div>
+      <div class="card-desc">Four words breathing through Fraunces' 4D variation space at different cycle lengths. Terracotta on dark.</div>
+      <div class="card-meta">
+        <span>Fraunces</span>
+        <span>4 axes</span>
+        <span>CSS only</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="recursive.html" class="card">
+    <div class="card-preview">
+      <div class="preview-recursive">
+        <span class="pr1">function breathe()</span>
+        <span class="pr2">everything moves</span>
+        <span class="pr3">between machine and hand</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">recursive morph</div>
+      <div class="card-desc">Code becoming handwriting becoming code. Recursive's MONO and CASL axes morph letterforms between mechanical and flowing.</div>
+      <div class="card-meta">
+        <span>Recursive</span>
+        <span>5 axes</span>
+        <span>CSS only</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="cursor.html" class="card">
+    <div class="card-preview">
+      <div class="preview-cursor">
+        <span>touch</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">cursor field</div>
+      <div class="card-desc">Mouse-driven instrument. X controls weight, Y controls softness. You are the animation. Click to cycle words.</div>
+      <div class="card-meta">
+        <span>Fraunces</span>
+        <span>interactive</span>
+        <span>JS driven</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="poem.html" class="card">
+    <div class="card-preview">
+      <div class="preview-poem">
+        <span class="pv1">she draws what the body remembers</span>
+        <span class="pv2">what remains</span>
+        <span class="pv3">after the looking is done</span>
+        <span class="pv4">the bones</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">what remains</div>
+      <div class="card-desc">A poem where each line breathes at its own rate. Fraunces italic and upright mixing across variable margins.</div>
+      <div class="card-meta">
+        <span>Fraunces</span>
+        <span>italic + upright</span>
+        <span>CSS only</span>
+      </div>
+    </div>
+  </a>
+
+</div>
+
+<footer>
+  Built with variable fonts from Google Fonts. No frameworks, no canvas, no build step.<br>
+  Fraunces by Undercase Type. Recursive by Arrow Type.
+</footer>
+
+</body>
+</html>

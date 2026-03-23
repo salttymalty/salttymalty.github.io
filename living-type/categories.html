@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece, not part of a design system -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bones bodies animals abstract</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,100..900,0..100,0..1&display=swap" rel="stylesheet">
+<style>
+/* Fraunces loaded via Google Fonts — variable with SOFT, WONK, opsz, wght */
+
+:root {
+  --color-bg: #0a0908;
+  --color-text: #f9f8f6;
+  --color-accent: #b8652a;
+  --color-warm-light: #d4a574;
+  --color-warm-mid: #c47d3e;
+  --color-warm-deep: #8b5e3c;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--color-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  font-family: 'Fraunces', Georgia, serif;
+  cursor: crosshair;
+}
+
+.word {
+  font-family: 'Fraunces', Georgia, serif;
+  text-transform: lowercase;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-align: center;
+  color: var(--color-text);
+  will-change: font-variation-settings, opacity;
+  user-select: none;
+  transition: color 2s ease;
+}
+
+/* Each word breathes on a different cycle — like four organisms */
+
+#bones {
+  font-size: clamp(3.5rem, 14vw, 10rem);
+  animation: breathe-bones 8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  opacity: 0.9;
+}
+
+#bodies {
+  font-size: clamp(4.5rem, 18vw, 14rem);
+  animation: breathe-bodies 11s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  color: var(--color-accent);
+  opacity: 0.95;
+}
+
+#animals {
+  font-size: clamp(3rem, 12vw, 9rem);
+  animation: breathe-animals 14s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  opacity: 0.7;
+}
+
+#abstract {
+  font-size: clamp(2rem, 8vw, 6rem);
+  animation: breathe-abstract 19s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  opacity: 0.5;
+  letter-spacing: 0.15em;
+}
+
+/*
+   Each word traverses a different path through the 4D variation space:
+   wght (100-900), opsz (9-144), SOFT (0-100), WONK (0-1)
+
+   bones: heavy and sharp → light and soft (structural → dissolved)
+   bodies: soft and wide → tight and angular (flesh → tension)
+   animals: wild oscillation — WONK flickers, weight surges
+   abstract: slow drift through the full space, barely moving
+*/
+
+@keyframes breathe-bones {
+  0%   { font-variation-settings: 'wght' 800, 'opsz' 144, 'SOFT' 0,   'WONK' 0; }
+  35%  { font-variation-settings: 'wght' 300, 'opsz' 48,  'SOFT' 80,  'WONK' 0; }
+  65%  { font-variation-settings: 'wght' 200, 'opsz' 9,   'SOFT' 100, 'WONK' 1; }
+  100% { font-variation-settings: 'wght' 800, 'opsz' 144, 'SOFT' 0,   'WONK' 0; }
+}
+
+@keyframes breathe-bodies {
+  0%   { font-variation-settings: 'wght' 400, 'opsz' 72,  'SOFT' 100, 'WONK' 1; }
+  25%  { font-variation-settings: 'wght' 700, 'opsz' 144, 'SOFT' 60,  'WONK' 1; }
+  50%  { font-variation-settings: 'wght' 900, 'opsz' 144, 'SOFT' 0,   'WONK' 0; }
+  75%  { font-variation-settings: 'wght' 600, 'opsz' 48,  'SOFT' 40,  'WONK' 1; }
+  100% { font-variation-settings: 'wght' 400, 'opsz' 72,  'SOFT' 100, 'WONK' 1; }
+}
+
+@keyframes breathe-animals {
+  0%   { font-variation-settings: 'wght' 500, 'opsz' 48,  'SOFT' 50,  'WONK' 0; opacity: 0.7; }
+  15%  { font-variation-settings: 'wght' 900, 'opsz' 144, 'SOFT' 0,   'WONK' 1; opacity: 0.9; }
+  30%  { font-variation-settings: 'wght' 200, 'opsz' 9,   'SOFT' 100, 'WONK' 0; opacity: 0.5; }
+  50%  { font-variation-settings: 'wght' 800, 'opsz' 96,  'SOFT' 20,  'WONK' 1; opacity: 0.85; }
+  70%  { font-variation-settings: 'wght' 300, 'opsz' 24,  'SOFT' 90,  'WONK' 0; opacity: 0.6; }
+  85%  { font-variation-settings: 'wght' 700, 'opsz' 144, 'SOFT' 10,  'WONK' 1; opacity: 0.8; }
+  100% { font-variation-settings: 'wght' 500, 'opsz' 48,  'SOFT' 50,  'WONK' 0; opacity: 0.7; }
+}
+
+@keyframes breathe-abstract {
+  0%   { font-variation-settings: 'wght' 300, 'opsz' 24,  'SOFT' 60,  'WONK' 0; letter-spacing: 0.15em; }
+  50%  { font-variation-settings: 'wght' 400, 'opsz' 48,  'SOFT' 80,  'WONK' 1; letter-spacing: 0.25em; }
+  100% { font-variation-settings: 'wght' 300, 'opsz' 24,  'SOFT' 60,  'WONK' 0; letter-spacing: 0.15em; }
+}
+
+/* Mouse interaction: hover warms everything */
+body.warm #bones   { color: var(--color-warm-light); }
+body.warm #animals { color: var(--color-warm-mid); opacity: 0.85; }
+body.warm #abstract { color: var(--color-warm-deep); opacity: 0.7; }
+
+/* Reduced motion: still show variation, just no animation */
+@media (prefers-reduced-motion: reduce) {
+  .word { animation-play-state: paused; }
+  #bones   { font-variation-settings: 'wght' 600, 'opsz' 96, 'SOFT' 40, 'WONK' 0; }
+  #bodies  { font-variation-settings: 'wght' 700, 'opsz' 144, 'SOFT' 80, 'WONK' 1; }
+  #animals { font-variation-settings: 'wght' 500, 'opsz' 48, 'SOFT' 50, 'WONK' 0; }
+  #abstract { font-variation-settings: 'wght' 300, 'opsz' 24, 'SOFT' 60, 'WONK' 0; }
+}
+</style>
+</head>
+<body>
+
+<div id="bones" class="word">bones</div>
+<div id="bodies" class="word">bodies</div>
+<div id="animals" class="word">animals</div>
+<div id="abstract" class="word">abstract</div>
+
+<script>
+// Mouse proximity warms the palette
+let warm = false;
+document.addEventListener('mousemove', () => {
+  if (!warm) {
+    document.body.classList.add('warm');
+    warm = true;
+  }
+});
+document.addEventListener('mouseleave', () => {
+  document.body.classList.remove('warm');
+  warm = false;
+});
+
+// Click freezes time — pauses all animation
+let frozen = false;
+document.addEventListener('click', () => {
+  frozen = !frozen;
+  document.querySelectorAll('.word').forEach(w => {
+    w.style.animationPlayState = frozen ? 'paused' : 'running';
+  });
+  document.body.style.cursor = frozen ? 'default' : 'crosshair';
+});
+</script>
+
+</body>
+</html>

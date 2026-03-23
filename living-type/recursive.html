@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>recursive morph</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Recursive:slnt,wght,CASL,CRSV,MONO@-15..0,300..1000,0..1,0..1,0..1&display=swap" rel="stylesheet">
+<style>
+/*
+  Recursive has 5 variable axes:
+  - MONO 0→1: proportional → monospace
+  - CASL 0→1: linear (mechanical) → casual (handwritten)
+  - wght 300→1000: light → black
+  - slnt -15→0: upright → italic
+  - CRSV 0→1: cursive off → on
+
+  Concept: code becoming handwriting becoming code.
+*/
+
+:root {
+  --color-bg: #0d1117;
+  --color-text: #c9d1d9;
+  --color-accent: #58a6ff;
+  --color-green: #7ee787;
+  --color-dim: #484f58;
+  --color-warm-accent: #e3b341;
+  --color-warm-dim: #6e7681;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--color-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5vh;
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+.line {
+  font-family: 'Recursive', monospace;
+  text-align: center;
+  will-change: font-variation-settings, opacity;
+  user-select: none;
+  transition: color 1.5s ease;
+}
+
+#line1 {
+  font-size: clamp(2.5rem, 7vw, 5.5rem);
+  color: var(--color-accent);
+  animation: morph-code 12s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  opacity: 0.95;
+}
+
+#line2 {
+  font-size: clamp(3.5rem, 10vw, 8rem);
+  color: var(--color-text);
+  animation: morph-between 16s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  opacity: 0.9;
+}
+
+#line3 {
+  font-size: clamp(2rem, 5.5vw, 4rem);
+  color: var(--color-green);
+  animation: morph-hand 20s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  opacity: 0.7;
+  letter-spacing: 0.05em;
+}
+
+#line4 {
+  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+  color: var(--color-dim);
+  animation: morph-ghost 25s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  opacity: 0.35;
+  letter-spacing: 0.12em;
+}
+
+@keyframes morph-code {
+  0%   { font-variation-settings: 'MONO' 1, 'CASL' 0, 'wght' 400, 'slnt' 0,   'CRSV' 0; }
+  30%  { font-variation-settings: 'MONO' 1, 'CASL' 0.3, 'wght' 700, 'slnt' 0,  'CRSV' 0; }
+  60%  { font-variation-settings: 'MONO' 0.5, 'CASL' 0.8, 'wght' 500, 'slnt' -10, 'CRSV' 1; }
+  80%  { font-variation-settings: 'MONO' 0, 'CASL' 1, 'wght' 350, 'slnt' -15, 'CRSV' 1; }
+  100% { font-variation-settings: 'MONO' 1, 'CASL' 0, 'wght' 400, 'slnt' 0,   'CRSV' 0; }
+}
+
+@keyframes morph-between {
+  0%   { font-variation-settings: 'MONO' 0, 'CASL' 1, 'wght' 800, 'slnt' -15, 'CRSV' 1; }
+  25%  { font-variation-settings: 'MONO' 0.3, 'CASL' 0.6, 'wght' 600, 'slnt' -8, 'CRSV' 1; }
+  50%  { font-variation-settings: 'MONO' 1, 'CASL' 0, 'wght' 300, 'slnt' 0,   'CRSV' 0; }
+  75%  { font-variation-settings: 'MONO' 0.7, 'CASL' 0.4, 'wght' 900, 'slnt' -5, 'CRSV' 0; }
+  100% { font-variation-settings: 'MONO' 0, 'CASL' 1, 'wght' 800, 'slnt' -15, 'CRSV' 1; }
+}
+
+@keyframes morph-hand {
+  0%   { font-variation-settings: 'MONO' 0, 'CASL' 1, 'wght' 400, 'slnt' -15, 'CRSV' 1; letter-spacing: 0.05em; }
+  40%  { font-variation-settings: 'MONO' 0.8, 'CASL' 0.2, 'wght' 700, 'slnt' -3, 'CRSV' 0; letter-spacing: 0.02em; }
+  70%  { font-variation-settings: 'MONO' 1, 'CASL' 0, 'wght' 1000, 'slnt' 0,  'CRSV' 0; letter-spacing: -0.01em; }
+  100% { font-variation-settings: 'MONO' 0, 'CASL' 1, 'wght' 400, 'slnt' -15, 'CRSV' 1; letter-spacing: 0.05em; }
+}
+
+@keyframes morph-ghost {
+  0%   { font-variation-settings: 'MONO' 0.5, 'CASL' 0.5, 'wght' 300, 'slnt' -7, 'CRSV' 0; }
+  50%  { font-variation-settings: 'MONO' 0.5, 'CASL' 0.5, 'wght' 500, 'slnt' -7, 'CRSV' 1; }
+  100% { font-variation-settings: 'MONO' 0.5, 'CASL' 0.5, 'wght' 300, 'slnt' -7, 'CRSV' 0; }
+}
+
+body.warm #line1 { color: var(--color-warm-accent); }
+body.warm #line4 { color: var(--color-warm-dim); opacity: 0.5; }
+
+@media (prefers-reduced-motion: reduce) {
+  .line { animation-play-state: paused; }
+}
+</style>
+</head>
+<body>
+
+<div id="line1" class="line">function breathe()</div>
+<div id="line2" class="line">everything moves</div>
+<div id="line3" class="line">between machine and hand</div>
+<div id="line4" class="line">// nothing is fixed</div>
+
+<script>
+let warm = false;
+document.addEventListener('mousemove', () => {
+  if (!warm) { document.body.classList.add('warm'); warm = true; }
+});
+document.addEventListener('mouseleave', () => {
+  document.body.classList.remove('warm'); warm = false;
+});
+let frozen = false;
+document.addEventListener('click', () => {
+  frozen = !frozen;
+  document.querySelectorAll('.line').forEach(l => {
+    l.style.animationPlayState = frozen ? 'paused' : 'running';
+  });
+  document.body.style.cursor = frozen ? 'default' : 'crosshair';
+});
+</script>
+</body>
+</html>

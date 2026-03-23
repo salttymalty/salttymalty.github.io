@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>what remains</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,100..900,0..100,0..1;1,9..144,100..900,0..100,0..1&display=swap" rel="stylesheet">
+<style>
+/*
+  Concept: A poem where each line breathes at a different rate and depth.
+  Fraunces italic for the emotional lines. Upright for the grounding ones.
+  Cream on near-black. Sparse. The negative space is the point.
+*/
+
+:root {
+  --color-bg: #0f0e0c;
+  --color-text: #e8e4de;
+  --color-accent: #b8652a;
+  --color-mid: #8a7e72;
+  --color-ghost: #3d3832;
+  --color-warm-text: #d4a574;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--color-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0 12vw;
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+.verse {
+  font-family: 'Fraunces', Georgia, serif;
+  color: var(--color-text);
+  will-change: font-variation-settings, opacity;
+  user-select: none;
+  transition: color 2.5s ease;
+}
+
+#v1 {
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-style: italic;
+  animation: drift-1 9s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  opacity: 0.85;
+  margin-bottom: 4vh;
+}
+
+#v2 {
+  font-size: clamp(3.5rem, 9vw, 7rem);
+  animation: drift-2 13s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  color: var(--color-accent);
+  opacity: 0.95;
+  margin-bottom: 2vh;
+}
+
+#v3 {
+  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+  animation: drift-3 17s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  color: var(--color-mid);
+  opacity: 0.6;
+  letter-spacing: 0.08em;
+  margin-bottom: 6vh;
+}
+
+#v4 {
+  font-size: clamp(4rem, 12vw, 10rem);
+  font-style: italic;
+  animation: drift-4 22s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  opacity: 0.9;
+  margin-bottom: 3vh;
+}
+
+#v5 {
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  animation: drift-5 30s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  color: var(--color-ghost);
+  opacity: 0.3;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* Italic lines use SOFT dramatically, upright lines use weight */
+
+@keyframes drift-1 {
+  0%   { font-variation-settings: 'wght' 300, 'opsz' 24, 'SOFT' 80, 'WONK' 1; }
+  50%  { font-variation-settings: 'wght' 500, 'opsz' 72, 'SOFT' 30, 'WONK' 0; }
+  100% { font-variation-settings: 'wght' 300, 'opsz' 24, 'SOFT' 80, 'WONK' 1; }
+}
+
+@keyframes drift-2 {
+  0%   { font-variation-settings: 'wght' 700, 'opsz' 144, 'SOFT' 0,   'WONK' 0; }
+  40%  { font-variation-settings: 'wght' 900, 'opsz' 144, 'SOFT' 60,  'WONK' 1; }
+  70%  { font-variation-settings: 'wght' 400, 'opsz' 48,  'SOFT' 100, 'WONK' 1; }
+  100% { font-variation-settings: 'wght' 700, 'opsz' 144, 'SOFT' 0,   'WONK' 0; }
+}
+
+@keyframes drift-3 {
+  0%   { font-variation-settings: 'wght' 400, 'opsz' 9,   'SOFT' 50, 'WONK' 0; }
+  50%  { font-variation-settings: 'wght' 300, 'opsz' 24,  'SOFT' 90, 'WONK' 1; }
+  100% { font-variation-settings: 'wght' 400, 'opsz' 9,   'SOFT' 50, 'WONK' 0; }
+}
+
+@keyframes drift-4 {
+  0%   { font-variation-settings: 'wght' 200, 'opsz' 9,   'SOFT' 100, 'WONK' 1; }
+  30%  { font-variation-settings: 'wght' 500, 'opsz' 72,  'SOFT' 60,  'WONK' 1; }
+  60%  { font-variation-settings: 'wght' 800, 'opsz' 144, 'SOFT' 0,   'WONK' 0; }
+  100% { font-variation-settings: 'wght' 200, 'opsz' 9,   'SOFT' 100, 'WONK' 1; }
+}
+
+@keyframes drift-5 {
+  0%   { font-variation-settings: 'wght' 300, 'opsz' 9,  'SOFT' 40, 'WONK' 0; opacity: 0.3; }
+  50%  { font-variation-settings: 'wght' 400, 'opsz' 24, 'SOFT' 70, 'WONK' 1; opacity: 0.15; }
+  100% { font-variation-settings: 'wght' 300, 'opsz' 9,  'SOFT' 40, 'WONK' 0; opacity: 0.3; }
+}
+
+body.warm #v1 { color: var(--color-warm-text); }
+body.warm #v3 { color: var(--color-accent); }
+body.warm #v5 { color: var(--color-mid); opacity: 0.4; }
+
+@media (prefers-reduced-motion: reduce) {
+  .verse { animation-play-state: paused; }
+}
+</style>
+</head>
+<body>
+
+<div id="v1" class="verse">she draws what the body remembers</div>
+<div id="v2" class="verse">what remains</div>
+<div id="v3" class="verse">after the looking is done</div>
+<div id="v4" class="verse">the bones</div>
+<div id="v5" class="verse">know</div>
+
+<script>
+let warm = false;
+document.addEventListener('mousemove', () => {
+  if (!warm) { document.body.classList.add('warm'); warm = true; }
+});
+document.addEventListener('mouseleave', () => {
+  document.body.classList.remove('warm'); warm = false;
+});
+let frozen = false;
+document.addEventListener('click', () => {
+  frozen = !frozen;
+  document.querySelectorAll('.verse').forEach(v => {
+    v.style.animationPlayState = frozen ? 'paused' : 'running';
+  });
+  document.body.style.cursor = frozen ? 'default' : 'crosshair';
+});
+</script>
+</body>
+</html>

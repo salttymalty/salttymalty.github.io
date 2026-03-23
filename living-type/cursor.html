@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>cursor field</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,100..900,0..100,0..1&display=swap" rel="stylesheet">
+<style>
+/*
+  Concept: One giant word. Mouse position drives the axes.
+  X → weight (left=light, right=heavy)
+  Y → SOFT (top=sharp, bottom=round)
+  No animation — YOU are the animation.
+*/
+
+:root {
+  --color-bg: #f9f8f6;
+  --color-text: #1a1714;
+  --color-accent: #b8652a;
+  --color-ghost: #d4cec6;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--color-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  cursor: none;
+}
+
+#word {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(6rem, 28vw, 22rem);
+  color: var(--color-text);
+  line-height: 0.9;
+  text-transform: lowercase;
+  user-select: none;
+  text-align: center;
+  transition: font-variation-settings 0.08s linear;
+}
+
+#axes {
+  position: fixed;
+  bottom: 3vh;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Recursive', 'Source Code Pro', monospace;
+  font-size: 13px;
+  color: var(--color-ghost);
+  letter-spacing: 0.05em;
+  user-select: none;
+  transition: opacity 0.5s ease;
+  white-space: nowrap;
+}
+
+#dot {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+
+/* Subtle color shift at extremes */
+.extreme #word {
+  color: var(--color-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #word { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<div id="word">touch</div>
+<div id="axes">wght 100 · opsz 9 · SOFT 0 · WONK 0</div>
+<div id="dot"></div>
+
+<script>
+const word = document.getElementById('word');
+const axes = document.getElementById('axes');
+const dot = document.getElementById('dot');
+let visible = false;
+
+const words = ['touch', 'bones', 'soft', 'found', 'slow', 'ink', 'wild', 'body'];
+let wordIdx = 0;
+
+document.addEventListener('mousemove', (e) => {
+  const x = e.clientX / window.innerWidth;
+  const y = e.clientY / window.innerHeight;
+
+  const wght = Math.round(100 + x * 800);
+  const soft = Math.round(y * 100);
+  const opsz = Math.round(9 + (1 - y) * 135);
+  const wonk = y > 0.7 ? 1 : 0;
+
+  word.style.fontVariationSettings =
+    `'wght' ${wght}, 'opsz' ${opsz}, 'SOFT' ${soft}, 'WONK' ${wonk}`;
+
+  axes.textContent = `wght ${wght} · opsz ${opsz} · SOFT ${soft} · WONK ${wonk}`;
+
+  dot.style.left = e.clientX + 'px';
+  dot.style.top = e.clientY + 'px';
+
+  if (!visible) {
+    dot.style.opacity = '1';
+    axes.style.opacity = '1';
+    visible = true;
+  }
+
+  // Color shift at extremes
+  const isExtreme = (x > 0.9 || x < 0.1 || y > 0.9 || y < 0.1);
+  document.body.classList.toggle('extreme', isExtreme);
+});
+
+document.addEventListener('mouseleave', () => {
+  dot.style.opacity = '0';
+  axes.style.opacity = '0.3';
+  visible = false;
+});
+
+document.addEventListener('click', () => {
+  wordIdx = (wordIdx + 1) % words.length;
+  word.textContent = words[wordIdx];
+});
+</script>
+</body>
+</html>
