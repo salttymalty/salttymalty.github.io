@@ -449,6 +449,68 @@ h1 {
   100% { font-variation-settings: 'wght' 200, 'opsz' 9, 'SOFT' 100, 'WONK' 1; }
 }
 
+.preview-turb {
+  background: var(--color-preview-dark);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 3rem;
+  color: var(--color-preview-dark-text);
+  animation: p-bones 8s ease infinite;
+}
+
+.preview-nova {
+  background: var(--color-preview-dark);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 3.5rem;
+  color: var(--color-preview-dark-text);
+  animation: slam-preview 6s cubic-bezier(0.2, 0, 0, 1) infinite;
+  mix-blend-mode: difference;
+}
+
+.preview-acid {
+  background: var(--color-preview-dark);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  overflow: hidden;
+}
+
+.preview-acid .pa1 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 2rem;
+  animation: acid-cycle 3s linear infinite;
+}
+
+.preview-acid .pa2 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.2rem;
+  animation: acid-cycle 3s linear infinite;
+  animation-delay: -1s;
+}
+
+@keyframes acid-cycle {
+  0%   { color: hsl(0, 100%, 60%); }
+  16%  { color: hsl(60, 100%, 55%); }
+  33%  { color: hsl(120, 90%, 50%); }
+  50%  { color: hsl(180, 90%, 55%); }
+  66%  { color: hsl(240, 85%, 60%); }
+  83%  { color: hsl(300, 90%, 55%); }
+  100% { color: hsl(360, 100%, 60%); }
+}
+
 footer {
   margin-top: 6vh;
   padding-top: 3vh;
@@ -615,6 +677,54 @@ footer a:hover {
         <span>Fraunces + Recursive</span>
         <span>fast</span>
         <span>CSS only</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="turbulence.html" class="card">
+    <div class="card-preview">
+      <div class="preview-turb">dissolve</div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">turbulence</div>
+      <div class="card-desc">SVG feTurbulence displacement warps the letterforms. Animated noise frequency makes text shimmer like heat haze. Mouse distance from center amplifies distortion. Sun glyphs float behind with the same filter.</div>
+      <div class="card-meta">
+        <span>Fraunces</span>
+        <span>feTurbulence</span>
+        <span>SVG filter</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="supernova.html" class="card">
+    <div class="card-preview">
+      <div class="preview-nova">SUN</div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">supernova</div>
+      <div class="card-desc">Canvas particle system with hand-drawn sun glyphs drifting in curl noise behind variable font text. Full saturation palette. Click to burst. mix-blend-mode: difference inverts text against the particle field.</div>
+      <div class="card-meta">
+        <span>Fraunces + Canvas</span>
+        <span>particles</span>
+        <span>sun glyphs</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="acid.html" class="card">
+    <div class="card-preview">
+      <div class="preview-acid">
+        <span class="pa1">MELT</span>
+        <span class="pa2">everything</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">acid</div>
+      <div class="card-desc">Three fonts (Anybody + Fraunces + Recursive), 14 axes total, all moving. Full saturation color cycling. Chromatic aberration SVG filter. Mouse X = aberration intensity, mouse Y = weight. Marks with heavy feTurbulence displacement. Click to glitch.</div>
+      <div class="card-meta">
+        <span>3 fonts / 14 axes</span>
+        <span>chromatic aberration</span>
+        <span>full saturation</span>
       </div>
     </div>
   </a>

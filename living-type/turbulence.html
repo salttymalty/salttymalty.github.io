@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>turbulence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-bg: #0a0908;
+  --color-text: #f9f8f6;
+  --color-accent: #b8652a;
+  --color-mid: #8a7e72;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--color-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+.turb-wrap {
+  filter: url(#displacement);
+  will-change: filter;
+}
+
+.word {
+  font-family: 'Fraunces', Georgia, serif;
+  text-align: center;
+  user-select: none;
+  line-height: 0.95;
+}
+
+#w1 {
+  font-size: clamp(5rem, 20vw, 16rem);
+  color: var(--color-text);
+  animation: breathe-1 8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  opacity: 0.9;
+}
+
+#w2 {
+  font-size: clamp(3rem, 12vw, 10rem);
+  color: var(--color-accent);
+  animation: breathe-2 11s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+#w3 {
+  font-size: clamp(2rem, 7vw, 5rem);
+  color: var(--color-mid);
+  animation: breathe-3 15s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  opacity: 0.6;
+  letter-spacing: 0.1em;
+}
+
+@keyframes breathe-1 {
+  0%   { font-variation-settings: 'wght' 900, 'opsz' 144, 'SOFT' 0, 'WONK' 0; }
+  50%  { font-variation-settings: 'wght' 200, 'opsz' 9, 'SOFT' 100, 'WONK' 1; }
+  100% { font-variation-settings: 'wght' 900, 'opsz' 144, 'SOFT' 0, 'WONK' 0; }
+}
+
+@keyframes breathe-2 {
+  0%   { font-variation-settings: 'wght' 400, 'opsz' 48, 'SOFT' 80, 'WONK' 1; }
+  50%  { font-variation-settings: 'wght' 800, 'opsz' 144, 'SOFT' 0, 'WONK' 0; }
+  100% { font-variation-settings: 'wght' 400, 'opsz' 48, 'SOFT' 80, 'WONK' 1; }
+}
+
+@keyframes breathe-3 {
+  0%   { font-variation-settings: 'wght' 300, 'opsz' 24, 'SOFT' 60, 'WONK' 0; }
+  50%  { font-variation-settings: 'wght' 500, 'opsz' 72, 'SOFT' 40, 'WONK' 1; }
+  100% { font-variation-settings: 'wght' 300, 'opsz' 24, 'SOFT' 60, 'WONK' 0; }
+}
+
+/* Floating SVG marks behind the text */
+.float-mark {
+  position: fixed;
+  pointer-events: none;
+  filter: url(#displacement);
+  opacity: 0.06;
+  animation: mark-drift 20s ease-in-out infinite;
+  color: var(--color-accent);
+}
+
+@keyframes mark-drift {
+  0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+  25% { transform: translateY(-15px) rotate(5deg) scale(1.03); }
+  50% { transform: translateY(5px) rotate(-3deg) scale(0.98); }
+  75% { transform: translateY(-8px) rotate(2deg) scale(1.01); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .word, .float-mark { animation-play-state: paused; }
+}
+</style>
+</head>
+<body>
+
+<!-- SVG filter: animated feTurbulence displacement -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <filter id="displacement" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence id="turb" type="fractalNoise" baseFrequency="0.015" numOctaves="3" seed="1" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="12" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
+<!-- Floating sun marks -->
+<img src="marks/sun-organic.svg" class="float-mark" style="top: 10vh; left: 8vw; width: 180px; animation-delay: 0s; animation-duration: 18s;" alt="">
+<img src="marks/sun-expressive.svg" class="float-mark" style="bottom: 8vh; right: 6vw; width: 220px; animation-delay: -5s; animation-duration: 24s;" alt="">
+<img src="marks/skull.svg" class="float-mark" style="top: 55vh; right: 12vw; width: 140px; animation-delay: -10s; animation-duration: 22s; opacity: 0.04;" alt="">
+<img src="marks/eye.svg" class="float-mark" style="bottom: 30vh; left: 5vw; width: 160px; animation-delay: -7s; animation-duration: 26s; opacity: 0.05;" alt="">
+<img src="marks/sun-full.svg" class="float-mark" style="top: 25vh; right: 25vw; width: 100px; animation-delay: -12s; animation-duration: 30s; opacity: 0.03;" alt="">
+
+<div class="turb-wrap">
+  <div id="w1" class="word">dissolve</div>
+  <div id="w2" class="word">into noise</div>
+  <div id="w3" class="word">everything trembles</div>
+</div>
+
+<script>
+const turb = document.getElementById('turb');
+let t = 0;
+
+function animate() {
+  t += 0.003;
+  const bfx = 0.012 + Math.sin(t * 0.7) * 0.008;
+  const bfy = 0.015 + Math.cos(t * 0.5) * 0.01;
+  turb.setAttribute('baseFrequency', `${bfx.toFixed(4)} ${bfy.toFixed(4)}`);
+  turb.setAttribute('seed', Math.floor(t * 2) % 100);
+  requestAnimationFrame(animate);
+}
+animate();
+
+// Mouse proximity increases displacement scale
+const filter = document.querySelector('#displacement feDisplacementMap');
+document.addEventListener('mousemove', (e) => {
+  const cx = window.innerWidth / 2;
+  const cy = window.innerHeight / 2;
+  const dist = Math.sqrt((e.clientX - cx) ** 2 + (e.clientY - cy) ** 2);
+  const maxDist = Math.sqrt(cx * cx + cy * cy);
+  const proximity = dist / maxDist;
+  const scale = 8 + proximity * 40;
+  filter.setAttribute('scale', scale.toFixed(1));
+});
+
+// Click freezes turbulence
+let frozen = false;
+document.addEventListener('click', () => {
+  frozen = !frozen;
+  if (frozen) {
+    cancelAnimationFrame(animate);
+  } else {
+    requestAnimationFrame(animate);
+  }
+  document.body.style.cursor = frozen ? 'default' : 'crosshair';
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>supernova</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-bg: #080606;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--color-bg);
+  min-height: 100vh;
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+canvas { position: fixed; inset: 0; z-index: 1; }
+
+#overlay {
+  position: fixed; inset: 0; z-index: 2;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  pointer-events: none;
+  mix-blend-mode: difference;
+}
+
+.word {
+  font-family: 'Fraunces', Georgia, serif;
+  text-align: center;
+  user-select: none;
+  color: white;
+  line-height: 0.9;
+}
+
+#s1 {
+  font-size: clamp(6rem, 22vw, 18rem);
+  animation: nova-1 6s cubic-bezier(0.2, 0, 0, 1) infinite;
+}
+
+#s2 {
+  font-size: clamp(3rem, 10vw, 8rem);
+  animation: nova-2 4s cubic-bezier(0.2, 0, 0, 1) infinite;
+  opacity: 0.8;
+}
+
+#s3 {
+  font-size: clamp(1.5rem, 5vw, 3.5rem);
+  animation: nova-3 9s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  opacity: 0.5;
+  letter-spacing: 0.15em;
+}
+
+@keyframes nova-1 {
+  0%   { font-variation-settings: 'wght' 900, 'opsz' 144, 'SOFT' 0, 'WONK' 0; transform: scale(1); }
+  15%  { font-variation-settings: 'wght' 900, 'opsz' 144, 'SOFT' 0, 'WONK' 0; transform: scale(1.12); }
+  40%  { font-variation-settings: 'wght' 100, 'opsz' 9, 'SOFT' 100, 'WONK' 1; transform: scale(0.88); }
+  100% { font-variation-settings: 'wght' 900, 'opsz' 144, 'SOFT' 0, 'WONK' 0; transform: scale(1); }
+}
+
+@keyframes nova-2 {
+  0%   { font-variation-settings: 'wght' 200, 'opsz' 9, 'SOFT' 100, 'WONK' 1; }
+  30%  { font-variation-settings: 'wght' 900, 'opsz' 144, 'SOFT' 0, 'WONK' 0; }
+  100% { font-variation-settings: 'wght' 200, 'opsz' 9, 'SOFT' 100, 'WONK' 1; }
+}
+
+@keyframes nova-3 {
+  0%   { font-variation-settings: 'wght' 400, 'opsz' 48, 'SOFT' 50, 'WONK' 0; letter-spacing: 0.15em; }
+  50%  { font-variation-settings: 'wght' 300, 'opsz' 24, 'SOFT' 80, 'WONK' 1; letter-spacing: 0.4em; }
+  100% { font-variation-settings: 'wght' 400, 'opsz' 48, 'SOFT' 50, 'WONK' 0; letter-spacing: 0.15em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .word { animation-play-state: paused; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+
+<div id="overlay">
+  <div id="s1" class="word">SUN</div>
+  <div id="s2" class="word">burns through</div>
+  <div id="s3" class="word">everything you thought was solid</div>
+</div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+let W, H;
+
+function resize() { W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
+resize();
+addEventListener('resize', resize);
+
+// Sun glyph paths (extracted from warm-stack SVGs)
+const SUN_PATHS = [
+  // compact rays
+  'M50,25 Q55,10 50,0 Q45,10 50,25 M50,75 Q55,90 50,100 Q45,90 50,75 M25,50 Q10,45 0,50 Q10,55 25,50 M75,50 Q90,55 100,50 Q90,45 75,50 M32,32 Q22,22 15,15 Q22,22 32,32 M68,32 Q78,22 85,15 Q78,22 68,32 M32,68 Q22,78 15,85 Q22,78 32,68 M68,68 Q78,78 85,85 Q78,78 68,68',
+];
+
+// Full saturation palette
+const COLORS = [
+  '#ff3b30', '#ff9500', '#ffcc00', '#34c759', '#00c7be',
+  '#30b0c7', '#007aff', '#5856d6', '#af52de', '#ff2d55',
+  '#e85d26', '#b8652a', '#d4926a', '#f5c542', '#7ee787',
+];
+
+let mx = W / 2, my = H / 2;
+const particles = [];
+
+class Sun {
+  constructor(x, y, burst) {
+    this.x = x;
+    this.y = y;
+    const angle = Math.random() * Math.PI * 2;
+    const speed = burst ? 2 + Math.random() * 6 : 0.2 + Math.random() * 0.8;
+    this.vx = Math.cos(angle) * speed;
+    this.vy = Math.sin(angle) * speed;
+    this.size = 8 + Math.random() * 50;
+    this.rot = Math.random() * Math.PI * 2;
+    this.rotV = (Math.random() - 0.5) * 0.04;
+    this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+    this.alpha = burst ? 0.9 : 0.1 + Math.random() * 0.4;
+    this.life = burst ? 0 : -1;
+    this.maxLife = burst ? 100 + Math.random() * 200 : Infinity;
+    this.phase = Math.random() * Math.PI * 2;
+  }
+
+  update(t) {
+    // Drift toward mouse
+    const dx = mx - this.x;
+    const dy = my - this.y;
+    const dist = Math.sqrt(dx * dx + dy * dy) + 1;
+    const pull = 0.3 / dist;
+    this.vx += dx * pull * 0.01;
+    this.vy += dy * pull * 0.01;
+
+    // Curl noise approximation
+    const nx = Math.sin(this.x * 0.003 + t * 0.5) * 0.3;
+    const ny = Math.cos(this.y * 0.003 + t * 0.3) * 0.3;
+    this.vx += nx * 0.1;
+    this.vy += ny * 0.1;
+
+    // Damping
+    this.vx *= 0.98;
+    this.vy *= 0.98;
+
+    this.x += this.vx;
+    this.y += this.vy;
+    this.rot += this.rotV;
+
+    if (this.life >= 0) this.life++;
+
+    // Wrap
+    if (this.x < -50) this.x = W + 50;
+    if (this.x > W + 50) this.x = -50;
+    if (this.y < -50) this.y = H + 50;
+    if (this.y > H + 50) this.y = -50;
+  }
+
+  draw(ctx, t) {
+    let a = this.alpha;
+    if (this.life >= 0 && this.maxLife !== Infinity) {
+      const progress = this.life / this.maxLife;
+      a *= progress < 0.1 ? progress / 0.1 : progress > 0.7 ? (1 - progress) / 0.3 : 1;
+    }
+    const pulse = 1 + Math.sin(t * 2 + this.phase) * 0.15;
+    const s = this.size * pulse;
+
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rot);
+    ctx.globalAlpha = a;
+
+    // Draw sun shape — rays from center
+    ctx.beginPath();
+    const rays = 8 + Math.floor(Math.random() * 0.01); // stable ray count
+    for (let i = 0; i < rays; i++) {
+      const angle = (i / rays) * Math.PI * 2;
+      const inner = s * 0.3;
+      const outer = s * (0.6 + Math.sin(t + i * 1.5) * 0.15);
+      ctx.moveTo(0, 0);
+      ctx.lineTo(Math.cos(angle) * outer, Math.sin(angle) * outer);
+    }
+    ctx.strokeStyle = this.color;
+    ctx.lineWidth = Math.max(1, s * 0.06);
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    // Center circle
+    ctx.beginPath();
+    ctx.arc(0, 0, s * 0.18, 0, Math.PI * 2);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  dead() {
+    return this.life >= 0 && this.life > this.maxLife;
+  }
+}
+
+// Seed particles
+for (let i = 0; i < 40; i++) {
+  particles.push(new Sun(Math.random() * W, Math.random() * H, false));
+}
+
+document.addEventListener('mousemove', (e) => { mx = e.clientX; my = e.clientY; });
+
+// Click bursts
+document.addEventListener('click', (e) => {
+  for (let i = 0; i < 25; i++) {
+    particles.push(new Sun(e.clientX, e.clientY, true));
+  }
+});
+
+let t = 0;
+function loop() {
+  t += 0.016;
+  ctx.fillStyle = 'rgba(8,6,6,0.12)';
+  ctx.fillRect(0, 0, W, H);
+
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.update(t);
+    p.draw(ctx, t);
+    if (p.dead()) particles.splice(i, 1);
+  }
+
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+</body>
+</html>
