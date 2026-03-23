@@ -10,19 +10,23 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --color-bg: #0f0e0c;
-  --color-surface: #1a1816;
-  --color-text: #e8e4de;
-  --color-text-secondary: #8a7e72;
+  --color-bg: #f9f8f6;
+  --color-surface: #ffffff;
+  --color-text: #1a1714;
+  --color-text-secondary: #6b6058;
   --color-accent: #b8652a;
-  --color-accent-hover: #d4783a;
-  --color-border: oklch(0.22 0.01 55);
+  --color-accent-hover: #9a5322;
+  --color-border: oklch(0.88 0.01 55);
   --color-cursor-bg: #f9f8f6;
   --color-cursor-text: #1a1714;
-  --color-code-bg: #0d1117;
-  --color-code-blue: #58a6ff;
-  --color-code-text: #c9d1d9;
-  --color-code-green: #7ee787;
+  --color-code-bg: #f4f1ed;
+  --color-code-blue: #2a6cb8;
+  --color-code-text: #2d2a26;
+  --color-code-green: #3a7d44;
+  --color-card-shadow: oklch(0.75 0.02 55 / 0.15);
+  --color-preview-dark: #0f0e0c;
+  --color-preview-dark-text: #e8e4de;
+  --color-preview-dark-mid: #8a7e72;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -73,15 +77,17 @@ h1 {
   border: 1px solid var(--color-border);
   border-radius: 12px;
   overflow: hidden;
-  transition: border-color 0.3s ease, transform 0.3s ease;
+  transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   text-decoration: none;
   color: inherit;
   display: block;
+  box-shadow: 0 2px 8px var(--color-card-shadow);
 }
 
 .card:hover {
   border-color: var(--color-accent);
   transform: translateY(-2px);
+  box-shadow: 0 4px 16px var(--color-card-shadow);
 }
 
 .card-preview {
@@ -122,7 +128,7 @@ h1 {
 /* Live preview thumbnails */
 
 .preview-categories {
-  background: var(--color-bg);
+  background: var(--color-preview-dark);
   width: 100%;
   height: 100%;
   display: flex;
@@ -134,7 +140,7 @@ h1 {
 
 .preview-categories .pw1 {
   font-size: 2.2rem;
-  color: var(--color-text);
+  color: var(--color-preview-dark-text);
   opacity: 0.8;
   animation: p-bones 8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   line-height: 1;
@@ -150,7 +156,7 @@ h1 {
 
 .preview-categories .pw3 {
   font-size: 1.8rem;
-  color: var(--color-text);
+  color: var(--color-preview-dark-text);
   opacity: 0.6;
   animation: p-animals 14s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   line-height: 1;
@@ -158,7 +164,7 @@ h1 {
 
 .preview-categories .pw4 {
   font-size: 1.2rem;
-  color: var(--color-text-secondary);
+  color: var(--color-preview-dark-mid);
   opacity: 0.35;
   letter-spacing: 0.15em;
   animation: p-abstract 19s cubic-bezier(0.45, 0, 0.55, 1) infinite;
@@ -190,7 +196,7 @@ h1 {
 }
 
 .preview-poem {
-  background: var(--color-bg);
+  background: var(--color-preview-dark);
   width: 100%;
   height: 100%;
   display: flex;
@@ -204,7 +210,7 @@ h1 {
 .preview-poem .pv1 {
   font-size: 0.95rem;
   font-style: italic;
-  color: var(--color-text);
+  color: var(--color-preview-dark-text);
   opacity: 0.7;
   animation: pd-1 9s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   margin-bottom: 0.5rem;
@@ -219,7 +225,7 @@ h1 {
 
 .preview-poem .pv3 {
   font-size: 0.75rem;
-  color: var(--color-text-secondary);
+  color: var(--color-preview-dark-mid);
   opacity: 0.5;
   margin-bottom: 1.2rem;
 }
@@ -227,7 +233,7 @@ h1 {
 .preview-poem .pv4 {
   font-size: 2.5rem;
   font-style: italic;
-  color: var(--color-text);
+  color: var(--color-preview-dark-text);
   animation: pd-4 22s cubic-bezier(0.45, 0, 0.55, 1) infinite;
 }
 
@@ -300,6 +306,147 @@ h1 {
   font-size: 0.85rem;
   color: var(--color-code-green);
   font-style: italic;
+}
+
+/* Atmospheric marks — hand-drawn SVGs and ink scans */
+.atmosphere {
+  position: fixed;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0;
+  animation: fade-in 2s ease forwards;
+}
+
+@keyframes fade-in {
+  to { opacity: 1; }
+}
+
+.mark {
+  filter: grayscale(1) sepia(0.15);
+}
+
+.mark-sun {
+  width: 120px;
+  opacity: 0.04;
+  animation: ink-rock 12s ease-in-out infinite, fade-in 3s ease forwards;
+  color: var(--color-accent);
+}
+
+.mark-ink {
+  height: 140px;
+  opacity: 0.05;
+  animation: ink-breathe 18s ease-in-out infinite, fade-in 4s ease forwards;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+@keyframes ink-rock {
+  0%, 100% { transform: rotate(-4deg) scale(1); }
+  50% { transform: rotate(4deg) scale(1.03); }
+}
+
+@keyframes ink-breathe {
+  0%, 100% { transform: scale(1); opacity: 0.05; }
+  50% { transform: scale(1.06); opacity: 0.07; }
+}
+
+/* Section divider */
+.divider {
+  margin: 5vh 0 3vh;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+
+.divider-label {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 0.9rem;
+  font-variation-settings: 'SOFT' 60, 'opsz' 24, 'wght' 400;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Wild preview cards */
+.preview-earthquake {
+  background: var(--color-preview-dark);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 2rem;
+  color: var(--color-preview-dark-text);
+  overflow: hidden;
+  padding: 1rem;
+  text-align: center;
+  word-break: break-all;
+  line-height: 0.95;
+}
+
+.preview-earthquake span {
+  display: inline-block;
+}
+
+.preview-ripple {
+  background: var(--color-preview-dark);
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  align-items: center;
+  justify-items: center;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.4rem;
+  color: var(--color-preview-dark-text);
+  padding: 0.8rem;
+  opacity: 0.7;
+}
+
+.preview-rave {
+  background: var(--color-preview-dark);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fraunces', Georgia, serif;
+  gap: 0.2rem;
+}
+
+.preview-rave .xr1 {
+  font-size: 2.5rem;
+  color: var(--color-accent);
+  animation: slam-preview 2.4s cubic-bezier(0.2, 0, 0, 1) infinite;
+}
+
+.preview-rave .xr2 {
+  font-size: 1.8rem;
+  color: var(--color-preview-dark-text);
+  animation: slam-preview-2 3.2s cubic-bezier(0.2, 0, 0, 1) infinite;
+}
+
+@keyframes slam-preview {
+  0%   { font-variation-settings: 'wght' 900, 'opsz' 144, 'SOFT' 0, 'WONK' 0; transform: scale(1); }
+  8%   { font-variation-settings: 'wght' 900, 'opsz' 144, 'SOFT' 0, 'WONK' 0; transform: scale(1.1); }
+  20%  { font-variation-settings: 'wght' 100, 'opsz' 9, 'SOFT' 100, 'WONK' 1; transform: scale(0.92); }
+  100% { font-variation-settings: 'wght' 900, 'opsz' 144, 'SOFT' 0, 'WONK' 0; transform: scale(1); }
+}
+
+@keyframes slam-preview-2 {
+  0%   { font-variation-settings: 'wght' 200, 'opsz' 9, 'SOFT' 100, 'WONK' 1; }
+  15%  { font-variation-settings: 'wght' 900, 'opsz' 144, 'SOFT' 0, 'WONK' 0; }
+  30%  { font-variation-settings: 'wght' 200, 'opsz' 9, 'SOFT' 100, 'WONK' 1; }
+  100% { font-variation-settings: 'wght' 200, 'opsz' 9, 'SOFT' 100, 'WONK' 1; }
 }
 
 footer {
@@ -412,7 +559,75 @@ footer a:hover {
     </div>
   </a>
 
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-label">maximalist</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <a href="earthquake.html" class="card">
+    <div class="card-preview">
+      <div class="preview-earthquake">
+        <span style="animation: p-bones 3s ease infinite; font-variation-settings: 'wght' 800, 'SOFT' 0;">E</span><span style="animation: p-bodies 4s ease infinite; color: var(--color-accent);">V</span><span style="animation: p-animals 2.5s ease infinite;">E</span><span style="animation: p-bones 5s ease infinite;">R</span><span style="animation: p-bodies 3.5s ease infinite;">Y</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">earthquake</div>
+      <div class="card-desc">Every letter is its own organism. Independent random animation through all four Fraunces axes with rotation and scale. Chaos.</div>
+      <div class="card-meta">
+        <span>Fraunces</span>
+        <span>per-letter</span>
+        <span>JS generated</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="ripple.html" class="card">
+    <div class="card-preview">
+      <div class="preview-ripple">
+        <span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span><span>g</span><span>h</span>
+        <span>i</span><span>j</span><span>k</span><span>l</span><span>m</span><span>n</span><span>o</span><span>p</span>
+        <span>q</span><span>r</span><span>s</span><span>t</span><span>u</span><span>v</span><span>w</span><span>x</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">ripple</div>
+      <div class="card-desc">A grid of letters. Mouse proximity controls every axis. Distance from cursor = distance from maximum weight and softness. Typography as heat map.</div>
+      <div class="card-meta">
+        <span>Fraunces</span>
+        <span>200+ elements</span>
+        <span>JS physics</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="rave.html" class="card">
+    <div class="card-preview">
+      <div class="preview-rave">
+        <span class="xr1">TYPE</span>
+        <span class="xr2">ALIVE</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">rave</div>
+      <div class="card-desc">Fast, aggressive axis slamming with scale punches and color strobing. Fraunces and Recursive at nightclub tempo. Mouse triggers color inversion.</div>
+      <div class="card-meta">
+        <span>Fraunces + Recursive</span>
+        <span>fast</span>
+        <span>CSS only</span>
+      </div>
+    </div>
+  </a>
+
 </div>
+
+<!-- Atmospheric hand-drawn marks -->
+<img src="marks/sun-organic.svg" class="atmosphere mark-sun" style="top: 8vh; right: 6vw; animation-delay: 0s;" alt="">
+<img src="marks/sun-expressive.svg" class="atmosphere mark-sun" style="bottom: 12vh; left: 4vw; width: 90px; animation-delay: 1.5s;" alt="">
+<img src="ink/skull-cutout-on-wood.webp" class="atmosphere mark mark-ink" style="top: 35vh; right: 3vw; animation-delay: 0.5s;" alt="">
+<img src="ink/eye-linocut-framed.webp" class="atmosphere mark mark-ink" style="bottom: 25vh; left: 2vw; height: 100px; animation-delay: 2s;" alt="">
+<img src="ink/crescent-moon-star.webp" class="atmosphere mark mark-ink" style="top: 60vh; right: 8vw; height: 80px; animation-delay: 3s;" alt="">
+<img src="marks/eye.svg" class="atmosphere mark-sun" style="bottom: 35vh; right: 15vw; width: 70px; opacity: 0.03; animation-delay: 2.5s;" alt="">
 
 <footer>
   Built with variable fonts from Google Fonts. No frameworks, no canvas, no build step.<br>

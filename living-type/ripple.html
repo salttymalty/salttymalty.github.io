@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ripple</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-bg: #0a0908;
+  --color-text: #f9f8f6;
+  --color-accent: #b8652a;
+  --color-hot: #e85d26;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--color-bg);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: none;
+}
+
+#grid {
+  display: grid;
+  gap: 0;
+  font-family: 'Fraunces', Georgia, serif;
+  user-select: none;
+}
+
+#grid span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: font-variation-settings 0.15s ease, color 0.3s ease, opacity 0.3s ease;
+  color: var(--color-text);
+}
+
+#dot {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-hot);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  box-shadow: 0 0 12px var(--color-hot);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #grid span { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<div id="grid"></div>
+<div id="dot"></div>
+
+<script>
+const grid = document.getElementById('grid');
+const dot = document.getElementById('dot');
+const char = 'a';
+const spans = [];
+
+// Calculate grid size based on viewport
+const cellSize = Math.max(36, Math.min(56, window.innerWidth / 22));
+const cols = Math.floor(window.innerWidth / cellSize);
+const rows = Math.floor(window.innerHeight / cellSize);
+const total = cols * rows;
+
+grid.style.gridTemplateColumns = `repeat(${cols}, ${cellSize}px)`;
+grid.style.fontSize = `${cellSize * 0.7}px`;
+grid.style.lineHeight = `${cellSize}px`;
+
+const chars = 'abcdefghijklmnopqrstuvwxyz';
+for (let i = 0; i < total; i++) {
+  const span = document.createElement('span');
+  span.textContent = chars[Math.floor(Math.random() * chars.length)];
+  span.style.width = cellSize + 'px';
+  span.style.height = cellSize + 'px';
+  span.dataset.col = i % cols;
+  span.dataset.row = Math.floor(i / cols);
+  grid.appendChild(span);
+  spans.push(span);
+}
+
+let mx = -1000, my = -1000;
+let animFrame;
+
+document.addEventListener('mousemove', (e) => {
+  mx = e.clientX;
+  my = e.clientY;
+  dot.style.left = mx + 'px';
+  dot.style.top = my + 'px';
+});
+
+function update() {
+  const gridRect = grid.getBoundingClientRect();
+
+  for (let i = 0; i < spans.length; i++) {
+    const span = spans[i];
+    const col = parseInt(span.dataset.col);
+    const row = parseInt(span.dataset.row);
+
+    const cx = gridRect.left + col * cellSize + cellSize / 2;
+    const cy = gridRect.top + row * cellSize + cellSize / 2;
+
+    const dx = mx - cx;
+    const dy = my - cy;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const maxDist = Math.max(window.innerWidth, window.innerHeight) * 0.5;
+    const proximity = Math.max(0, 1 - dist / maxDist);
+    const p = proximity * proximity; // quadratic falloff
+
+    const wght = Math.round(100 + p * 800);
+    const soft = Math.round(p * 100);
+    const opsz = Math.round(9 + p * 135);
+    const wonk = p > 0.6 ? 1 : 0;
+
+    span.style.fontVariationSettings =
+      `'wght' ${wght}, 'opsz' ${opsz}, 'SOFT' ${soft}, 'WONK' ${wonk}`;
+
+    if (p > 0.7) {
+      span.style.color = 'var(--color-hot)';
+    } else if (p > 0.4) {
+      span.style.color = 'var(--color-accent)';
+    } else {
+      span.style.color = 'var(--color-text)';
+    }
+
+    span.style.opacity = Math.max(0.15, 0.15 + p * 0.85);
+  }
+
+  animFrame = requestAnimationFrame(update);
+}
+
+update();
+
+// Click randomizes all characters
+document.addEventListener('click', () => {
+  spans.forEach(span => {
+    span.textContent = chars[Math.floor(Math.random() * chars.length)];
+  });
+});
+</script>
+</body>
+</html>

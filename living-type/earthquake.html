@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>earthquake</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-bg: #0a0908;
+  --color-text: #f9f8f6;
+  --color-accent: #b8652a;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--color-bg);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+#field {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(3rem, 8vw, 7rem);
+  color: var(--color-text);
+  line-height: 0.95;
+  text-align: center;
+  padding: 4vh 4vw;
+  max-width: 95vw;
+  word-break: break-all;
+}
+
+#field span {
+  display: inline-block;
+  will-change: font-variation-settings, transform, color;
+  transition: color 0.3s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #field span { animation-play-state: paused !important; }
+}
+</style>
+</head>
+<body>
+
+<div id="field"></div>
+
+<script>
+const text = 'EVERYTHING IS ALIVE AND SHAKING AND NOTHING HOLDS STILL';
+const field = document.getElementById('field');
+
+text.split('').forEach((char, i) => {
+  const span = document.createElement('span');
+  span.textContent = char === ' ' ? '\u00A0' : char;
+
+  const duration = 3 + Math.random() * 8;
+  const delay = Math.random() * -10;
+
+  const wghtA = Math.round(100 + Math.random() * 800);
+  const wghtB = Math.round(100 + Math.random() * 800);
+  const softA = Math.round(Math.random() * 100);
+  const softB = Math.round(Math.random() * 100);
+  const opszA = Math.round(9 + Math.random() * 135);
+  const opszB = Math.round(9 + Math.random() * 135);
+  const wonkA = Math.random() > 0.5 ? 1 : 0;
+  const wonkB = Math.random() > 0.5 ? 1 : 0;
+  const rotA = (Math.random() - 0.5) * 12;
+  const rotB = (Math.random() - 0.5) * 12;
+  const scaleA = 0.85 + Math.random() * 0.3;
+  const scaleB = 0.85 + Math.random() * 0.3;
+  const yA = (Math.random() - 0.5) * 10;
+  const yB = (Math.random() - 0.5) * 10;
+
+  const name = `quake-${i}`;
+  const keyframes = `
+    @keyframes ${name} {
+      0%   { font-variation-settings: 'wght' ${wghtA}, 'opsz' ${opszA}, 'SOFT' ${softA}, 'WONK' ${wonkA}; transform: rotate(${rotA}deg) scale(${scaleA}) translateY(${yA}px); }
+      50%  { font-variation-settings: 'wght' ${wghtB}, 'opsz' ${opszB}, 'SOFT' ${softB}, 'WONK' ${wonkB}; transform: rotate(${rotB}deg) scale(${scaleB}) translateY(${yB}px); }
+      100% { font-variation-settings: 'wght' ${wghtA}, 'opsz' ${opszA}, 'SOFT' ${softA}, 'WONK' ${wonkA}; transform: rotate(${rotA}deg) scale(${scaleA}) translateY(${yA}px); }
+    }
+  `;
+
+  const style = document.createElement('style');
+  style.textContent = keyframes;
+  document.head.appendChild(style);
+
+  span.style.animation = `${name} ${duration}s cubic-bezier(0.45, 0, 0.55, 1) ${delay}s infinite`;
+
+  if (Math.random() > 0.7) {
+    span.style.color = 'var(--color-accent)';
+  }
+  if (Math.random() > 0.85) {
+    span.style.opacity = '0.4';
+  }
+
+  field.appendChild(span);
+});
+
+let frozen = false;
+document.addEventListener('click', () => {
+  frozen = !frozen;
+  field.querySelectorAll('span').forEach(s => {
+    s.style.animationPlayState = frozen ? 'paused' : 'running';
+  });
+  document.body.style.cursor = frozen ? 'default' : 'crosshair';
+});
+</script>
+</body>
+</html>
