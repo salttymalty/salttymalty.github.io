@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ledger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,100..900,0..100,0..1;1,9..144,100..900,0..100,0..1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-bg: #ece5d5;
+  --color-text: #2a2420;
+  --color-ink: #1a1714;
+  --color-faded: #8a7e6a;
+  --color-red-ink: #8b3a2a;
+  --color-rule: #c4b89a;
+  --color-margin: #d4c8aa;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--color-bg);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  cursor: default;
+  /* Paper texture via CSS */
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(200,190,170,0.3) 0%, transparent 70%),
+    radial-gradient(ellipse at 80% 30%, rgba(180,170,150,0.2) 0%, transparent 60%);
+}
+
+svg { position: absolute; width: 0; height: 0; }
+
+.page {
+  max-width: 700px;
+  width: 90vw;
+  padding: 3rem 4rem 3rem 5rem;
+  position: relative;
+  /* Margin line */
+  border-left: 2px solid var(--color-margin);
+}
+
+/* Ruled lines */
+.rule {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--color-rule);
+  opacity: 0.5;
+}
+
+.entry {
+  font-family: 'Fraunces', Georgia, serif;
+  margin-bottom: 1.8rem;
+  position: relative;
+}
+
+.entry-date {
+  font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+  color: var(--color-faded);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.3rem;
+  font-variation-settings: 'wght' 400, 'opsz' 9, 'SOFT' 60, 'WONK' 0;
+}
+
+.entry-text {
+  line-height: 1.6;
+  color: var(--color-ink);
+}
+
+.entry-text span {
+  display: inline-block;
+  filter: url(#ink-bleed);
+}
+
+/* Red ink annotations */
+.note {
+  font-style: italic;
+  color: var(--color-red-ink);
+  font-size: 0.85em;
+  margin-top: 0.3rem;
+  opacity: 0.7;
+}
+
+.note span {
+  display: inline-block;
+  filter: url(#ink-bleed);
+}
+
+/* Corner mark — like a stamp */
+.stamp {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 60px;
+  opacity: 0.08;
+  transform: rotate(15deg);
+  filter: url(#ink-bleed);
+}
+
+/* Bottom mark */
+.endmark {
+  display: block;
+  width: 30px;
+  opacity: 0.15;
+  margin: 1rem 0 0 0;
+  filter: url(#ink-bleed);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entry-text span, .note span { transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<svg>
+  <defs>
+    <filter id="ink-bleed" x="-2%" y="-2%" width="104%" height="104%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" seed="7" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
+<div class="page" id="page">
+  <img src="marks/sun-organic.svg" class="stamp" alt="">
+</div>
+
+<script>
+const entries = [
+  {
+    date: 'march 23',
+    text: 'started with the fonts today. each letter is its own weight and the page looks like it was written by five different people.',
+    size: 'clamp(1.1rem, 2vw, 1.5rem)',
+    pressure: 'normal',
+  },
+  {
+    date: '',
+    text: 'the soft axis changes everything. serifs dissolve into rounds and back.',
+    size: 'clamp(1.3rem, 2.5vw, 1.8rem)',
+    pressure: 'heavy',
+    note: 'this is the one — SOFT is the whole thing'
+  },
+  {
+    date: '',
+    text: 'taylor would draw it better by hand. but this trembles the same way.',
+    size: 'clamp(1rem, 1.8vw, 1.3rem)',
+    pressure: 'light',
+  },
+  {
+    date: '',
+    text: 'what makes type feel handmade isnt the font. its the inconsistency.',
+    size: 'clamp(1.4rem, 2.8vw, 2rem)',
+    pressure: 'heavy',
+  },
+  {
+    date: '',
+    text: 'every letter a slightly different weight. a slightly different softness. a tiny rotation. ink that dried at different speeds.',
+    size: 'clamp(0.95rem, 1.6vw, 1.15rem)',
+    pressure: 'light',
+    note: 'grain matters — not the pattern, the attitude'
+  },
+];
+
+const page = document.getElementById('page');
+
+// Pressure maps to variation ranges
+const PRESSURE = {
+  light:  { wMin: 250, wMax: 450, sMin: 50, sMax: 100, oMin: 9,  oMax: 48,  rot: 1.8, y: 2, opMin: 0.6, opMax: 0.85 },
+  normal: { wMin: 350, wMax: 600, sMin: 25, sMax: 75,  oMin: 24, oMax: 96,  rot: 1.2, y: 1.5, opMin: 0.75, opMax: 0.95 },
+  heavy:  { wMin: 500, wMax: 800, sMin: 0,  sMax: 40,  oMin: 48, oMax: 144, rot: 0.6, y: 0.8, opMin: 0.85, opMax: 1.0 },
+};
+
+function rand(min, max) { return min + Math.random() * (max - min); }
+
+let ruleY = 0;
+
+entries.forEach((entry, idx) => {
+  const div = document.createElement('div');
+  div.className = 'entry';
+
+  if (entry.date) {
+    const date = document.createElement('div');
+    date.className = 'entry-date';
+    date.textContent = entry.date;
+    div.appendChild(date);
+  }
+
+  const textDiv = document.createElement('div');
+  textDiv.className = 'entry-text';
+  textDiv.style.fontSize = entry.size;
+
+  const p = PRESSURE[entry.pressure];
+
+  entry.text.split('').forEach((char) => {
+    if (char === ' ') {
+      textDiv.appendChild(document.createTextNode('\u00A0'));
+      return;
+    }
+
+    const span = document.createElement('span');
+    span.textContent = char;
+
+    const wght = Math.round(rand(p.wMin, p.wMax));
+    const soft = Math.round(rand(p.sMin, p.sMax));
+    const opsz = Math.round(rand(p.oMin, p.oMax));
+    const wonk = Math.random() > 0.7 ? 1 : 0;
+    const rot = (Math.random() - 0.5) * p.rot * 2;
+    const yOff = (Math.random() - 0.5) * p.y * 2;
+    const opacity = rand(p.opMin, p.opMax);
+
+    span.style.fontVariationSettings = `'wght' ${wght}, 'opsz' ${opsz}, 'SOFT' ${soft}, 'WONK' ${wonk}`;
+    span.style.transform = `rotate(${rot.toFixed(2)}deg) translateY(${yOff.toFixed(1)}px)`;
+    span.style.opacity = opacity.toFixed(2);
+
+    span.dataset.wght = wght;
+    span.dataset.soft = soft;
+
+    textDiv.appendChild(span);
+  });
+
+  div.appendChild(textDiv);
+
+  if (entry.note) {
+    const note = document.createElement('div');
+    note.className = 'note';
+
+    entry.note.split('').forEach((char) => {
+      if (char === ' ') {
+        note.appendChild(document.createTextNode('\u00A0'));
+        return;
+      }
+      const span = document.createElement('span');
+      span.textContent = char;
+      const wght = Math.round(rand(300, 500));
+      const soft = Math.round(rand(40, 90));
+      const rot = (Math.random() - 0.5) * 2.5;
+      span.style.fontVariationSettings = `'wght' ${wght}, 'opsz' 24, 'SOFT' ${soft}, 'WONK' 1`;
+      span.style.transform = `rotate(${rot.toFixed(2)}deg) translateY(${((Math.random()-0.5)*2).toFixed(1)}px)`;
+      note.appendChild(span);
+    });
+
+    div.appendChild(note);
+  }
+
+  page.appendChild(div);
+});
+
+// Add endmark
+const end = document.createElement('img');
+end.src = 'marks/sun-expressive.svg';
+end.className = 'endmark';
+end.alt = '';
+page.appendChild(end);
+
+// Add ruled lines
+requestAnimationFrame(() => {
+  const pageRect = page.getBoundingClientRect();
+  const lineHeight = 32;
+  for (let y = lineHeight; y < pageRect.height; y += lineHeight) {
+    const rule = document.createElement('div');
+    rule.className = 'rule';
+    rule.style.top = y + 'px';
+    page.appendChild(rule);
+  }
+});
+
+// Hover: letters darken slightly, like fresh ink
+document.addEventListener('mousemove', (e) => {
+  document.querySelectorAll('.entry-text span').forEach(span => {
+    const rect = span.getBoundingClientRect();
+    const dist = Math.sqrt((e.clientX - rect.left) ** 2 + (e.clientY - rect.top) ** 2);
+    if (dist < 80) {
+      const p = 1 - dist / 80;
+      const baseW = parseInt(span.dataset.wght);
+      span.style.fontVariationSettings =
+        `'wght' ${Math.round(baseW + p * 100)}, 'opsz' 144, 'SOFT' ${Math.round(parseInt(span.dataset.soft) * (1 - p * 0.5))}, 'WONK' 1`;
+      span.style.transition = 'font-variation-settings 0.1s ease';
+    } else {
+      span.style.fontVariationSettings =
+        `'wght' ${span.dataset.wght}, 'opsz' ${span.style.fontVariationSettings.match(/opsz' (\d+)/)?.[1] || 48}, 'SOFT' ${span.dataset.soft}, 'WONK' ${Math.random() > 0.7 ? 1 : 0}`;
+      span.style.transition = 'font-variation-settings 2s ease';
+    }
+  });
+});
+</script>
+</body>
+</html>

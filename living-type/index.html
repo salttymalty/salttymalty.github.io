@@ -27,6 +27,16 @@
   --color-preview-dark: #0f0e0c;
   --color-preview-dark-text: #e8e4de;
   --color-preview-dark-mid: #8a7e72;
+  /* Handmade preview palettes */
+  --color-worn-bg: #f5f0e8;
+  --color-worn-mid: #6b6058;
+  --color-worn-ghost: #c4bba8;
+  --color-ledger-bg: #ece5d5;
+  --color-ledger-text: #2a2420;
+  --color-ledger-faded: #8a7e6a;
+  --color-ledger-red: #8b3a2a;
+  --color-ledger-rule: #c4b89a;
+  --color-ledger-margin: #d4c8aa;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -511,6 +521,185 @@ h1 {
   100% { color: hsl(360, 100%, 60%); }
 }
 
+/* Handmade preview cards */
+
+.preview-worn {
+  background: var(--color-worn-bg);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1.5rem 2rem;
+  font-family: 'Fraunces', Georgia, serif;
+  position: relative;
+}
+
+.preview-worn .wo1 {
+  font-size: 0.9rem;
+  color: var(--color-worn-mid);
+  font-style: italic;
+  animation: worn-drift-1 11s ease-in-out infinite;
+  opacity: 0.7;
+}
+
+.preview-worn .wo2 {
+  font-size: 1.6rem;
+  color: var(--color-text);
+  animation: worn-drift-2 9s ease-in-out infinite;
+  margin: 0.3rem 0;
+}
+
+.preview-worn .wo3 {
+  font-size: 2.2rem;
+  color: var(--color-accent);
+  animation: worn-drift-3 14s ease-in-out infinite;
+}
+
+.preview-worn .wo-mark {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--color-accent);
+  opacity: 0.15;
+  animation: ink-rock 12s ease-in-out infinite;
+}
+
+.preview-worn .wo-mark::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  transform: translate(-50%, -50%);
+}
+
+@keyframes worn-drift-1 {
+  0%   { font-variation-settings: 'wght' 300, 'opsz' 24, 'SOFT' 100, 'WONK' 1; }
+  50%  { font-variation-settings: 'wght' 500, 'opsz' 48, 'SOFT' 40, 'WONK' 0; }
+  100% { font-variation-settings: 'wght' 300, 'opsz' 24, 'SOFT' 100, 'WONK' 1; }
+}
+
+@keyframes worn-drift-2 {
+  0%   { font-variation-settings: 'wght' 600, 'opsz' 72, 'SOFT' 20, 'WONK' 0; }
+  50%  { font-variation-settings: 'wght' 300, 'opsz' 24, 'SOFT' 80, 'WONK' 1; }
+  100% { font-variation-settings: 'wght' 600, 'opsz' 72, 'SOFT' 20, 'WONK' 0; }
+}
+
+@keyframes worn-drift-3 {
+  0%   { font-variation-settings: 'wght' 400, 'opsz' 48, 'SOFT' 60, 'WONK' 1; }
+  50%  { font-variation-settings: 'wght' 700, 'opsz' 144, 'SOFT' 0, 'WONK' 0; }
+  100% { font-variation-settings: 'wght' 400, 'opsz' 48, 'SOFT' 60, 'WONK' 1; }
+}
+
+.preview-ledger {
+  background: var(--color-ledger-bg);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1.5rem 2rem 1.5rem 3rem;
+  font-family: 'Fraunces', Georgia, serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.preview-ledger .pl-rules {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 0.5rem 0;
+}
+
+.preview-ledger .pl-rules span {
+  display: block;
+  height: 1px;
+  background: var(--color-ledger-rule);
+  opacity: 0.5;
+}
+
+.preview-ledger .pl-margin {
+  position: absolute;
+  left: 2rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--color-ledger-margin);
+}
+
+.preview-ledger .pl1 {
+  font-size: 0.75rem;
+  color: var(--color-ledger-faded);
+  position: relative;
+  z-index: 1;
+  margin-bottom: 0.4rem;
+}
+
+.preview-ledger .pl2 {
+  font-size: 1.4rem;
+  color: var(--color-ledger-text);
+  position: relative;
+  z-index: 1;
+  animation: ledger-ink 13s ease-in-out infinite;
+}
+
+.preview-ledger .pl3 {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--color-ledger-red);
+  position: relative;
+  z-index: 1;
+  margin-top: 0.3rem;
+  animation: ledger-red 17s ease-in-out infinite;
+}
+
+.preview-ledger .pl-stamp {
+  position: absolute;
+  bottom: 0.8rem;
+  right: 1.2rem;
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--color-ledger-red);
+  border-radius: 50%;
+  opacity: 0.2;
+  transform: rotate(12deg);
+  z-index: 1;
+}
+
+.preview-ledger .pl-stamp::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 2px;
+  background: var(--color-ledger-red);
+  transform: translate(-50%, -50%) rotate(-20deg);
+}
+
+@keyframes ledger-ink {
+  0%   { font-variation-settings: 'wght' 500, 'opsz' 48, 'SOFT' 30, 'WONK' 0; }
+  50%  { font-variation-settings: 'wght' 300, 'opsz' 24, 'SOFT' 80, 'WONK' 1; }
+  100% { font-variation-settings: 'wght' 500, 'opsz' 48, 'SOFT' 30, 'WONK' 0; }
+}
+
+@keyframes ledger-red {
+  0%   { font-variation-settings: 'wght' 400, 'opsz' 36, 'SOFT' 60, 'WONK' 1; }
+  50%  { font-variation-settings: 'wght' 600, 'opsz' 72, 'SOFT' 20, 'WONK' 0; }
+  100% { font-variation-settings: 'wght' 400, 'opsz' 36, 'SOFT' 60, 'WONK' 1; }
+}
+
 footer {
   margin-top: 6vh;
   padding-top: 3vh;
@@ -707,6 +896,54 @@ footer a:hover {
         <span>Fraunces + Canvas</span>
         <span>particles</span>
         <span>sun glyphs</span>
+      </div>
+    </div>
+  </a>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-label">handmade</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <a href="worn.html" class="card">
+    <div class="card-preview">
+      <div class="preview-worn">
+        <span class="wo1">she draws</span>
+        <span class="wo2">what the body</span>
+        <span class="wo3">remembers</span>
+        <span class="wo-mark" aria-hidden="true"></span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">worn</div>
+      <div class="card-desc">A poem with per-letter variation settings, film grain SVG filter, and hand-drawn sun ornaments inline like printer's marks. Each letter wears differently.</div>
+      <div class="card-meta">
+        <span>Fraunces</span>
+        <span>per-letter</span>
+        <span>SVG grain</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="ledger.html" class="card">
+    <div class="card-preview">
+      <div class="preview-ledger">
+        <div class="pl-rules"><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="pl-margin"></div>
+        <span class="pl1">March 23</span>
+        <span class="pl2">the ink remembers</span>
+        <span class="pl3">what the hand forgets</span>
+        <span class="pl-stamp" aria-hidden="true"></span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">ledger</div>
+      <div class="card-desc">A journal page with ruled lines, margin line, red ink annotations, stamps, and ink-bleed feTurbulence. Handwriting that ages as you watch.</div>
+      <div class="card-meta">
+        <span>Fraunces</span>
+        <span>feTurbulence</span>
+        <span>ink bleed</span>
       </div>
     </div>
   </a>
