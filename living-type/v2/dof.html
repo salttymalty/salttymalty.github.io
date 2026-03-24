@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>depth of field</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&display=swap" rel="stylesheet">
+<style>
+/*
+  Concept: Words at varying z-depths. Mouse Y sets the focal plane.
+  Near camera = warm, large, bold. Far = cool, small, light.
+  Focus distance controls CSS blur + Fraunces SOFT axis.
+*/
+
+:root {
+  --color-bg: #0f0e0c;
+  --color-near: #e8e4de;   /* warm cream — closest to camera */
+  --color-far: #6b6058;    /* cool muted — furthest from camera */
+  --color-hint: var(--color-far);
+  --color-focal-line: var(--color-near);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--color-bg);
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+#scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.word {
+  position: absolute;
+  font-family: 'Fraunces', Georgia, serif;
+  font-optical-sizing: auto;
+  user-select: none;
+  white-space: nowrap;
+  transition:
+    filter 0.4s ease,
+    opacity 0.4s ease,
+    transform 0.4s ease,
+    font-variation-settings 0.4s ease;
+  will-change: filter, opacity, transform, font-variation-settings;
+  line-height: 1;
+}
+
+#focal-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--color-focal-line);
+  opacity: 0;
+  pointer-events: none;
+  transition: top 0.1s linear, opacity 0.3s ease;
+}
+
+#hint {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Source Code Pro', 'Courier New', monospace;
+  font-size: 0.75rem;
+  color: var(--color-hint);
+  letter-spacing: 0.08em;
+  pointer-events: none;
+  opacity: 0;
+  animation: hint-fade 3s ease 1.5s forwards;
+}
+
+@keyframes hint-fade {
+  0%   { opacity: 0; }
+  30%  { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .word {
+    transition: none;
+    animation: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  #focal-line { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div id="scene">
+  <div id="focal-line"></div>
+</div>
+<div id="hint">move mouse · click to freeze</div>
+
+<script>
+// Word definitions: depth 0 = near camera, depth 1 = far
+const WORDS = [
+  { text: 'surface',  depth: 0.00, hpos: 0.50, vpos: 0.08 },
+  { text: 'focus',    depth: 0.15, hpos: 0.30, vpos: 0.20 },
+  { text: 'clarity',  depth: 0.30, hpos: 0.62, vpos: 0.31 },
+  { text: 'sharp',    depth: 0.45, hpos: 0.22, vpos: 0.43 },
+  { text: 'between',  depth: 0.50, hpos: 0.52, vpos: 0.50 },
+  { text: 'soft',     depth: 0.60, hpos: 0.72, vpos: 0.59 },
+  { text: 'distance', depth: 0.70, hpos: 0.38, vpos: 0.68 },
+  { text: 'memory',   depth: 0.85, hpos: 0.60, vpos: 0.79 },
+  { text: 'gone',     depth: 1.00, hpos: 0.44, vpos: 0.91 }
+];
+
+const MAX_BLUR = 12;     // px
+const FOCUS_BAND = 0.08; // half-width where a word is considered in-focus
+
+// Color at depth 0 (near, warm cream #e8e4de) → depth 1 (far, cool muted #6b6058)
+function depthColor(depth) {
+  const r = Math.round(232 - depth * (232 - 107));
+  const g = Math.round(228 - depth * (228 - 96));
+  const b = Math.round(222 - depth * (222 - 88));
+  return `rgb(${r},${g},${b})`;
+}
+
+// Font size: depth 0 → near (large), depth 1 → far (small)
+function depthFontSize(depth) {
+  const nearRem = 4.5;
+  const farRem  = 1.2;
+  const rem = nearRem - depth * (nearRem - farRem);
+  const minRem = (rem * 0.6).toFixed(2);
+  const vw     = (rem * 1.5).toFixed(2);
+  const maxRem = rem.toFixed(2);
+  return `clamp(${minRem}rem, ${vw}vw, ${maxRem}rem)`;
+}
+
+// Weight: depth 0 → 700, depth 1 → 300
+function depthWeight(depth) {
+  return Math.round(700 - depth * 400);
+}
+
+// opsz: depth 0 → 72 (large), depth 1 → 9 (small)
+function depthOpsz(depth) {
+  return Math.round(72 - depth * 63);
+}
+
+// Build word elements
+const scene = document.getElementById('scene');
+const focalLine = document.getElementById('focal-line');
+const wordEls = [];
+
+WORDS.forEach((w) => {
+  const el = document.createElement('div');
+  el.className = 'word';
+  el.textContent = w.text;
+  el.style.left = (w.hpos * 100) + 'vw';
+  el.style.top  = (w.vpos * 100) + 'vh';
+  el.style.transform = 'translate(-50%, -50%)';
+  el.style.fontSize = depthFontSize(w.depth);
+  el.style.color = depthColor(w.depth);
+  el.dataset.depth = w.depth;
+  el.dataset.baseWght = depthWeight(w.depth);
+  el.dataset.opsz = depthOpsz(w.depth);
+  el.dataset.pulsing = 'false';
+  scene.appendChild(el);
+  wordEls.push(el);
+});
+
+// Focal plane state
+let focalDepth = 0.5;
+let frozen = false;
+let lastFrame = 0;
+const FRAME_INTERVAL = 1000 / 30; // throttle to 30fps
+
+function applyFocus(fd) {
+  wordEls.forEach((el, i) => {
+    const depth = parseFloat(el.dataset.depth);
+    const base  = parseInt(el.dataset.baseWght, 10);
+    const opsz  = parseInt(el.dataset.opsz, 10);
+
+    const dist   = Math.abs(depth - fd);
+    const blur   = dist * MAX_BLUR;
+    const opacity = 0.3 + (1 - Math.min(dist / 0.5, 1)) * 0.7;
+    const scale  = dist < FOCUS_BAND ? 1.02 : 0.98;
+    // SOFT: in-focus = 0 (crisp serifs), blurred = melted
+    const soft   = Math.min(dist * 120, 100);
+    const isInFocus = dist < FOCUS_BAND;
+
+    el.style.filter = `blur(${blur.toFixed(1)}px)`;
+    el.style.opacity = opacity.toFixed(3);
+    el.style.transform = `translate(-50%, -50%) scale(${scale})`;
+    el.dataset.pulsing = isInFocus ? 'true' : 'false';
+    el.dataset.currentSoft = soft.toFixed(0);
+
+    // For out-of-focus words, set a static weight; in-focus weight is handled by pulseLoop
+    if (!isInFocus) {
+      el.style.fontVariationSettings =
+        `'wght' ${base}, 'opsz' ${opsz}, 'SOFT' ${soft.toFixed(0)}, 'WONK' 0`;
+    }
+  });
+
+  focalLine.style.top = (fd * 100) + 'vh';
+}
+
+// Weight breathing rAF loop — only animates in-focus words
+let pulseStart = null;
+function pulseLoop(ts) {
+  if (pulseStart === null) pulseStart = ts;
+  wordEls.forEach((el) => {
+    if (el.dataset.pulsing !== 'true') return;
+    const base = parseInt(el.dataset.baseWght, 10);
+    const opsz = parseInt(el.dataset.opsz, 10);
+    const soft = el.dataset.currentSoft || '0';
+    const phase = ((ts - pulseStart) / 6000) * Math.PI * 2;
+    const wghtBreathe = Math.round(base + Math.sin(phase) * 80);
+    el.style.fontVariationSettings =
+      `'wght' ${wghtBreathe}, 'opsz' ${opsz}, 'SOFT' ${soft}, 'WONK' 0`;
+  });
+  requestAnimationFrame(pulseLoop);
+}
+requestAnimationFrame(pulseLoop);
+
+// Initial state
+applyFocus(0.5);
+
+// Mouse tracking — throttled to 30fps
+document.addEventListener('mousemove', (e) => {
+  if (frozen) return;
+  const now = performance.now();
+  if (now - lastFrame < FRAME_INTERVAL) return;
+  lastFrame = now;
+  focalDepth = e.clientY / window.innerHeight;
+  focalLine.style.opacity = '0.14';
+  applyFocus(focalDepth);
+});
+
+// Click to freeze/unfreeze
+document.addEventListener('click', () => {
+  frozen = !frozen;
+  document.body.style.cursor = frozen ? 'default' : 'crosshair';
+  focalLine.style.opacity = frozen ? '0.28' : '0.14';
+});
+
+// Touch support
+document.addEventListener('touchmove', (e) => {
+  if (frozen) return;
+  e.preventDefault();
+  const now = performance.now();
+  if (now - lastFrame < FRAME_INTERVAL) return;
+  lastFrame = now;
+  focalDepth = e.touches[0].clientY / window.innerHeight;
+  focalLine.style.opacity = '0.14';
+  applyFocus(focalDepth);
+}, { passive: false });
+</script>
+</body>
+</html>
