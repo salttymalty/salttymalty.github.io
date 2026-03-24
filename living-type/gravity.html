@@ -41,136 +41,229 @@ body {
   line-height: 1;
 }
 
-@keyframes hint-show {
-  0%   { opacity: 0; }
-  20%  { opacity: 0.4; }
-  100% { opacity: 0; }
+.word.waiting {
+  animation: pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.7; }
+  50%       { opacity: 1.0; }
+}
+
+#floor-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed rgba(232,226,214,0.15);
+  pointer-events: none;
+}
+
+#hint {
+  position: fixed;
+  bottom: 5vh;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 0.85rem;
+  color: var(--color-text);
+  opacity: 0.4;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 0.6s;
 }
 </style>
 </head>
 <body>
 
-<div id="stage"></div>
+<div id="stage">
+  <div id="floor-line"></div>
+</div>
+<div id="hint">click to place words, then double-click to release</div>
 
 <script>
-const WORDS = ['fall','rise','weight','float','sink','drift','land','bounce','rest','drop'];
-const GRAVITY = 0.35;
+const VOCAB   = ['fall','rise','weight','float','sink','drift','land','bounce','rest','drop'];
+const GRAVITY = 0.4;
 const DAMPING = 0.6;
-const FLOOR_PAD = 20;
+const FLOOR_RATIO = 0.9;
+const MAX_WORDS = 20;
 
-let frozen = false;
-let particles = [];
-let rafId = null;
+let mode    = 'compose'; // 'compose' | 'simulate'
+let frozen  = false;
+let words   = [];
+let wordIdx = 0;
+let rafId   = null;
 let lastFrame = 0;
+
 const stage = document.getElementById('stage');
+const hint  = document.getElementById('hint');
+const floorLine = document.getElementById('floor-line');
 
-function measure(el) {
-  const r = el.getBoundingClientRect();
-  return { w: r.width, h: r.height };
+function floorY() { return window.innerHeight * FLOOR_RATIO; }
+
+function positionFloorLine() {
+  floorLine.style.top = floorY() + 'px';
 }
+positionFloorLine();
+window.addEventListener('resize', positionFloorLine);
 
-function spawn(word) {
+// -- Compose --
+
+function placeWord(cx, cy) {
+  if (words.length >= MAX_WORDS) return;
+  const text = VOCAB[wordIdx % VOCAB.length];
+  wordIdx++;
+
+  const wght = 100 + Math.random() * 600;
+  const soft = Math.random() * 100;
+  const opsz = 9 + Math.random() * 100;
+
   const el = document.createElement('span');
-  el.className = 'word';
-  el.textContent = word;
-  el.style.fontVariationSettings = "'wght' 200, 'opsz' 72, 'SOFT' 100, 'WONK' 0";
-  el.style.transform = 'translate(-9999px, -9999px)';
+  el.className = 'word waiting';
+  el.textContent = text;
+  el.style.fontVariationSettings = `'wght' ${wght.toFixed(0)}, 'opsz' ${opsz.toFixed(0)}, 'SOFT' ${soft.toFixed(0)}, 'WONK' 0`;
+  el.style.transform = 'translate(-9999px,-9999px)';
   stage.appendChild(el);
 
-  // measure after render
   requestAnimationFrame(() => {
-    const { w } = measure(el);
-    const x = Math.random() * Math.max(0, window.innerWidth - w);
-    const p = {
-      el,
-      x,
-      y: -80 - Math.random() * 200,
-      vy: 1 + Math.random() * 2,
-      w,
-      born: performance.now()
-    };
-    particles.push(p);
-    updateStyle(p);
+    const r = el.getBoundingClientRect();
+    const w = r.width;
+    const h = r.height;
+    // clamp so word doesn't overflow viewport
+    const x = Math.min(Math.max(cx - w / 2, 0), window.innerWidth - w);
+    const y = Math.min(Math.max(cy - h / 2, 0), floorY() - h);
+    el.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px)`;
+
+    words.push({ el, x, y, vy: 0, w, h, restFrames: 0, settled: false, wght, soft });
+
+    if (words.length >= MAX_WORDS) {
+      hint.textContent = 'double-click to release';
+      hint.style.opacity = '0.5';
+    }
   });
+}
+
+// -- Simulate --
+
+function startPhysics() {
+  // strip waiting animation; give initial vy = 0
+  words.forEach(p => {
+    p.el.classList.remove('waiting');
+    p.vy = 0;
+    p.restFrames = 0;
+    p.settled = false;
+  });
+  hint.textContent = 'click to freeze · r to reset';
+  hint.style.opacity = '0.3';
+  if (!rafId) rafId = requestAnimationFrame(tick);
 }
 
 function updateStyle(p) {
   const speed = Math.abs(p.vy);
-  // faster = heavier and sharper; slower = lighter and softer
   const t = Math.min(speed / 14, 1);
-  const wght = 200 + t * 600;
-  const soft = 100 - t * 100;
-  p.el.style.fontVariationSettings = `'wght' ${wght.toFixed(0)}, 'opsz' 72, 'SOFT' ${soft.toFixed(0)}, 'WONK' 0`;
-  p.el.style.transform = `translate(${p.x.toFixed(1)}px, ${p.y.toFixed(1)}px)`;
+  const wght = p.wght * (1 - t) + (p.wght + (800 - p.wght) * t);
+  const wghtClamped = Math.min(Math.max(wght, 100), 900);
+  const soft = p.soft * (1 - t);
+  p.el.style.fontVariationSettings = `'wght' ${wghtClamped.toFixed(0)}, 'opsz' 72, 'SOFT' ${soft.toFixed(0)}, 'WONK' 0`;
+  p.el.style.transform = `translate(${p.x.toFixed(1)}px,${p.y.toFixed(1)}px)`;
 }
 
 function tick(ts) {
   rafId = requestAnimationFrame(tick);
   if (ts - lastFrame < 33) return;
   lastFrame = ts;
-  if (!frozen) {
-    const floorY = window.innerHeight - FLOOR_PAD;
+  if (frozen) return;
 
-    for (const p of particles) {
-      p.vy += GRAVITY;
-      p.y += p.vy;
+  const floor = floorY();
+  let anyActive = false;
 
-      const elH = p.el.offsetHeight || 40;
-      if (p.y + elH >= floorY) {
-        p.y = floorY - elH;
-        p.vy *= -DAMPING;
-        // kill tiny bounces
-        if (Math.abs(p.vy) < 0.5) p.vy = 0;
-      }
+  for (const p of words) {
+    if (p.settled) continue;
+    anyActive = true;
 
-      updateStyle(p);
+    p.vy += GRAVITY;
+    p.y  += p.vy;
+
+    const h = p.el.offsetHeight || 40;
+    if (p.y + h >= floor) {
+      p.y  = floor - h;
+      p.vy *= -DAMPING;
+      if (Math.abs(p.vy) < 0.5) p.vy = 0;
     }
+
+    if (Math.abs(p.vy) < 0.5) {
+      p.restFrames++;
+      if (p.restFrames > 30) p.settled = true;
+    } else {
+      p.restFrames = 0;
+    }
+
+    updateStyle(p);
+  }
+
+  if (!anyActive) {
+    cancelAnimationFrame(rafId);
+    rafId = null;
   }
 }
 
-function init() {
-  // stagger spawns
-  WORDS.forEach((w, i) => {
-    setTimeout(() => spawn(w), i * 220);
-  });
+// -- Event wiring --
 
-  // respawn words that have settled — respawn after 8-14s
-  setInterval(() => {
-    if (particles.length < 10) return;
-    // find a resting particle (vy ~0)
-    const resting = particles.filter(p => Math.abs(p.vy) < 0.1);
-    if (resting.length === 0) return;
-    const idx = Math.floor(Math.random() * resting.length);
-    const p = resting[idx];
-    const word = p.el.textContent;
-    p.el.remove();
-    particles.splice(particles.indexOf(p), 1);
-    setTimeout(() => spawn(word), 400);
-  }, 2200);
+// Prevent double-click from firing two single-clicks in compose mode
+let clickPending = false;
 
-  rafId = requestAnimationFrame(tick);
-}
-
-document.addEventListener('click', () => {
-  frozen = !frozen;
-  document.body.style.cursor = frozen ? 'default' : 'crosshair';
+document.addEventListener('click', (e) => {
+  if (e.detail > 1) return; // part of a dblclick — ignore
+  if (mode === 'compose') {
+    clickPending = true;
+    setTimeout(() => {
+      if (!clickPending) return;
+      clickPending = false;
+      placeWord(e.clientX, e.clientY);
+    }, 220);
+  } else {
+    // simulate mode: freeze toggle
+    frozen = !frozen;
+    if (frozen && !rafId) rafId = requestAnimationFrame(tick);
+  }
 });
 
+document.addEventListener('dblclick', (e) => {
+  clickPending = false; // cancel the pending single-click
+  if (mode === 'compose' && words.length > 0) {
+    mode = 'simulate';
+    frozen = false;
+    startPhysics();
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'r' || e.key === 'R') {
+    words.forEach(p => p.el.remove());
+    words = [];
+    wordIdx = 0;
+    mode = 'compose';
+    frozen = false;
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+    hint.textContent = 'click to place words, then double-click to release';
+    hint.style.opacity = '0.4';
+  }
+});
+
+// -- Reduced motion: static layout, skip physics entirely --
+
 if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  frozen = true;
-  // just show words statically placed
-  WORDS.forEach((w, i) => {
+  floorLine.style.display = 'none';
+  hint.style.display = 'none';
+  VOCAB.forEach((w, i) => {
     const el = document.createElement('span');
     el.className = 'word';
     el.textContent = w;
     el.style.fontVariationSettings = "'wght' 400, 'opsz' 72, 'SOFT' 50, 'WONK' 0";
     el.style.position = 'absolute';
-    el.style.left = (5 + (i % 5) * 18) + '%';
-    el.style.top = (20 + Math.floor(i / 5) * 40) + '%';
+    el.style.left  = (5 + (i % 5) * 18) + '%';
+    el.style.top   = (20 + Math.floor(i / 5) * 40) + '%';
     stage.appendChild(el);
   });
-} else {
-  init();
 }
 </script>
 </body>
