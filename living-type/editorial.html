@@ -94,6 +94,12 @@ body {
   100% { font-variation-settings: 'wght' 300, 'opsz' 14; }
 }
 
+@keyframes hint-show {
+  0%   { opacity: 0; }
+  20%  { opacity: 0.4; }
+  100% { opacity: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .headline, .body-text p { animation-play-state: paused; }
 }
@@ -101,6 +107,10 @@ body {
 </head>
 <body>
 
+<div id="hint" style="position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);
+  font-family:'Source Sans 3',system-ui,sans-serif;font-size:0.8rem;
+  color:var(--color-body);opacity:0;pointer-events:none;
+  animation:hint-show 3s ease 2s forwards;">click to freeze</div>
 <div class="column">
   <p class="dateline">No. 1 — Spring 2026</p>
   <h1 class="headline">The Variable Issue</h1>

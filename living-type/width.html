@@ -27,6 +27,14 @@ body {
   overflow: hidden;
 }
 
+/* @property enables smooth numeric interpolation for wdth axis.
+   Requires Chrome 85+ / Safari 16.4+. Firefox degrades to static — font won't animate. */
+@property --wdth {
+  syntax: '<number>';
+  initial-value: 75;
+  inherits: false;
+}
+
 #sentence {
   font-family: 'Roboto Flex', sans-serif;
   font-size: clamp(2rem, 6vw, 5rem);
@@ -34,14 +42,20 @@ body {
   user-select: none;
   text-align: center;
   line-height: 1.1;
+  font-variation-settings: 'wdth' var(--wdth);
   animation: stretch 6s ease-in-out infinite;
-  will-change: font-stretch;
+  will-change: font-variation-settings;
 }
 
 @keyframes stretch {
-  0%   { font-stretch: 75%; }
-  50%  { font-stretch: 150%; }
-  100% { font-stretch: 75%; }
+  0%, 100% { --wdth: 75;  }
+  50%       { --wdth: 150; }
+}
+
+@keyframes hint-show {
+  0%   { opacity: 0; }
+  20%  { opacity: 0.4; }
+  100% { opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -52,6 +66,10 @@ body {
 <body>
 
 <div id="sentence">typography expands to fill the space it is given</div>
+<div id="hint" style="position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);
+  font-family:'Source Sans 3',system-ui,sans-serif;font-size:0.8rem;
+  color:var(--color-text);opacity:0;pointer-events:none;
+  animation:hint-show 3s ease 2s forwards;">click to freeze</div>
 
 <script>
 let frozen = false;

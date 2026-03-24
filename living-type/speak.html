@@ -12,8 +12,6 @@
 :root {
   --bg: #0f0e0c;
   --cream: #e8e4de;
-  --terra: #c4623a;
-  --sand: #d4c4a0;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
@@ -44,13 +42,9 @@ body {
   white-space: nowrap;
   line-height: 1;
   user-select: none;
-  will-change: font-variation-settings, opacity;
-}
-@keyframes fade-out {
-  to { opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .w { animation-play-state: paused !important; }
+  .w { transition: none !important; }
 }
 </style>
 </head>
@@ -60,11 +54,42 @@ body {
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 const COLORS = ['#e8e4de','#e8e4de','#d4c4a0','#c4623a','#c4623a'];
 const MAX = 40;
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 let started = false;
 let words = [];
 
 function r(a, b) { return a + Math.random() * (b - a); }
 function ri(a, b) { return Math.round(r(a, b)); }
+
+function animate() {
+  if (!reducedMotion) {
+    const now = Date.now();
+    for (const w of words) {
+      const t = ((now - w.born) % w.dur) / w.dur;
+      const s = 0.5 - 0.5 * Math.cos(t * Math.PI * 2);
+      const wght = Math.round(w.wghtLo + s * (w.wghtHi - w.wghtLo));
+      w.el.style.fontVariationSettings = `'wght' ${wght},'opsz' ${w.opsz},'SOFT' ${w.soft},'WONK' ${w.wonk}`;
+    }
+  }
+  requestAnimationFrame(animate);
+}
+animate();
+
+setInterval(() => {
+  const now = Date.now();
+  for (const w of words) {
+    const age = now - w.born;
+    if (age > 15000 && !w.fading) {
+      w.fading = true;
+      w.el.style.transition = 'opacity 5s';
+      w.el.style.opacity = '0';
+    }
+    if (age > 20000) {
+      w.el.remove();
+    }
+  }
+  words = words.filter(w => (Date.now() - w.born) <= 20000);
+}, 1000);
 
 function placeWord(text) {
   if (words.length >= MAX) {
@@ -86,84 +111,56 @@ function placeWord(text) {
   const wghtLo = Math.max(100, wght - ri(100, 300));
   const wghtHi = Math.min(900, wght + ri(100, 300));
 
-  el.style.cssText = `
-    font-size: clamp(1.2rem, ${sz}vw, 4rem);
-    font-variation-settings: 'wght' ${wght}, 'opsz' ${opsz}, 'SOFT' ${soft}, 'WONK' ${wonk};
-    color: ${color};
-    transform: rotate(${rot}deg);
-    opacity: 1;
-  `;
-
-  // inject per-element keyframe for weight breathing
-  const id = 'k' + Date.now() + Math.random().toString(36).slice(2);
-  const sheet = document.styleSheets[0];
-  sheet.insertRule(`@keyframes ${id} {
-    0%,100% { font-variation-settings: 'wght' ${wghtLo}, 'opsz' ${opsz}, 'SOFT' ${soft}, 'WONK' ${wonk}; }
-    50%      { font-variation-settings: 'wght' ${wghtHi}, 'opsz' ${opsz}, 'SOFT' ${soft}, 'WONK' ${wonk}; }
-  }`, sheet.cssRules.length);
-  el.style.animation = `${id} ${dur}ms ease-in-out infinite`;
+  el.style.cssText = `font-size:clamp(1.2rem,${sz}vw,4rem);font-variation-settings:'wght' ${wght},'opsz' ${opsz},'SOFT' ${soft},'WONK' ${wonk};color:${color};transform:rotate(${rot}deg);opacity:1`;
 
   document.body.appendChild(el);
 
-  // place after paint so offsetWidth is real
   requestAnimationFrame(() => {
-    const pad = 40;
-    const w = el.offsetWidth  || 60;
-    const h = el.offsetHeight || 30;
-    el.style.left = r(pad, Math.max(pad + 1, window.innerWidth  - w - pad)) + 'px';
-    el.style.top  = r(pad, Math.max(pad + 1, window.innerHeight - h - pad)) + 'px';
+    const p=40, w=el.offsetWidth||60, h=el.offsetHeight||30;
+    el.style.left = r(p, Math.max(p+1, window.innerWidth -w-p)) + 'px';
+    el.style.top  = r(p, Math.max(p+1, window.innerHeight-h-p)) + 'px';
   });
 
-  const entry = { el, born: Date.now() };
-  words.push(entry);
-
-  // fade after 15s, remove after 20s
-  setTimeout(() => {
-    el.style.transition = 'opacity 5s';
-    el.style.opacity = '0';
-  }, 15000);
-  setTimeout(() => {
-    el.remove();
-    words = words.filter(w => w !== entry);
-  }, 20000);
+  words.push({ el, born: Date.now(), wghtLo, wghtHi, opsz, soft, wonk, dur, fading: false });
 }
 
 function start() {
   if (started) return;
   if (!SR) {
-    document.getElementById('prompt').textContent = 'speech recognition not available in this browser';
-    document.getElementById('prompt').style.opacity = '0.7';
+    const prompt = document.getElementById('prompt');
+    prompt.textContent = 'speech recognition requires Chrome, Edge, or Safari on macOS';
+    prompt.style.opacity = '0.7';
     return;
   }
   started = true;
   const prompt = document.getElementById('prompt');
-  prompt.textContent = 'listening…';
-  setTimeout(() => { prompt.style.opacity = '0'; }, 2000);
+  prompt.textContent='listening…';
+  setTimeout(()=>{prompt.style.opacity='0';},2000);
+
+  let lastSpeech = Date.now();
 
   const rec = new SR();
   rec.continuous = true;
-  rec.interimResults = true;
+  rec.interimResults = false;
   rec.lang = 'en-US';
 
-  rec.onresult = (event) => {
-    for (let i = event.resultIndex; i < event.results.length; i++) {
-      if (event.results[i].isFinal) {
-        event.results[i][0].transcript.trim().split(/\s+/).forEach(w => {
-          if (w) placeWord(w);
-        });
-      }
-    }
+  rec.onresult = (e) => {
+    lastSpeech = Date.now();
+    for (let i = e.resultIndex; i < e.results.length; i++)
+      if (e.results[i].isFinal)
+        e.results[i][0].transcript.trim().split(/\s+/).forEach(w => { if (w) placeWord(w); });
   };
-
-  rec.onerror = (e) => {
-    if (e.error === 'not-allowed') {
-      prompt.textContent = 'mic access denied';
-      prompt.style.opacity = '0.7';
-    }
-  };
+  rec.onerror = (e) => { if (e.error==='not-allowed') { prompt.textContent='mic access denied'; prompt.style.opacity='0.7'; } };
 
   rec.onend = () => { if (started) rec.start(); };
   rec.start();
+  setInterval(() => {
+    if (started && Date.now()-lastSpeech > 50000) {
+      lastSpeech = Date.now();
+      try{rec.stop()}catch(e){}
+      setTimeout(()=>{try{rec.start()}catch(e){}},200);
+    }
+  }, 10000);
 }
 
 document.addEventListener('click', start);

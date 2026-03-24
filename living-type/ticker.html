@@ -34,10 +34,15 @@ body{background:var(--bg);min-height:100vh;display:flex;flex-direction:column;ju
 @keyframes br-a{0%,100%{opacity:.85}50%{opacity:1;transform:scaleY(1.04)}}
 @keyframes br-b{0%,100%{opacity:.7}50%{opacity:1}}
 @keyframes br-c{0%,100%{letter-spacing:.02em}50%{letter-spacing:.08em}}
+@keyframes hint-show{0%{opacity:0}20%{opacity:0.4}100%{opacity:0}}
 @media(prefers-reduced-motion:reduce){.track,.word{animation-play-state:paused!important}}
 </style>
 </head>
 <body>
+<div id="hint" style="position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);
+  font-family:'Source Sans 3',system-ui,sans-serif;font-size:0.8rem;
+  color:var(--cream);opacity:0;pointer-events:none;
+  animation:hint-show 3s ease 2s forwards;">click to freeze</div>
 <div class="band band-a"><div class="track" id="a"></div></div>
 <div class="band band-b"><div class="track" id="b"></div></div>
 <script>

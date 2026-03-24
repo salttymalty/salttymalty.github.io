@@ -15,6 +15,8 @@
   --color-label: #6b6058;
   --color-divider: #d4cfc6;
   --color-note: #9a8e80;
+  --color-overlay-text: #e8e4de;
+  --color-overlay-hint: #6b6058;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -102,15 +104,55 @@ body {
   animation: animate-weight 4s ease-in-out infinite;
 }
 
+@keyframes hint-show {
+  0%   { opacity: 0; }
+  20%  { opacity: 0.4; }
+  100% { opacity: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   #word-grade, #word-weight {
     animation-play-state: paused;
   }
 }
+
+#code-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 14, 12, 0.92);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 2rem;
+  cursor: pointer;
+}
+#code-overlay pre {
+  font-family: 'Source Code Pro', monospace;
+  font-size: clamp(0.75rem, 1.5vw, 1rem);
+  color: var(--color-overlay-text);
+  line-height: 1.7;
+  max-width: 60ch;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+#code-overlay .code-hint {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: system-ui, sans-serif;
+  font-size: 0.75rem;
+  color: var(--color-overlay-hint);
+}
 </style>
 </head>
 <body>
 
+<div id="hint" style="position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);
+  font-family:'Source Sans 3',system-ui,sans-serif;font-size:0.8rem;
+  color:var(--color-text);opacity:0;pointer-events:none;
+  animation:hint-show 3s ease 2s forwards;">click to freeze</div>
 <div class="columns">
   <div class="column">
     <span class="label">grade</span>
@@ -127,6 +169,24 @@ body {
   </div>
 </div>
 
+<div id="code-overlay">
+  <pre>/* grade changes density without reflow
+   weight changes density AND reflows */
+
+/* left column: grade axis */
+@keyframes grade-shift {
+  50% { font-variation-settings: 'GRAD' 150; }
+}
+
+/* right column: weight axis */
+@keyframes weight-shift {
+  50% { font-variation-settings: 'wght' 900; }
+}
+
+/* same visual effect, different mechanics */</pre>
+  <span class="code-hint">press c or click to close</span>
+</div>
+
 <script>
 let frozen = false;
 document.addEventListener('click', () => {
@@ -135,6 +195,16 @@ document.addEventListener('click', () => {
   els.forEach(el => {
     el.style.animationPlayState = frozen ? 'paused' : 'running';
   });
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'c' || e.key === 'C') {
+    const ov = document.getElementById('code-overlay');
+    ov.style.display = ov.style.display === 'flex' ? 'none' : 'flex';
+  }
+});
+document.getElementById('code-overlay').addEventListener('click', () => {
+  document.getElementById('code-overlay').style.display = 'none';
 });
 </script>
 </body>

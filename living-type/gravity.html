@@ -40,6 +40,12 @@ body {
   white-space: nowrap;
   line-height: 1;
 }
+
+@keyframes hint-show {
+  0%   { opacity: 0; }
+  20%  { opacity: 0.4; }
+  100% { opacity: 0; }
+}
 </style>
 </head>
 <body>
@@ -55,6 +61,7 @@ const FLOOR_PAD = 20;
 let frozen = false;
 let particles = [];
 let rafId = null;
+let lastFrame = 0;
 const stage = document.getElementById('stage');
 
 function measure(el) {
@@ -97,7 +104,10 @@ function updateStyle(p) {
   p.el.style.transform = `translate(${p.x.toFixed(1)}px, ${p.y.toFixed(1)}px)`;
 }
 
-function tick() {
+function tick(ts) {
+  rafId = requestAnimationFrame(tick);
+  if (ts - lastFrame < 33) return;
+  lastFrame = ts;
   if (!frozen) {
     const floorY = window.innerHeight - FLOOR_PAD;
 
@@ -116,8 +126,6 @@ function tick() {
       updateStyle(p);
     }
   }
-
-  rafId = requestAnimationFrame(tick);
 }
 
 function init() {

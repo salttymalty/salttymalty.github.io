@@ -89,6 +89,8 @@ const prompt = document.getElementById('prompt');
 let audioCtx, analyser, freqData;
 let started = false;
 let frozen = false;
+let stream = null;
+let lastFrame = 0;
 
 function getBands() {
   analyser.getByteFrequencyData(freqData);
@@ -118,7 +120,10 @@ function mapRange(v, inMin, inMax, outMin, outMax) {
 
 function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 
-function tick() {
+function tick(ts) {
+  requestAnimationFrame(tick);
+  if (ts - lastFrame < 33) return;
+  lastFrame = ts;
   if (!frozen) {
     const bands = getBands();
     letterEls.forEach((el, idx) => {
@@ -130,12 +135,11 @@ function tick() {
       el.style.transform = `scale(${scale})`;
     });
   }
-  requestAnimationFrame(tick);
 }
 
 async function startAudio() {
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     audioCtx = new AudioContext();
     analyser = audioCtx.createAnalyser();
     analyser.fftSize = 1024;
@@ -157,6 +161,10 @@ document.addEventListener('click', () => {
     frozen = !frozen;
     document.body.style.cursor = frozen ? 'default' : 'crosshair';
   }
+});
+
+window.addEventListener('beforeunload', () => {
+  if (stream) stream.getTracks().forEach(t => t.stop());
 });
 </script>
 </body>

@@ -41,6 +41,7 @@ body {
   justify-content: center;
   transition: font-variation-settings 0.15s ease, color 0.3s ease, opacity 0.3s ease;
   color: var(--color-text);
+  will-change: auto;
 }
 
 #dot {
@@ -95,6 +96,7 @@ for (let i = 0; i < total; i++) {
 
 let mx = -1000, my = -1000;
 let animFrame;
+let lastFrame = 0;
 
 document.addEventListener('mousemove', (e) => {
   mx = e.clientX;
@@ -103,7 +105,10 @@ document.addEventListener('mousemove', (e) => {
   dot.style.top = my + 'px';
 });
 
-function update() {
+function update(ts) {
+  requestAnimationFrame(update);
+  if (ts - lastFrame < 33) return;
+  lastFrame = ts;
   const gridRect = grid.getBoundingClientRect();
 
   for (let i = 0; i < spans.length; i++) {
@@ -139,8 +144,6 @@ function update() {
 
     span.style.opacity = Math.max(0.15, 0.15 + p * 0.85);
   }
-
-  animFrame = requestAnimationFrame(update);
 }
 
 update();

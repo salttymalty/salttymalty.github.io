@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<!-- guards: core/color, core/layout, core/typography — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>callback</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0e0c;
+  --cream: #e8e4de;
+  --dim: rgba(232, 228, 222, 0.6);
+  --accent: #c4623a;
+  --overlay-bg: rgba(15, 14, 12, 0.94);
+  --overlay-card: #1a1916;
+  --overlay-border: rgba(232, 228, 222, 0.15);
+  --hint: rgba(232, 228, 222, 0.5);
+  --comment: rgba(232, 228, 222, 0.55);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  cursor: pointer;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#sentence {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1.25;
+  color: var(--cream);
+  text-align: center;
+  max-width: 90vw;
+  padding: 0 1rem;
+}
+
+#sentence span {
+  display: inline;
+  transition: font-variation-settings 0.05s linear;
+  will-change: font-variation-settings;
+}
+
+#label {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  min-height: 1em;
+}
+
+/* Code overlay */
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 10;
+}
+
+#overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#overlay-inner {
+  background: var(--overlay-card);
+  border: 1px solid var(--overlay-border);
+  border-radius: 8px;
+  padding: 2rem 2.5rem;
+  max-width: min(480px, 88vw);
+  width: 100%;
+}
+
+#overlay-inner .fn-label {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+#overlay-inner pre {
+  font-family: 'Source Code Pro', 'Courier New', monospace;
+  font-size: clamp(0.8rem, 2vw, 0.95rem);
+  color: var(--cream);
+  line-height: 1.6;
+  white-space: pre;
+}
+
+#overlay-inner .comment {
+  color: var(--comment);
+}
+
+#overlay-inner .dismiss {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.7rem;
+  color: var(--hint);
+  margin-top: 1.25rem;
+  display: block;
+  text-align: right;
+  letter-spacing: 0.08em;
+}
+
+#hint {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--hint);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #sentence span { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<div id="sentence"></div>
+<div id="label">f(i) = linear</div>
+<div id="hint">c = code &nbsp; click = next</div>
+
+<div id="overlay">
+  <div id="overlay-inner">
+    <span class="fn-label" id="overlay-label">linear</span>
+    <pre id="overlay-pre"></pre>
+    <span class="dismiss">press c or click to dismiss</span>
+  </div>
+</div>
+
+<script>
+// ─── sentence ────────────────────────────────────────────────────────────────
+const TEXT = 'every letter is a function of its position';
+const sentence = document.getElementById('sentence');
+const spans = [];
+
+// Build spans for non-space chars, preserve spaces as text nodes
+let charIndex = 0;
+for (let i = 0; i < TEXT.length; i++) {
+  const ch = TEXT[i];
+  if (ch === ' ') {
+    sentence.appendChild(document.createTextNode('\u00a0'));
+  } else {
+    const s = document.createElement('span');
+    s.textContent = ch;
+    s.dataset.i = charIndex;
+    sentence.appendChild(s);
+    spans.push(s);
+    charIndex++;
+  }
+}
+const N = spans.length;
+
+// ─── hash for deterministic random ──────────────────────────────────────────
+function hash(i) {
+  const x = Math.sin(i * 127.1 + 311.7) * 43758.5453;
+  return x - Math.floor(x);
+}
+
+// ─── functions ───────────────────────────────────────────────────────────────
+const FUNCTIONS = [
+  {
+    name: 'linear',
+    label: 'f(i) = linear',
+    animates: false,
+    wght: (i) => 200 + (i / (N - 1)) * 700,
+    pseudo: [
+      '// linear — weight ramps thin to bold',
+      'wght(i) = 200 + (i / n) * 700',
+      'soft(i) = 100 - (i / n) * 100',
+      'opsz(i) = 9 + (i / n) * 135',
+    ],
+  },
+  {
+    name: 'sine',
+    label: 'f(i) = sine',
+    animates: true,
+    wght: (i, t) => 450 + Math.sin(i * 0.5 + t) * 350,
+    pseudo: [
+      '// sine — a wave of weight moves through',
+      'wght(i, t) = 450 + sin(i * 0.5 + t) * 350',
+      'soft(i, t) = 50 + cos(i * 0.5 + t) * 50',
+      'opsz(i, t) = 72 + sin(i * 0.5 + t) * 63',
+    ],
+  },
+  {
+    name: 'step',
+    label: 'f(i) = step',
+    animates: false,
+    wght: (i) => (i % 3 === 0) ? 800 : 200,
+    pseudo: [
+      '// step — every 3rd letter is bold',
+      'wght(i) = i % 3 === 0 ? 800 : 200',
+      'soft(i) = i % 3 === 0 ? 0   : 90',
+      'opsz(i) = i % 3 === 0 ? 144 : 9',
+    ],
+  },
+  {
+    name: 'random',
+    label: 'f(i) = random (frozen)',
+    animates: false,
+    wght: (i) => 200 + hash(i) * 700,
+    pseudo: [
+      '// random — deterministic per-glyph seed',
+      'wght(i) = 200 + hash(i) * 700',
+      'soft(i) = hash(i + 99) * 100',
+      'opsz(i) = 9 + hash(i + 7) * 135',
+    ],
+  },
+  {
+    name: 'cascade',
+    label: 'f(i) = cascade',
+    animates: true,
+    wght: (i, t) => {
+      const wave = (t * 0.4) % (N + 10) - 5;
+      return 200 + Math.max(0, 1 - Math.abs(i - wave) / 5) * 700;
+    },
+    pseudo: [
+      '// cascade — spotlight sweeps left to right',
+      'wave(t)    = (t * 0.4) % (n + 10) - 5',
+      'wght(i, t) = 200 + max(0, 1 - |i - wave| / 5) * 700',
+      'soft(i, t) = 100 - (wght - 200) / 700 * 100',
+    ],
+  },
+];
+
+// ─── state ───────────────────────────────────────────────────────────────────
+let fnIndex = 0;
+let time = 0;
+let lastFrame = 0;
+let overlayOpen = false;
+const label = document.getElementById('label');
+const overlay = document.getElementById('overlay');
+const overlayLabel = document.getElementById('overlay-label');
+const overlayPre = document.getElementById('overlay-pre');
+
+// ─── apply function ───────────────────────────────────────────────────────────
+function applyFunction(t) {
+  const fn = FUNCTIONS[fnIndex];
+  for (let i = 0; i < N; i++) {
+    const w = Math.round(fn.wght(i, t));
+    // SOFT is inverse of weight: heavy = sharp (0), light = soft (100)
+    const soft = Math.round(100 - ((w - 200) / 700) * 100);
+    // opsz proportional to weight
+    const opsz = Math.round(9 + ((w - 200) / 700) * 135);
+    spans[i].style.fontVariationSettings =
+      `'wght' ${w}, 'opsz' ${opsz}, 'SOFT' ${soft}, 'WONK' 0`;
+  }
+}
+
+// ─── rAF loop — throttled to ~30fps ──────────────────────────────────────────
+const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function loop(ts) {
+  requestAnimationFrame(loop);
+  if (overlayOpen) return;
+  if (ts - lastFrame < 33) return;
+  const dt = Math.min((ts - lastFrame) / 1000, 0.1);
+  lastFrame = ts;
+
+  if (!reduced && FUNCTIONS[fnIndex].animates) {
+    time += dt * 2.4;
+  }
+  applyFunction(time);
+}
+
+// ─── cycle to next function ───────────────────────────────────────────────────
+function cycleFunction() {
+  fnIndex = (fnIndex + 1) % FUNCTIONS.length;
+  time = 0;
+  label.textContent = FUNCTIONS[fnIndex].label;
+  applyFunction(time);
+}
+
+// ─── code overlay ────────────────────────────────────────────────────────────
+function buildOverlayContent() {
+  const fn = FUNCTIONS[fnIndex];
+  overlayLabel.textContent = fn.name;
+  overlayPre.innerHTML = fn.pseudo.map((line) => {
+    if (line.startsWith('//')) {
+      return `<span class="comment">${line}</span>`;
+    }
+    return line;
+  }).join('\n');
+}
+
+function showOverlay() {
+  buildOverlayContent();
+  overlayOpen = true;
+  overlay.classList.add('visible');
+}
+
+function hideOverlay() {
+  overlayOpen = false;
+  overlay.classList.remove('visible');
+}
+
+// ─── event listeners ─────────────────────────────────────────────────────────
+document.addEventListener('click', () => {
+  if (overlayOpen) { hideOverlay(); return; }
+  cycleFunction();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'c' || e.key === 'C') {
+    e.preventDefault();
+    if (overlayOpen) hideOverlay(); else showOverlay();
+  }
+  if (e.key === 'Escape' && overlayOpen) hideOverlay();
+});
+
+// ─── boot ────────────────────────────────────────────────────────────────────
+// reduced-motion: stay on linear, static
+label.textContent = FUNCTIONS[0].label;
+applyFunction(0);
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

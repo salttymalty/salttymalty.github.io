@@ -47,7 +47,7 @@ body {
   will-change: font-variation-settings, opacity, transform;
 }
 @media (prefers-reduced-motion: reduce) {
-  .w { animation-play-state: paused !important; transition: none !important; }
+  .w { transition: none !important; }
 }
 </style>
 </head>
@@ -56,10 +56,20 @@ body {
 <script>
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 const MAX = 35;
+const FADE_AT = 20000;
+const REMOVE_AT = 25000;
+const SILENCE_RESTART = 50000;
 let started = false;
+let frozen = false;
 let words = [];
 let analyser, timeData, freqData;
-let sheet;
+let lastSpeech = 0;
+let audioStream = null;
+let rec;
+
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  frozen = true;
+}
 
 function r(a, b) { return a + Math.random() * (b - a); }
 function ri(a, b) { return Math.round(r(a, b)); }
@@ -81,29 +91,62 @@ function getFreqBias() {
   const len = freqData.length;
   const bass  = freqData.slice(0,  Math.floor(len * 0.1)).reduce((s, v) => s + v, 0) / (len * 0.1);
   const treble = freqData.slice(Math.floor(len * 0.6)).reduce((s, v) => s + v, 0) / (len * 0.4);
-  // -1 = bass, +1 = treble, 0 = balanced
   if (bass + treble < 5) return 0;
   return (treble - bass) / (treble + bass);
 }
 
 function energyColor(rms, bias) {
   if (rms < 0.01) return '#e8e4de';
-  if (bias > 0.3) return '#5ba8a0';   // treble-heavy = teal
-  if (bias < -0.3) return '#c4623a';  // bass-heavy = terra
-  return '#d4c4a0';                    // balanced = sand
+  if (bias > 0.3) return '#5ba8a0';
+  if (bias < -0.3) return '#c4623a';
+  return '#d4c4a0';
 }
 
 function energyParams(rms) {
   if (rms < 0.02) {
-    // whisper
     return { lo: 300, hi: 500, dur: 8000, rot: r(-4, 4), scale: 1 };
   } else if (rms < 0.08) {
-    // normal
     return { lo: 200, hi: 700, dur: 4000, rot: r(-8, 8), scale: 1 };
   } else {
-    // shout — earthquake energy
     return { lo: 100, hi: 900, dur: 500, rot: r(-15, 15), scale: r(1.05, 1.2) };
   }
+}
+
+// Single rAF loop — no insertRule/deleteRule
+function animate() {
+  if (frozen) { requestAnimationFrame(animate); return; }
+  const now = Date.now();
+
+  // Age-based sweep: fade at 20s, remove at 25s
+  for (let i = words.length - 1; i >= 0; i--) {
+    const w = words[i];
+    const age = now - w.born;
+    if (age >= REMOVE_AT) {
+      w.el.remove();
+      words.splice(i, 1);
+      continue;
+    }
+    if (!w.fading && age >= FADE_AT) {
+      w.fading = true;
+      w.el.style.transition = 'opacity 5s';
+      w.el.style.opacity = '0';
+    }
+    const t = ((now - w.born) % w.dur) / w.dur;
+    const s = 0.5 - 0.5 * Math.cos(t * Math.PI * 2);
+    const wght = Math.round(w.wghtLo + s * (w.wghtHi - w.wghtLo));
+    const rot = w.rot * (1 - 2 * s);
+    const sc = 1 + s * (w.scale - 1);
+    w.el.style.fontVariationSettings = `'wght' ${wght}, 'opsz' ${w.opsz}, 'SOFT' ${w.soft}, 'WONK' ${w.wonk}`;
+    w.el.style.transform = `rotate(${rot.toFixed(1)}deg) scale(${sc.toFixed(2)})`;
+  }
+
+  // Chrome 60s silence restart
+  if (started && rec && now - lastSpeech > SILENCE_RESTART) {
+    lastSpeech = now;
+    try { rec.stop(); } catch (e) {}
+  }
+
+  requestAnimationFrame(animate);
 }
 
 function placeWord(text) {
@@ -128,19 +171,8 @@ function placeWord(text) {
     font-size: clamp(1.2rem, ${sz}vw, 4rem);
     font-variation-settings: 'wght' ${ri(lo, hi)}, 'opsz' ${opsz}, 'SOFT' ${soft}, 'WONK' ${wonk};
     color: ${color};
-    transform: rotate(${rot.toFixed(1)}deg) scale(${scale.toFixed(2)});
     opacity: 1;
   `;
-
-  // per-element breathing keyframe
-  const id = 'k' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-  sheet.insertRule(`@keyframes ${id} {
-    0%,100% { font-variation-settings: 'wght' ${lo}, 'opsz' ${opsz}, 'SOFT' ${soft}, 'WONK' ${wonk};
-               transform: rotate(${rot.toFixed(1)}deg) scale(1); }
-    50%      { font-variation-settings: 'wght' ${hi}, 'opsz' ${opsz}, 'SOFT' ${soft}, 'WONK' ${wonk};
-               transform: rotate(${(-rot).toFixed(1)}deg) scale(${scale.toFixed(2)}); }
-  }`, sheet.cssRules.length);
-  el.style.animation = `${id} ${dur}ms ease-in-out infinite`;
 
   document.body.appendChild(el);
 
@@ -152,35 +184,26 @@ function placeWord(text) {
     el.style.top  = r(pad, Math.max(pad + 1, window.innerHeight - h - pad)) + 'px';
   });
 
-  const entry = { el, born: Date.now() };
-  words.push(entry);
-
-  setTimeout(() => {
-    el.style.transition = 'opacity 5s';
-    el.style.opacity = '0';
-  }, 20000);
-  setTimeout(() => {
-    el.remove();
-    words = words.filter(w => w !== entry);
-  }, 25000);
+  words.push({ el, born: Date.now(), wghtLo: lo, wghtHi: hi, opsz, soft, wonk, dur, rot, scale, fading: false });
 }
 
 async function start() {
   if (started) return;
   if (!SR) {
     const p = document.getElementById('prompt');
-    p.textContent = 'speech recognition not available in this browser';
+    p.textContent = 'speech recognition requires Chrome, Edge, or Safari on macOS';
     p.style.opacity = '0.7';
     return;
   }
   started = true;
-  sheet = document.styleSheets[0];
+  lastSpeech = Date.now();
   const prompt = document.getElementById('prompt');
 
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
     const ctx = new AudioContext();
-    const src = ctx.createMediaStreamSource(stream);
+    if (ctx.state === 'suspended') await ctx.resume();
+    const src = ctx.createMediaStreamSource(audioStream);
     analyser = ctx.createAnalyser();
     analyser.fftSize = 256;
     src.connect(analyser);
@@ -195,12 +218,13 @@ async function start() {
   prompt.textContent = 'listening…';
   setTimeout(() => { prompt.style.opacity = '0'; }, 2000);
 
-  const rec = new SR();
+  rec = new SR();
   rec.continuous = true;
-  rec.interimResults = true;
+  rec.interimResults = false;
   rec.lang = 'en-US';
 
   rec.onresult = (event) => {
+    lastSpeech = Date.now();
     for (let i = event.resultIndex; i < event.results.length; i++) {
       if (event.results[i].isFinal) {
         event.results[i][0].transcript.trim().split(/\s+/).forEach(w => {
@@ -213,9 +237,15 @@ async function start() {
   rec.onerror = () => {};
   rec.onend = () => { if (started) rec.start(); };
   rec.start();
+
+  requestAnimationFrame(animate);
 }
 
 document.addEventListener('click', start);
+
+window.addEventListener('beforeunload', () => {
+  if (audioStream) audioStream.getTracks().forEach(t => t.stop());
+});
 </script>
 </body>
 </html>

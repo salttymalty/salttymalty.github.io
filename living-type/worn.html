@@ -191,10 +191,20 @@ lines.forEach(line => {
 });
 
 // Hover: letters nearby shift slightly, like ink responding to breath
+let moveTimer;
 document.addEventListener('mousemove', (e) => {
+  if (moveTimer) return;
+  moveTimer = setTimeout(() => { moveTimer = null; }, 50);
+
+  // Batch read: collect all rects first
   const spans = document.querySelectorAll('.verse span');
-  spans.forEach(span => {
-    const rect = span.getBoundingClientRect();
+  const rects = [];
+  for (const span of spans) {
+    rects.push({ span, rect: span.getBoundingClientRect() });
+  }
+
+  // Batch write: update styles
+  for (const { span, rect } of rects) {
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
     const dx = e.clientX - cx;
@@ -214,7 +224,7 @@ document.addEventListener('mousemove', (e) => {
       span.style.fontVariationSettings =
         `'wght' ${span.dataset.wght}, 'opsz' ${span.dataset.opsz}, 'SOFT' ${span.dataset.soft}, 'WONK' ${span.dataset.wonk}`;
     }
-  });
+  }
 });
 </script>
 </body>

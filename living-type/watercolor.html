@@ -62,6 +62,12 @@ body {
   100% { font-variation-settings: 'wght' 700, 'opsz' 144, 'SOFT' 0,   'WONK' 0; opacity: 0.92; }
 }
 
+@keyframes hint-show {
+  0%   { opacity: 0; }
+  20%  { opacity: 0.4; }
+  100% { opacity: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .word { animation-play-state: paused; }
 }
@@ -85,6 +91,10 @@ body {
   </defs>
 </svg>
 
+<div id="hint" style="position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);
+  font-family:'Source Sans 3',system-ui,sans-serif;font-size:0.8rem;
+  color:var(--ink);opacity:0;pointer-events:none;
+  animation:hint-show 3s ease 2s forwards;">click to freeze</div>
 <div id="scene">
   <svg id="wash" viewBox="0 0 900 600" preserveAspectRatio="xMidYMid slice" filter="url(#wc)" aria-hidden="true">
     <ellipse cx="450" cy="200" rx="380" ry="140" fill="#c4743a" opacity="0.30"/>

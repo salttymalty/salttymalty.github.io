@@ -12,6 +12,7 @@
 :root {
   --color-bg: #0f0e0c;
   --color-text: #e8e4de;
+  --color-label: #6b6058;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -64,6 +65,36 @@ body {
   #word { transition: none; }
   #vignette { transition: none; }
 }
+
+#code-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 14, 12, 0.92);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 2rem;
+  cursor: pointer;
+}
+#code-overlay pre {
+  font-family: 'Source Code Pro', monospace;
+  font-size: clamp(0.75rem, 1.5vw, 1rem);
+  color: var(--color-text);
+  line-height: 1.7;
+  max-width: 60ch;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+#code-overlay .code-hint {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: system-ui, sans-serif;
+  font-size: 0.75rem;
+  color: var(--color-label);
+}
 </style>
 </head>
 <body>
@@ -71,6 +102,24 @@ body {
 <div id="vignette"></div>
 <div id="word">pulse</div>
 <div id="prompt">click to feel</div>
+
+<div id="code-overlay">
+  <pre>/* sub-bass (20-80Hz) drives everything */
+
+const sub = avgBand(20, 80);  // 0-255
+const rms = getRMS();          // 0-1
+
+// bass → weight + scale
+word.style.fontVariationSettings =
+  "'wght' " + lerp(200, 900, sub/255);
+word.style.transform =
+  "scale(" + lerp(1, 1.5, sub/255) + ")";
+
+// rms → background color shift
+body.style.background =
+  oklch(lerp(0.08, 0.25, rms), ...);</pre>
+  <span class="code-hint">press c or click to close</span>
+</div>
 
 <script>
 const wordEl = document.getElementById('word');
@@ -80,6 +129,7 @@ const promptEl = document.getElementById('prompt');
 let audioCtx, analyser, freqData;
 let started = false;
 let frozen = false;
+let stream = null;
 let smoothedBass = 0;
 let smoothedRms = 0;
 
@@ -135,7 +185,7 @@ function tick() {
 
 async function startAudio() {
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     audioCtx = new AudioContext();
     analyser = audioCtx.createAnalyser();
     analyser.fftSize = 1024;
@@ -157,6 +207,20 @@ document.addEventListener('click', () => {
     frozen = !frozen;
     document.body.style.cursor = frozen ? 'default' : 'crosshair';
   }
+});
+
+window.addEventListener('beforeunload', () => {
+  if (stream) stream.getTracks().forEach(t => t.stop());
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'c' || e.key === 'C') {
+    const ov = document.getElementById('code-overlay');
+    ov.style.display = ov.style.display === 'flex' ? 'none' : 'flex';
+  }
+});
+document.getElementById('code-overlay').addEventListener('click', () => {
+  document.getElementById('code-overlay').style.display = 'none';
 });
 </script>
 </body>

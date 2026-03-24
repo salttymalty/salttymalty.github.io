@@ -12,6 +12,7 @@
 :root {
   --color-bg: #0f0e0c;
   --color-text: #e8e4de;
+  --color-label: #6b6058;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -26,29 +27,109 @@ body {
   cursor: crosshair;
 }
 
+/* @property enables smooth numeric interpolation per axis.
+   Requires Chrome 85+ / Safari 16.4+. Firefox degrades to static — font won't animate. */
+@property --wght {
+  syntax: '<number>';
+  initial-value: 200;
+  inherits: false;
+}
+
+@property --opsz {
+  syntax: '<number>';
+  initial-value: 9;
+  inherits: false;
+}
+
+@property --soft {
+  syntax: '<number>';
+  initial-value: 80;
+  inherits: false;
+}
+
 #word {
   font-family: 'Fraunces', Georgia, serif;
   font-size: clamp(2rem, 20vw, 12rem);
   color: var(--color-text);
   user-select: none;
+  font-variation-settings: 'wght' var(--wght), 'opsz' var(--opsz), 'SOFT' var(--soft), 'WONK' 0;
   animation: breathe 8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   will-change: font-variation-settings;
 }
 
 @keyframes breathe {
-  0%   { font-variation-settings: 'wght' 200, 'opsz' 9,   'SOFT' 80, 'WONK' 0; }
-  50%  { font-variation-settings: 'wght' 900, 'opsz' 144, 'SOFT' 0,  'WONK' 0; }
-  100% { font-variation-settings: 'wght' 200, 'opsz' 9,   'SOFT' 80, 'WONK' 0; }
+  0%, 100% { --wght: 200; --opsz: 9;   --soft: 80; }
+  50%       { --wght: 900; --opsz: 144; --soft: 0;  }
+}
+
+@keyframes hint-show {
+  0%   { opacity: 0; }
+  20%  { opacity: 0.4; }
+  100% { opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   #word { animation-play-state: paused; }
+}
+
+#code-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 14, 12, 0.92);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 2rem;
+  cursor: pointer;
+}
+#code-overlay pre {
+  font-family: 'Source Code Pro', monospace;
+  font-size: clamp(0.75rem, 1.5vw, 1rem);
+  color: var(--color-text);
+  line-height: 1.7;
+  max-width: 60ch;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+#code-overlay .code-hint {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: system-ui, sans-serif;
+  font-size: 0.75rem;
+  color: var(--color-label);
 }
 </style>
 </head>
 <body>
 
 <div id="word">breathe</div>
+<div id="hint" style="position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);
+  font-family:'Source Sans 3',system-ui,sans-serif;font-size:0.8rem;
+  color:var(--color-text);opacity:0;pointer-events:none;
+  animation:hint-show 3s ease 2s forwards;">click to freeze</div>
+
+<div id="code-overlay">
+  <pre>/* one word, one axis, one speed */
+
+@property --wght {
+  syntax: '&lt;number&gt;';
+  initial-value: 200;
+  inherits: false;
+}
+
+.word {
+  font-variation-settings: 'wght' var(--wght);
+  animation: breathe 8s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  50% { --wght: 900; }
+}</pre>
+  <span class="code-hint">press c or click to close</span>
+</div>
 
 <script>
 let frozen = false;
@@ -56,6 +137,16 @@ document.addEventListener('click', () => {
   frozen = !frozen;
   document.getElementById('word').style.animationPlayState = frozen ? 'paused' : 'running';
   document.body.style.cursor = frozen ? 'default' : 'crosshair';
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'c' || e.key === 'C') {
+    const ov = document.getElementById('code-overlay');
+    ov.style.display = ov.style.display === 'flex' ? 'none' : 'flex';
+  }
+});
+document.getElementById('code-overlay').addEventListener('click', () => {
+  document.getElementById('code-overlay').style.display = 'none';
 });
 </script>
 </body>

@@ -32,10 +32,18 @@ body {
   gap: clamp(0.25rem, 1vw, 0.75rem);
 }
 
+/* @property enables smooth numeric interpolation for SOFT axis.
+   Requires Chrome 85+ / Safari 16.4+. Firefox degrades to static — font won't animate. */
+@property --soft {
+  syntax: '<number>';
+  initial-value: 0;
+  inherits: false;
+}
+
 .word {
   font-family: 'Fraunces', Georgia, serif;
   font-size: clamp(2rem, 8vw, 6rem);
-  font-variation-settings: 'wght' 600, 'opsz' 72, 'SOFT' 0, 'WONK' 0;
+  font-variation-settings: 'wght' 600, 'opsz' 72, 'SOFT' var(--soft), 'WONK' 0;
   color: var(--color-text);
   user-select: none;
   animation: soften 8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
@@ -50,9 +58,14 @@ body {
 .word:nth-child(5) { animation-delay: 6.4s; }
 
 @keyframes soften {
-  0%   { font-variation-settings: 'wght' 600, 'opsz' 72, 'SOFT' 0,   'WONK' 0; }
-  50%  { font-variation-settings: 'wght' 600, 'opsz' 72, 'SOFT' 100, 'WONK' 0; }
-  100% { font-variation-settings: 'wght' 600, 'opsz' 72, 'SOFT' 0,   'WONK' 0; }
+  0%, 100% { --soft: 0;   }
+  50%       { --soft: 100; }
+}
+
+@keyframes hint-show {
+  0%   { opacity: 0; }
+  20%  { opacity: 0.4; }
+  100% { opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -62,6 +75,10 @@ body {
 </head>
 <body>
 
+<div id="hint" style="position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);
+  font-family:'Source Sans 3',system-ui,sans-serif;font-size:0.8rem;
+  color:var(--color-text);opacity:0;pointer-events:none;
+  animation:hint-show 3s ease 2s forwards;">click to freeze</div>
 <div id="stack">
   <div class="word">serif</div>
   <div class="word">serif</div>

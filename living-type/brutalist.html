@@ -65,12 +65,22 @@ body {
   100% { font-weight: 100; }
 }
 
+@keyframes hint-show {
+  0%   { opacity: 0; }
+  20%  { opacity: 0.4; }
+  100% { opacity: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .cell { animation-play-state: paused; }
 }
 </style>
 </head>
 <body>
+<div id="hint" style="position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);
+  font-family:'Source Sans 3',system-ui,sans-serif;font-size:0.8rem;
+  color:var(--white);opacity:0;pointer-events:none;z-index:10;
+  animation:hint-show 3s ease 2s forwards;">click to freeze</div>
 <script>
 (function() {
   const W = 'WEIGHT';

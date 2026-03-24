@@ -68,6 +68,36 @@ body {
     color: var(--color-crisis);
   }
 }
+
+#code-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 14, 12, 0.92);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 2rem;
+  cursor: pointer;
+}
+#code-overlay pre {
+  font-family: 'Source Code Pro', monospace;
+  font-size: clamp(0.75rem, 1.5vw, 1rem);
+  color: var(--color-text);
+  line-height: 1.7;
+  max-width: 60ch;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+#code-overlay .code-hint {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: system-ui, sans-serif;
+  font-size: 0.75rem;
+  color: var(--color-label);
+}
 </style>
 </head>
 <body>
@@ -75,6 +105,20 @@ body {
 <div id="year-display">1979</div>
 <div id="word">CLIMATE</div>
 <div id="label">the letterforms know what we did</div>
+
+<div id="code-overlay">
+  <pre>/* Climate Crisis font: YEAR axis 1979-2050
+   letterforms degrade as year advances */
+
+function tick() {
+  const t = (Date.now() % 10000) / 10000;
+  const year = Math.round(1979 + t * 71);
+  word.style.fontVariationSettings =
+    "'YEAR' " + year;
+  counter.textContent = year;
+}</pre>
+  <span class="code-hint">press c or click to close</span>
+</div>
 
 <script>
 const YEAR_MIN = 1979;
@@ -127,6 +171,16 @@ document.addEventListener('click', () => {
     start = now - (t * DURATION);
     requestAnimationFrame(tick);
   }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'c' || e.key === 'C') {
+    const ov = document.getElementById('code-overlay');
+    ov.style.display = ov.style.display === 'flex' ? 'none' : 'flex';
+  }
+});
+document.getElementById('code-overlay').addEventListener('click', () => {
+  document.getElementById('code-overlay').style.display = 'none';
 });
 </script>
 </body>
