@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>chorus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0e0c;
+  --cream: #e8e4de;
+  --terra: #c4623a;
+  --teal: #5ba8a0;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+}
+#prompt {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(1rem, 3vw, 1.8rem);
+  font-variation-settings: 'wght' 300, 'opsz' 72, 'SOFT' 40, 'WONK' 0;
+  color: var(--cream);
+  opacity: 0.5;
+  pointer-events: none;
+  transition: opacity 0.8s;
+}
+.w {
+  position: absolute;
+  font-family: 'Fraunces', Georgia, serif;
+  white-space: nowrap;
+  line-height: 1;
+  user-select: none;
+  will-change: font-variation-settings, opacity, transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .w { animation-play-state: paused !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<div id="prompt">click to begin</div>
+<script>
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const MAX = 35;
+let started = false;
+let words = [];
+let analyser, timeData, freqData;
+let sheet;
+
+function r(a, b) { return a + Math.random() * (b - a); }
+function ri(a, b) { return Math.round(r(a, b)); }
+
+function getRMS() {
+  if (!analyser) return 0;
+  analyser.getByteTimeDomainData(timeData);
+  let sum = 0;
+  for (let i = 0; i < timeData.length; i++) {
+    const v = (timeData[i] - 128) / 128;
+    sum += v * v;
+  }
+  return Math.sqrt(sum / timeData.length);
+}
+
+function getFreqBias() {
+  if (!analyser) return 0;
+  analyser.getByteFrequencyData(freqData);
+  const len = freqData.length;
+  const bass  = freqData.slice(0,  Math.floor(len * 0.1)).reduce((s, v) => s + v, 0) / (len * 0.1);
+  const treble = freqData.slice(Math.floor(len * 0.6)).reduce((s, v) => s + v, 0) / (len * 0.4);
+  // -1 = bass, +1 = treble, 0 = balanced
+  if (bass + treble < 5) return 0;
+  return (treble - bass) / (treble + bass);
+}
+
+function energyColor(rms, bias) {
+  if (rms < 0.01) return '#e8e4de';
+  if (bias > 0.3) return '#5ba8a0';   // treble-heavy = teal
+  if (bias < -0.3) return '#c4623a';  // bass-heavy = terra
+  return '#d4c4a0';                    // balanced = sand
+}
+
+function energyParams(rms) {
+  if (rms < 0.02) {
+    // whisper
+    return { lo: 300, hi: 500, dur: 8000, rot: r(-4, 4), scale: 1 };
+  } else if (rms < 0.08) {
+    // normal
+    return { lo: 200, hi: 700, dur: 4000, rot: r(-8, 8), scale: 1 };
+  } else {
+    // shout — earthquake energy
+    return { lo: 100, hi: 900, dur: 500, rot: r(-15, 15), scale: r(1.05, 1.2) };
+  }
+}
+
+function placeWord(text) {
+  if (words.length >= MAX) {
+    const old = words.shift();
+    old.el.remove();
+  }
+
+  const rms  = getRMS();
+  const bias = getFreqBias();
+  const color = energyColor(rms, bias);
+  const { lo, hi, dur, rot, scale } = energyParams(rms);
+  const opsz = ri(9, 144);
+  const soft = ri(0, 80);
+  const wonk = rms > 0.08 ? 1 : 0;
+  const sz   = r(2, 7).toFixed(1);
+
+  const el = document.createElement('span');
+  el.className = 'w';
+  el.textContent = text;
+  el.style.cssText = `
+    font-size: clamp(1.2rem, ${sz}vw, 4rem);
+    font-variation-settings: 'wght' ${ri(lo, hi)}, 'opsz' ${opsz}, 'SOFT' ${soft}, 'WONK' ${wonk};
+    color: ${color};
+    transform: rotate(${rot.toFixed(1)}deg) scale(${scale.toFixed(2)});
+    opacity: 1;
+  `;
+
+  // per-element breathing keyframe
+  const id = 'k' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  sheet.insertRule(`@keyframes ${id} {
+    0%,100% { font-variation-settings: 'wght' ${lo}, 'opsz' ${opsz}, 'SOFT' ${soft}, 'WONK' ${wonk};
+               transform: rotate(${rot.toFixed(1)}deg) scale(1); }
+    50%      { font-variation-settings: 'wght' ${hi}, 'opsz' ${opsz}, 'SOFT' ${soft}, 'WONK' ${wonk};
+               transform: rotate(${(-rot).toFixed(1)}deg) scale(${scale.toFixed(2)}); }
+  }`, sheet.cssRules.length);
+  el.style.animation = `${id} ${dur}ms ease-in-out infinite`;
+
+  document.body.appendChild(el);
+
+  requestAnimationFrame(() => {
+    const pad = 40;
+    const w = el.offsetWidth  || 60;
+    const h = el.offsetHeight || 30;
+    el.style.left = r(pad, Math.max(pad + 1, window.innerWidth  - w - pad)) + 'px';
+    el.style.top  = r(pad, Math.max(pad + 1, window.innerHeight - h - pad)) + 'px';
+  });
+
+  const entry = { el, born: Date.now() };
+  words.push(entry);
+
+  setTimeout(() => {
+    el.style.transition = 'opacity 5s';
+    el.style.opacity = '0';
+  }, 20000);
+  setTimeout(() => {
+    el.remove();
+    words = words.filter(w => w !== entry);
+  }, 25000);
+}
+
+async function start() {
+  if (started) return;
+  if (!SR) {
+    const p = document.getElementById('prompt');
+    p.textContent = 'speech recognition not available in this browser';
+    p.style.opacity = '0.7';
+    return;
+  }
+  started = true;
+  sheet = document.styleSheets[0];
+  const prompt = document.getElementById('prompt');
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const ctx = new AudioContext();
+    const src = ctx.createMediaStreamSource(stream);
+    analyser = ctx.createAnalyser();
+    analyser.fftSize = 256;
+    src.connect(analyser);
+    timeData = new Uint8Array(analyser.fftSize);
+    freqData = new Uint8Array(analyser.frequencyBinCount);
+  } catch (e) {
+    prompt.textContent = 'mic access denied';
+    prompt.style.opacity = '0.7';
+    return;
+  }
+
+  prompt.textContent = 'listening…';
+  setTimeout(() => { prompt.style.opacity = '0'; }, 2000);
+
+  const rec = new SR();
+  rec.continuous = true;
+  rec.interimResults = true;
+  rec.lang = 'en-US';
+
+  rec.onresult = (event) => {
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      if (event.results[i].isFinal) {
+        event.results[i][0].transcript.trim().split(/\s+/).forEach(w => {
+          if (w) placeWord(w);
+        });
+      }
+    }
+  };
+
+  rec.onerror = () => {};
+  rec.onend = () => { if (started) rec.start(); };
+  rec.start();
+}
+
+document.addEventListener('click', start);
+</script>
+</body>
+</html>

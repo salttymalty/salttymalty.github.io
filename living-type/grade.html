@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>grade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:GRAD,opsz,wdth,wght@-200..150,8..144,75..150,100..1000&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-bg: #f5f0e8;
+  --color-text: #1a1714;
+  --color-label: #6b6058;
+  --color-divider: #d4cfc6;
+  --color-note: #9a8e80;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--color-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6vh 6vw;
+  cursor: default;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  gap: 0 4vw;
+  align-items: center;
+  width: 100%;
+  max-width: 900px;
+}
+
+.divider {
+  background: var(--color-divider);
+  height: 40vh;
+  min-height: 200px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.label {
+  font-family: 'Roboto Flex', sans-serif;
+  font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-label);
+  font-variation-settings: 'wght' 500;
+}
+
+.word {
+  font-family: 'Roboto Flex', sans-serif;
+  font-size: clamp(1.4rem, 3vw, 2.5rem);
+  color: var(--color-text);
+  line-height: 1.2;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.note {
+  font-family: 'Roboto Flex', sans-serif;
+  font-size: clamp(0.65rem, 1.1vw, 0.78rem);
+  color: var(--color-note);
+  text-align: center;
+  line-height: 1.5;
+  max-width: 22ch;
+  font-variation-settings: 'wght' 400;
+}
+
+/* GRAD axis: optical density shifts, metrics stay constant */
+@keyframes animate-grade {
+  0%   { font-variation-settings: 'GRAD' -200, 'wght' 400, 'opsz' 24; }
+  50%  { font-variation-settings: 'GRAD' 150,  'wght' 400, 'opsz' 24; }
+  100% { font-variation-settings: 'GRAD' -200, 'wght' 400, 'opsz' 24; }
+}
+
+/* wght axis: weight changes density AND reflows the text */
+@keyframes animate-weight {
+  0%   { font-variation-settings: 'GRAD' 0, 'wght' 100,  'opsz' 24; }
+  50%  { font-variation-settings: 'GRAD' 0, 'wght' 900,  'opsz' 24; }
+  100% { font-variation-settings: 'GRAD' 0, 'wght' 100,  'opsz' 24; }
+}
+
+#word-grade {
+  animation: animate-grade 4s ease-in-out infinite;
+}
+
+#word-weight {
+  animation: animate-weight 4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #word-grade, #word-weight {
+    animation-play-state: paused;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="columns">
+  <div class="column">
+    <span class="label">grade</span>
+    <div class="word" id="word-grade">density<br>without reflow</div>
+    <p class="note">GRAD axis — ink density shifts, letter spacing stays locked</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="column">
+    <span class="label">weight</span>
+    <div class="word" id="word-weight">density<br>without reflow</div>
+    <p class="note">wght axis — heavier strokes push letters apart as they grow</p>
+  </div>
+</div>
+
+<script>
+let frozen = false;
+document.addEventListener('click', () => {
+  frozen = !frozen;
+  const els = document.querySelectorAll('#word-grade, #word-weight');
+  els.forEach(el => {
+    el.style.animationPlayState = frozen ? 'paused' : 'running';
+  });
+});
+</script>
+</body>
+</html>

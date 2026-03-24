@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>waveform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-bg: #0f0e0c;
+  --color-text: #e8e4de;
+  --color-band-0: oklch(0.72 0.14 290);
+  --color-band-1: oklch(0.72 0.14 220);
+  --color-band-2: oklch(0.72 0.14 160);
+  --color-band-3: oklch(0.72 0.14 90);
+  --color-band-4: oklch(0.72 0.14 40);
+  --color-band-5: oklch(0.72 0.14 10);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--color-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+#letters {
+  display: flex;
+  gap: clamp(0.1rem, 1vw, 0.6rem);
+  user-select: none;
+}
+
+.letter {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(3rem, 12vw, 8rem);
+  line-height: 1;
+  display: inline-block;
+  will-change: font-variation-settings, transform;
+}
+
+.letter[data-band="0"] { color: var(--color-band-0); }
+.letter[data-band="1"] { color: var(--color-band-1); }
+.letter[data-band="2"] { color: var(--color-band-2); }
+.letter[data-band="3"] { color: var(--color-band-3); }
+.letter[data-band="4"] { color: var(--color-band-4); }
+.letter[data-band="5"] { color: var(--color-band-5); }
+
+#prompt {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(0.75rem, 2vw, 1rem);
+  color: var(--color-text);
+  opacity: 0.25;
+  letter-spacing: 0.15em;
+  margin-top: clamp(1.5rem, 4vw, 3rem);
+  text-transform: lowercase;
+  font-variation-settings: 'wght' 300, 'SOFT' 60;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .letter { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<div id="letters">
+  <span class="letter" data-band="0">L</span>
+  <span class="letter" data-band="1">I</span>
+  <span class="letter" data-band="2">S</span>
+  <span class="letter" data-band="3">T</span>
+  <span class="letter" data-band="4">E</span>
+  <span class="letter" data-band="5">N</span>
+</div>
+<div id="prompt">click to listen</div>
+
+<script>
+const letterEls = document.querySelectorAll('.letter');
+const prompt = document.getElementById('prompt');
+
+let audioCtx, analyser, freqData;
+let started = false;
+let frozen = false;
+
+function getBands() {
+  analyser.getByteFrequencyData(freqData);
+  const nyquist = audioCtx.sampleRate / 2;
+  const binHz = nyquist / freqData.length;
+  function avg(lo, hi) {
+    let sum = 0, count = 0;
+    for (let i = 0; i < freqData.length; i++) {
+      const freq = i * binHz;
+      if (freq >= lo && freq < hi) { sum += freqData[i]; count++; }
+    }
+    return count ? sum / count : 0;
+  }
+  return [
+    avg(20, 60),
+    avg(60, 250),
+    avg(250, 2000),
+    avg(2000, 6000),
+    avg(6000, 12000),
+    avg(12000, 20000)
+  ];
+}
+
+function mapRange(v, inMin, inMax, outMin, outMax) {
+  return outMin + ((v - inMin) / (inMax - inMin)) * (outMax - outMin);
+}
+
+function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+function tick() {
+  if (!frozen) {
+    const bands = getBands();
+    letterEls.forEach((el, idx) => {
+      const raw = clamp(bands[idx], 0, 255);
+      const wght = Math.round(mapRange(raw, 0, 255, 200, 900));
+      const soft = Math.round(mapRange(raw, 0, 255, 100, 0));
+      const scale = mapRange(raw, 0, 255, 0.8, 1.3).toFixed(3);
+      el.style.fontVariationSettings = `'wght' ${wght}, 'SOFT' ${soft}, 'opsz' 72`;
+      el.style.transform = `scale(${scale})`;
+    });
+  }
+  requestAnimationFrame(tick);
+}
+
+async function startAudio() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioCtx = new AudioContext();
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 1024;
+    freqData = new Uint8Array(analyser.frequencyBinCount);
+    const source = audioCtx.createMediaStreamSource(stream);
+    source.connect(analyser);
+    prompt.style.display = 'none';
+    started = true;
+    tick();
+  } catch (err) {
+    prompt.textContent = 'mic access denied';
+  }
+}
+
+document.addEventListener('click', () => {
+  if (!started) {
+    startAudio();
+  } else {
+    frozen = !frozen;
+    document.body.style.cursor = frozen ? 'default' : 'crosshair';
+  }
+});
+</script>
+</body>
+</html>

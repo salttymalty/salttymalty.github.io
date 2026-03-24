@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>breathe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-bg: #0f0e0c;
+  --color-text: #e8e4de;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--color-bg);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+#word {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(2rem, 20vw, 12rem);
+  color: var(--color-text);
+  user-select: none;
+  animation: breathe 8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  will-change: font-variation-settings;
+}
+
+@keyframes breathe {
+  0%   { font-variation-settings: 'wght' 200, 'opsz' 9,   'SOFT' 80, 'WONK' 0; }
+  50%  { font-variation-settings: 'wght' 900, 'opsz' 144, 'SOFT' 0,  'WONK' 0; }
+  100% { font-variation-settings: 'wght' 200, 'opsz' 9,   'SOFT' 80, 'WONK' 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #word { animation-play-state: paused; }
+}
+</style>
+</head>
+<body>
+
+<div id="word">breathe</div>
+
+<script>
+let frozen = false;
+document.addEventListener('click', () => {
+  frozen = !frozen;
+  document.getElementById('word').style.animationPlayState = frozen ? 'paused' : 'running';
+  document.body.style.cursor = frozen ? 'default' : 'crosshair';
+});
+</script>
+</body>
+</html>

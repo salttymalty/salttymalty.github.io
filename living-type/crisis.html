@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>crisis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Climate+Crisis:YEAR@1979..2050&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-bg: #0f0e0c;
+  --color-text: #e8e4de;
+  --color-year: #e8e4de;
+  --color-label: #5a544c;
+  --color-crisis: oklch(0.55 0.18 35);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--color-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4vh 4vw;
+  cursor: default;
+  overflow: hidden;
+}
+
+#year-display {
+  font-family: 'Climate Crisis', sans-serif;
+  font-size: clamp(0.9rem, 2.5vw, 1.4rem);
+  color: var(--color-year);
+  letter-spacing: 0.3em;
+  font-variation-settings: 'YEAR' 1979;
+  margin-bottom: 2vh;
+  transition: color 0.3s ease;
+}
+
+#word {
+  font-family: 'Climate Crisis', sans-serif;
+  font-size: clamp(3.5rem, 14vw, 12rem);
+  color: var(--color-text);
+  line-height: 0.9;
+  text-align: center;
+  font-variation-settings: 'YEAR' 1979;
+  will-change: font-variation-settings, color;
+  transition: color 0.3s ease;
+}
+
+#label {
+  font-family: 'Climate Crisis', sans-serif;
+  font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+  color: var(--color-label);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 3vh;
+  font-variation-settings: 'YEAR' 1979;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #word, #year-display {
+    font-variation-settings: 'YEAR' 2050;
+    color: var(--color-crisis);
+  }
+}
+</style>
+</head>
+<body>
+
+<div id="year-display">1979</div>
+<div id="word">CLIMATE</div>
+<div id="label">the letterforms know what we did</div>
+
+<script>
+const YEAR_MIN = 1979;
+const YEAR_MAX = 2050;
+const DURATION = 10000;
+
+const word = document.getElementById('word');
+const yearDisplay = document.getElementById('year-display');
+
+// Color interpolation: neutral white → deep orange-red
+// Values match --color-text (232,228,222) → crisis tone (210,60,20)
+function yearColor(t) {
+  const r = Math.round(232 + t * (210 - 232));
+  const g = Math.round(228 + t * (60  - 228));
+  const b = Math.round(222 + t * (20  - 222));
+  return `rgb(${r},${g},${b})`;
+}
+
+let start = null;
+let frozen = false;
+
+function tick(ts) {
+  if (frozen) return;
+
+  if (!start) start = ts;
+  const elapsed = (ts - start) % DURATION;
+  const t = elapsed / DURATION;
+
+  const year = Math.round(YEAR_MIN + t * (YEAR_MAX - YEAR_MIN));
+  const color = yearColor(t);
+
+  const fvs = `'YEAR' ${year}`;
+  word.style.fontVariationSettings = fvs;
+  word.style.color = color;
+  yearDisplay.textContent = year;
+  yearDisplay.style.color = color;
+
+  requestAnimationFrame(tick);
+}
+
+requestAnimationFrame(tick);
+
+document.addEventListener('click', () => {
+  frozen = !frozen;
+  if (!frozen) {
+    // Resume: adjust start so animation continues from where it paused
+    const currentYear = parseInt(yearDisplay.textContent);
+    const t = (currentYear - YEAR_MIN) / (YEAR_MAX - YEAR_MIN);
+    const now = performance.now();
+    start = now - (t * DURATION);
+    requestAnimationFrame(tick);
+  }
+});
+</script>
+</body>
+</html>

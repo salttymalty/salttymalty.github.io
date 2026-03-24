@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>scatter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&family=Recursive:CASL,MONO,slnt,wght@0..1,0..1,-15..0,300..1000&family=Roboto+Flex:opsz,wdth,wght@8..144,75..150,100..1000&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0e0c;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  cursor: crosshair;
+  position: relative;
+}
+
+.word {
+  position: absolute;
+  user-select: none;
+  white-space: nowrap;
+  line-height: 1;
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: font-variation-settings, opacity;
+}
+
+.word.settling {
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: var(--op-low); }
+  50%       { opacity: var(--op-high); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .word { animation-play-state: paused !important; transition: none; }
+}
+</style>
+</head>
+<body>
+<script>
+const WORDS = ['drift','weight','soft','warm','lean','stretch','pulse','glow','fade','bloom','sway','rest','hum','breathe','flow'];
+
+const FONTS = [
+  { name: "'Fraunces', serif",        axes: () => `'wght' ${r(100,900)}, 'opsz' ${r(9,144)}, 'SOFT' ${r(0,100)}, 'WONK' ${ri(0,1)}` },
+  { name: "'Recursive', sans-serif",  axes: () => `'wght' ${r(300,1000)}, 'CASL' ${rf(0,1)}, 'MONO' ${rf(0,0.5)}, 'slnt' ${r(-15,0)}` },
+  { name: "'Roboto Flex', sans-serif", axes: () => `'wght' ${r(100,1000)}, 'wdth' ${r(75,150)}, 'opsz' ${r(8,144)}` },
+];
+
+const COLORS = ['#e8e4de','#c4623a','#c49a3a','#a8b89a','#d4c4a0','#e8c4a0'];
+
+function r(lo, hi)  { return Math.round(lo + Math.random() * (hi - lo)); }
+function ri(lo, hi) { return Math.random() > 0.5 ? hi : lo; }
+function rf(lo, hi) { return (lo + Math.random() * (hi - lo)).toFixed(2); }
+
+function place(el) {
+  const pad = 60;
+  const w = el.offsetWidth  || 80;
+  const h = el.offsetHeight || 40;
+  const x = pad + Math.random() * (window.innerWidth  - w - pad * 2);
+  const y = pad + Math.random() * (window.innerHeight - h - pad * 2);
+  el.style.left = x + 'px';
+  el.style.top  = y + 'px';
+}
+
+function style(el) {
+  const font  = FONTS[r(0, FONTS.length - 1)];
+  const color = COLORS[r(0, COLORS.length - 1)];
+  const size  = r(12, 28);
+  const rot   = r(-15, 15);
+  const opLow = (0.3 + Math.random() * 0.35).toFixed(2);
+  const opHi  = (parseFloat(opLow) + 0.3 + Math.random() * 0.3).toFixed(2);
+  const dur   = r(4000, 12000);
+  const delay = r(0, 5000);
+
+  el.style.fontFamily = font.name;
+  el.style.fontVariationSettings = font.axes();
+  el.style.fontSize = `clamp(1rem, ${size/10 * 2.5}vw, ${(size/10 * 4).toFixed(1)}rem)`;
+  el.style.color = color;
+  el.style.transform = `rotate(${rot}deg)`;
+  el.style.setProperty('--op-low',  opLow);
+  el.style.setProperty('--op-high', Math.min(1, parseFloat(opHi)).toFixed(2));
+  el.style.opacity = opLow;
+  el.style.animation = `pulse ${dur}ms ease-in-out ${delay}ms infinite`;
+}
+
+function build() {
+  const frag = document.createDocumentFragment();
+  WORDS.forEach(w => {
+    const el = document.createElement('span');
+    el.className = 'word';
+    el.textContent = w;
+    style(el);
+    frag.appendChild(el);
+  });
+  document.body.appendChild(frag);
+
+  // place after a frame so offsetWidth is real
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.word').forEach(place);
+  });
+}
+
+function reshuffle() {
+  document.querySelectorAll('.word').forEach(el => {
+    el.classList.add('settling');
+    style(el);
+    place(el);
+  });
+}
+
+build();
+
+let frozen = false;
+document.addEventListener('click', () => {
+  if (frozen) {
+    frozen = false;
+    document.querySelectorAll('.word').forEach(el => el.style.animationPlayState = 'running');
+    document.body.style.cursor = 'crosshair';
+  } else {
+    reshuffle();
+  }
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === ' ' || e.code === 'Space') {
+    e.preventDefault();
+    frozen = !frozen;
+    document.querySelectorAll('.word').forEach(el => el.style.animationPlayState = frozen ? 'paused' : 'running');
+    document.body.style.cursor = frozen ? 'default' : 'crosshair';
+  }
+});
+</script>
+</body>
+</html>

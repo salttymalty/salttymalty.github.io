@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>heartbeat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-bg: #0f0e0c;
+  --color-text: #e8e4de;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--color-bg);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+#vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 40%, oklch(0.08 0.04 25) 100%);
+  opacity: 0;
+  transition: opacity 0.1s ease;
+}
+
+#word {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(4rem, 15vw, 10rem);
+  color: var(--color-text);
+  user-select: none;
+  will-change: font-variation-settings, transform;
+  position: relative;
+  z-index: 1;
+}
+
+#prompt {
+  position: fixed;
+  bottom: clamp(1.5rem, 5vh, 3rem);
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(0.75rem, 2vw, 1rem);
+  color: var(--color-text);
+  opacity: 0.25;
+  letter-spacing: 0.15em;
+  text-transform: lowercase;
+  font-variation-settings: 'wght' 300, 'SOFT' 60;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #word { transition: none; }
+  #vignette { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<div id="vignette"></div>
+<div id="word">pulse</div>
+<div id="prompt">click to feel</div>
+
+<script>
+const wordEl = document.getElementById('word');
+const vignette = document.getElementById('vignette');
+const promptEl = document.getElementById('prompt');
+
+let audioCtx, analyser, freqData;
+let started = false;
+let frozen = false;
+let smoothedBass = 0;
+let smoothedRms = 0;
+
+function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+function mapRange(v, inMin, inMax, outMin, outMax) {
+  return outMin + ((v - inMin) / (inMax - inMin)) * (outMax - outMin);
+}
+
+function getAnalysis() {
+  analyser.getByteFrequencyData(freqData);
+  const nyquist = audioCtx.sampleRate / 2;
+  const binHz = nyquist / freqData.length;
+
+  let bassSum = 0, bassCount = 0;
+  let rmsSum = 0;
+  for (let i = 0; i < freqData.length; i++) {
+    const freq = i * binHz;
+    if (freq >= 20 && freq < 80) {
+      bassSum += freqData[i];
+      bassCount++;
+    }
+    const norm = freqData[i] / 255;
+    rmsSum += norm * norm;
+  }
+  const bass = bassCount ? bassSum / bassCount / 255 : 0;
+  const rms = Math.sqrt(rmsSum / freqData.length);
+  return { bass, rms };
+}
+
+function tick() {
+  if (!frozen) {
+    const { bass, rms } = getAnalysis();
+
+    smoothedBass = smoothedBass * 0.85 + bass * 0.15;
+    smoothedRms = smoothedRms * 0.85 + rms * 0.15;
+
+    const scale = mapRange(smoothedBass, 0, 0.6, 1.0, 1.5).toFixed(4);
+    const wght = Math.round(mapRange(smoothedBass, 0, 0.6, 200, 900));
+    const soft = Math.round(mapRange(smoothedBass, 0, 0.6, 80, 0));
+
+    wordEl.style.transform = `scale(${scale})`;
+    wordEl.style.fontVariationSettings = `'wght' ${wght}, 'SOFT' ${soft}, 'opsz' 72`;
+
+    const vigOpacity = clamp(mapRange(smoothedRms, 0, 0.3, 0, 0.85), 0, 0.85).toFixed(3);
+    vignette.style.opacity = vigOpacity;
+
+    const bgLight = mapRange(smoothedRms, 0, 0.3, 0.08, 0.25);
+    const bgChroma = mapRange(smoothedRms, 0, 0.3, 0.01, 0.12);
+    document.body.style.background = `oklch(${bgLight.toFixed(3)} ${bgChroma.toFixed(3)} 25)`;
+  }
+  requestAnimationFrame(tick);
+}
+
+async function startAudio() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioCtx = new AudioContext();
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 1024;
+    freqData = new Uint8Array(analyser.frequencyBinCount);
+    const source = audioCtx.createMediaStreamSource(stream);
+    source.connect(analyser);
+    promptEl.style.display = 'none';
+    started = true;
+    tick();
+  } catch (err) {
+    promptEl.textContent = 'mic access denied';
+  }
+}
+
+document.addEventListener('click', () => {
+  if (!started) {
+    startAudio();
+  } else {
+    frozen = !frozen;
+    document.body.style.cursor = frozen ? 'default' : 'crosshair';
+  }
+});
+</script>
+</body>
+</html>

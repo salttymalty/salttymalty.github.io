@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>width</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wdth,wght@8..144,75..150,100..1000&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-bg: #0f0e0c;
+  --color-text: #e8e4de;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--color-bg);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  cursor: crosshair;
+  overflow: hidden;
+}
+
+#sentence {
+  font-family: 'Roboto Flex', sans-serif;
+  font-size: clamp(2rem, 6vw, 5rem);
+  color: var(--color-text);
+  user-select: none;
+  text-align: center;
+  line-height: 1.1;
+  animation: stretch 6s ease-in-out infinite;
+  will-change: font-stretch;
+}
+
+@keyframes stretch {
+  0%   { font-stretch: 75%; }
+  50%  { font-stretch: 150%; }
+  100% { font-stretch: 75%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #sentence { animation-play-state: paused; }
+}
+</style>
+</head>
+<body>
+
+<div id="sentence">typography expands to fill the space it is given</div>
+
+<script>
+let frozen = false;
+document.addEventListener('click', () => {
+  frozen = !frozen;
+  document.getElementById('sentence').style.animationPlayState = frozen ? 'paused' : 'running';
+  document.body.style.cursor = frozen ? 'default' : 'crosshair';
+});
+</script>
+</body>
+</html>

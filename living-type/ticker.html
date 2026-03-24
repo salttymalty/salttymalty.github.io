@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ticker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wdth,wght@8..144,75..150,100..1000&family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f0e0c;--cream:#e8e4de;--terra:#c4623a;--ochre:#c49a3a}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);min-height:100vh;display:flex;flex-direction:column;justify-content:center;gap:clamp(1.5rem,4vh,3rem);overflow:hidden;cursor:crosshair}
+.band{display:flex;width:100%;overflow:hidden;white-space:nowrap;user-select:none}
+.track{display:inline-flex;gap:clamp(1.5rem,3vw,3rem);padding-right:clamp(1.5rem,3vw,3rem);will-change:transform}
+.band-a .track{animation:go-left 28s linear infinite}
+.band-b .track{animation:go-right 24s linear infinite}
+@keyframes go-left{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes go-right{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.word{display:inline-block;line-height:1;will-change:font-variation-settings}
+.rf{font-family:'Roboto Flex',sans-serif}
+.fr{font-family:'Fraunces',serif}
+.c-cream{color:var(--cream)}
+.c-terra{color:var(--terra)}
+.c-ochre{color:var(--ochre)}
+.s-sm{font-size:1.5rem}
+.s-md{font-size:2rem}
+.s-lg{font-size:3rem}
+.s-xl{font-size:4rem}
+.br-a{animation:br-a 7s ease-in-out infinite}
+.br-b{animation:br-b 9s ease-in-out infinite}
+.br-c{animation:br-c 5s ease-in-out infinite}
+@keyframes br-a{0%,100%{opacity:.85}50%{opacity:1;transform:scaleY(1.04)}}
+@keyframes br-b{0%,100%{opacity:.7}50%{opacity:1}}
+@keyframes br-c{0%,100%{letter-spacing:.02em}50%{letter-spacing:.08em}}
+@media(prefers-reduced-motion:reduce){.track,.word{animation-play-state:paused!important}}
+</style>
+</head>
+<body>
+<div class="band band-a"><div class="track" id="a"></div></div>
+<div class="band band-b"><div class="track" id="b"></div></div>
+<script>
+const wordsA=[
+  {t:'kerning',   c:'rf c-cream s-md br-a', v:"'wght' 300,'wdth' 150,'opsz' 14"},
+  {t:'ligature',  c:'fr c-terra s-xl br-b', v:"'wght' 700,'opsz' 72,'SOFT' 60"},
+  {t:'ascender',  c:'rf c-cream s-sm br-c', v:"'wght' 800,'wdth' 75,'opsz' 40"},
+  {t:'baseline',  c:'fr c-ochre s-lg br-a', v:"'wght' 200,'opsz' 9,'SOFT' 90"},
+  {t:'x-height',  c:'rf c-cream s-xl br-b', v:"'wght' 500,'wdth' 130,'opsz' 80"},
+  {t:'counter',   c:'fr c-cream s-md br-c', v:"'wght' 600,'opsz' 36,'SOFT' 20"},
+  {t:'serif',     c:'rf c-terra s-lg br-a', v:"'wght' 100,'wdth' 100,'opsz' 20"},
+  {t:'swash',     c:'fr c-cream s-sm br-b', v:"'wght' 900,'opsz' 120,'SOFT' 0"},
+  {t:'bowl',      c:'rf c-ochre s-lg br-c', v:"'wght' 400,'wdth' 90,'opsz' 50"},
+  {t:'descender', c:'fr c-cream s-xl br-a', v:"'wght' 300,'opsz' 48,'SOFT' 70"},
+  {t:'em',        c:'rf c-cream s-sm br-b', v:"'wght' 600,'wdth' 110,'opsz' 22"},
+  {t:'leading',   c:'fr c-ochre s-lg br-c', v:"'wght' 500,'opsz' 60,'SOFT' 45"}
+];
+const wordsB=[
+  {t:'optical',   c:'fr c-terra s-lg br-b', v:"'wght' 500,'opsz' 60,'SOFT' 40"},
+  {t:'grade',     c:'rf c-cream s-sm br-c', v:"'wght' 200,'wdth' 120,'opsz' 12"},
+  {t:'tracking',  c:'fr c-cream s-xl br-a', v:"'wght' 800,'opsz' 144,'SOFT' 10"},
+  {t:'weight',    c:'rf c-ochre s-md br-b', v:"'wght' 700,'wdth' 75,'opsz' 30"},
+  {t:'axis',      c:'fr c-cream s-lg br-c', v:"'wght' 100,'opsz' 9,'SOFT' 100"},
+  {t:'glyph',     c:'rf c-terra s-xl br-a', v:"'wght' 600,'wdth' 150,'opsz' 100"},
+  {t:'ligature',  c:'fr c-cream s-sm br-b', v:"'wght' 400,'opsz' 24,'SOFT' 55"},
+  {t:'kerning',   c:'rf c-cream s-lg br-c', v:"'wght' 900,'wdth' 90,'opsz' 70"},
+  {t:'descender', c:'fr c-ochre s-xl br-a', v:"'wght' 600,'opsz' 84,'SOFT' 30"},
+  {t:'swash',     c:'rf c-cream s-md br-b', v:"'wght' 300,'wdth' 110,'opsz' 18"},
+  {t:'serif',     c:'fr c-terra s-lg br-c', v:"'wght' 700,'opsz' 48,'SOFT' 65"},
+  {t:'baseline',  c:'rf c-cream s-sm br-a', v:"'wght' 400,'wdth' 130,'opsz' 28"}
+];
+function build(id,words){
+  const track=document.getElementById(id);
+  const doubled=[...words,...words];
+  doubled.forEach(w=>{
+    const s=document.createElement('span');
+    s.className='word '+w.c;
+    s.style.fontVariationSettings=w.v;
+    s.textContent=w.t;
+    track.appendChild(s);
+  });
+}
+build('a',wordsA);
+build('b',wordsB);
+let frozen=false;
+document.addEventListener('click',()=>{
+  frozen=!frozen;
+  document.querySelectorAll('.track,.word').forEach(el=>el.style.animationPlayState=frozen?'paused':'running');
+  document.body.style.cursor=frozen?'default':'crosshair';
+});
+</script>
+</body>
+</html>

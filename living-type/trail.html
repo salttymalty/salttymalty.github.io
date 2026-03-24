@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>trail</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-bg: #0f0e0c;
+  --color-fresh: #e8e2d6;
+  --color-mid: #c47a52;
+  --color-hint: rgba(232, 226, 214, 0.55);
+  --color-static: #e8e2d6;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--color-bg);
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  cursor: none;
+}
+
+#stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.hint {
+  position: absolute;
+  bottom: clamp(1.5rem, 4vh, 3rem);
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(0.75rem, 1.5vw, 1rem);
+  font-variation-settings: 'wght' 300, 'opsz' 12, 'SOFT' 80, 'WONK' 0;
+  color: var(--color-hint);
+  pointer-events: none;
+  white-space: nowrap;
+  letter-spacing: 0.08em;
+}
+
+.stamp {
+  position: absolute;
+  font-family: 'Fraunces', Georgia, serif;
+  user-select: none;
+  pointer-events: none;
+  will-change: transform, opacity, font-variation-settings, font-size;
+  line-height: 1;
+  transform-origin: center center;
+}
+
+.static-word {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(3rem, 12vw, 8rem);
+  font-variation-settings: 'wght' 500, 'opsz' 72, 'SOFT' 50, 'WONK' 0;
+  color: var(--color-static);
+  letter-spacing: 0.1em;
+}
+</style>
+</head>
+<body>
+
+<div id="stage">
+  <div class="hint">move mouse to write</div>
+</div>
+
+<script>
+const CHARS = ['t','r','a','i','l'];
+const LIFETIME = 3000;
+const THROTTLE = 60;
+const MAX_STAMPS = 80;
+const FRESH_SIZE_VW = 8;
+const OLD_SIZE_VW = 2;
+
+let frozen = false;
+let stamps = [];
+let charIdx = 0;
+let lastStamp = 0;
+let rafId = null;
+const stage = document.getElementById('stage');
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+// read colors from CSS custom properties so no hardcoded hex in JS
+const rootStyle = getComputedStyle(document.documentElement);
+function parseCSSColor(varName) {
+  const hex = rootStyle.getPropertyValue(varName).trim();
+  const n = parseInt(hex.slice(1), 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+const FRESH_RGB = parseCSSColor('--color-fresh');
+const MID_RGB   = parseCSSColor('--color-mid');
+
+function addStamp(x, y) {
+  if (stamps.length >= MAX_STAMPS) {
+    const oldest = stamps.shift();
+    oldest.el.remove();
+  }
+
+  const el = document.createElement('span');
+  el.className = 'stamp';
+  el.textContent = CHARS[charIdx % CHARS.length];
+  charIdx++;
+
+  const sizePx = (FRESH_SIZE_VW / 100) * window.innerWidth;
+  el.style.fontSize = sizePx + 'px';
+  el.style.fontVariationSettings = "'wght' 800, 'opsz' 144, 'SOFT' 0, 'WONK' 0";
+  el.style.color = `rgb(${FRESH_RGB.join(',')})`;
+  el.style.opacity = '1';
+  el.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+
+  stage.appendChild(el);
+  stamps.push({ el, x, y, born: performance.now() });
+}
+
+function easeOut(t) { return 1 - (1 - t) * (1 - t); }
+
+function tick(now) {
+  if (!frozen) {
+    for (let i = stamps.length - 1; i >= 0; i--) {
+      const s = stamps[i];
+      const age = now - s.born;
+      const t = Math.min(age / LIFETIME, 1);
+      const te = easeOut(t);
+
+      const wght = lerp(800, 200, te);
+      const soft = lerp(0, 100, te);
+
+      const vw = window.innerWidth;
+      const sizePx = lerp((FRESH_SIZE_VW / 100) * vw, (OLD_SIZE_VW / 100) * vw, te);
+
+      const colorT = Math.min(t / 0.6, 1);
+      const r = Math.round(lerp(FRESH_RGB[0], MID_RGB[0], colorT));
+      const g = Math.round(lerp(FRESH_RGB[1], MID_RGB[1], colorT));
+      const b = Math.round(lerp(FRESH_RGB[2], MID_RGB[2], colorT));
+
+      const opacityT = t > 0.6 ? (t - 0.6) / 0.4 : 0;
+      const opacity = 1 - opacityT;
+
+      s.el.style.fontVariationSettings = `'wght' ${wght.toFixed(0)}, 'opsz' 72, 'SOFT' ${soft.toFixed(0)}, 'WONK' 0`;
+      s.el.style.fontSize = sizePx.toFixed(1) + 'px';
+      s.el.style.color = `rgb(${r},${g},${b})`;
+      s.el.style.opacity = opacity.toFixed(3);
+
+      if (t >= 1) {
+        s.el.remove();
+        stamps.splice(i, 1);
+      }
+    }
+  }
+
+  rafId = requestAnimationFrame(tick);
+}
+
+document.addEventListener('mousemove', (e) => {
+  if (frozen) return;
+  const now = performance.now();
+  if (now - lastStamp < THROTTLE) return;
+  lastStamp = now;
+  addStamp(e.clientX, e.clientY);
+});
+
+document.addEventListener('click', () => {
+  frozen = !frozen;
+  document.body.style.cursor = frozen ? 'default' : 'none';
+  const hint = document.querySelector('.hint');
+  if (hint) hint.style.display = frozen ? 'none' : 'block';
+});
+
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  frozen = true;
+  document.body.style.cursor = 'default';
+  const el = document.createElement('span');
+  el.className = 'static-word';
+  el.textContent = 'trail';
+  stage.appendChild(el);
+} else {
+  rafId = requestAnimationFrame(tick);
+}
+</script>
+</body>
+</html>

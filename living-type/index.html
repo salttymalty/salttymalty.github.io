@@ -7,7 +7,7 @@
 <title>Living Type — Variable Font Experiments</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Climate+Crisis:YEAR@1979..2050&family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&family=Inter:opsz,wght@14..32,100..900&family=Recursive:CASL,MONO,slnt,wght@0..1,0..1,-15..0,300..1000&family=Roboto+Flex:GRAD,opsz,wdth,wght@-200..150,8..144,75..150,100..1000&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root {
   --color-bg: #f9f8f6;
@@ -31,6 +31,20 @@
   --color-worn-bg: #f5f0e8;
   --color-worn-mid: #6b6058;
   --color-worn-ghost: #c4bba8;
+  /* Voice preview palettes */
+  --color-voice-terra: #c4623a;
+  --color-voice-sand: #d4c4a0;
+  --color-voice-teal: #5ba8a0;
+  /* Single-axis / compositional / reactive preview palettes */
+  --color-mono-bg: #1e1d1b;
+  --color-mono-text: #a8c4a0;
+  --color-watercolor-bg: #faf7f0;
+  --color-neon-coral: #ff6b4a;
+  --color-neon-teal: #4affee;
+  --color-neon-gold: #ffc94a;
+  --color-wave-orange: #ffa04a;
+  --color-wave-lime: #a8c44a;
+  --color-wave-blue: #4a9eff;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -593,6 +607,527 @@ h1 {
   100% { font-variation-settings: 'wght' 400, 'opsz' 48, 'SOFT' 60, 'WONK' 1; }
 }
 
+.preview-ledger {
+  background: var(--color-ledger-bg);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1.5rem 2rem 1.5rem 3rem;
+  font-family: 'Fraunces', Georgia, serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.preview-ledger .pl-rules {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 0.5rem 0;
+}
+
+.preview-ledger .pl-rules span {
+  display: block;
+  height: 1px;
+  background: var(--color-ledger-rule);
+  opacity: 0.5;
+}
+
+.preview-ledger .pl-margin {
+  position: absolute;
+  left: 2rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--color-ledger-margin);
+}
+
+.preview-ledger .pl1 {
+  font-size: 0.75rem;
+  color: var(--color-ledger-faded);
+  position: relative;
+  z-index: 1;
+  margin-bottom: 0.4rem;
+}
+
+.preview-ledger .pl2 {
+  font-size: 1.4rem;
+  color: var(--color-ledger-text);
+  position: relative;
+  z-index: 1;
+  animation: ledger-ink 13s ease-in-out infinite;
+}
+
+.preview-ledger .pl3 {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--color-ledger-red);
+  position: relative;
+  z-index: 1;
+  margin-top: 0.3rem;
+  animation: ledger-red 17s ease-in-out infinite;
+}
+
+.preview-ledger .pl-stamp {
+  position: absolute;
+  bottom: 0.8rem;
+  right: 1.2rem;
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--color-ledger-red);
+  border-radius: 50%;
+  opacity: 0.2;
+  transform: rotate(12deg);
+  z-index: 1;
+}
+
+.preview-ledger .pl-stamp::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 2px;
+  background: var(--color-ledger-red);
+  transform: translate(-50%, -50%) rotate(-20deg);
+}
+
+@keyframes ledger-ink {
+  0%   { font-variation-settings: 'wght' 500, 'opsz' 48, 'SOFT' 30, 'WONK' 0; }
+  50%  { font-variation-settings: 'wght' 300, 'opsz' 24, 'SOFT' 80, 'WONK' 1; }
+  100% { font-variation-settings: 'wght' 500, 'opsz' 48, 'SOFT' 30, 'WONK' 0; }
+}
+
+@keyframes ledger-red {
+  0%   { font-variation-settings: 'wght' 400, 'opsz' 36, 'SOFT' 60, 'WONK' 1; }
+  50%  { font-variation-settings: 'wght' 600, 'opsz' 72, 'SOFT' 20, 'WONK' 0; }
+  100% { font-variation-settings: 'wght' 400, 'opsz' 36, 'SOFT' 60, 'WONK' 1; }
+}
+
+/* Voice preview cards */
+
+.preview-speak {
+  background: var(--color-preview-dark);
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.preview-speak span {
+  position: absolute;
+  font-family: 'Fraunces', Georgia, serif;
+  color: var(--color-preview-dark-text);
+}
+
+.preview-speak .sv1 {
+  font-size: 1.2rem;
+  top: 20%;
+  left: 12%;
+  animation: sv-breathe-1 7s ease-in-out infinite;
+  transform: rotate(-5deg);
+  opacity: 0.9;
+}
+
+.preview-speak .sv2 {
+  font-size: 1.8rem;
+  top: 48%;
+  left: 38%;
+  color: var(--color-voice-terra);
+  animation: sv-breathe-2 9s ease-in-out infinite;
+  transform: rotate(3deg);
+}
+
+.preview-speak .sv3 {
+  font-size: 1rem;
+  top: 65%;
+  left: 8%;
+  animation: sv-breathe-3 5s ease-in-out infinite;
+  transform: rotate(6deg);
+  opacity: 0.6;
+}
+
+.preview-speak .sv4 {
+  font-size: 1.4rem;
+  top: 22%;
+  right: 10%;
+  color: var(--color-voice-sand);
+  animation: sv-breathe-1 11s ease-in-out infinite;
+  transform: rotate(-3deg);
+  opacity: 0.7;
+}
+
+@keyframes sv-breathe-1 {
+  0%,100% { font-variation-settings: 'wght' 200, 'opsz' 9, 'SOFT' 80, 'WONK' 0; }
+  50%      { font-variation-settings: 'wght' 700, 'opsz' 144, 'SOFT' 10, 'WONK' 0; }
+}
+
+@keyframes sv-breathe-2 {
+  0%,100% { font-variation-settings: 'wght' 500, 'opsz' 72, 'SOFT' 40, 'WONK' 0; }
+  50%      { font-variation-settings: 'wght' 900, 'opsz' 144, 'SOFT' 0, 'WONK' 1; }
+}
+
+@keyframes sv-breathe-3 {
+  0%,100% { font-variation-settings: 'wght' 300, 'opsz' 24, 'SOFT' 100, 'WONK' 1; }
+  50%      { font-variation-settings: 'wght' 800, 'opsz' 72, 'SOFT' 20, 'WONK' 0; }
+}
+
+.preview-chorus {
+  background: var(--color-preview-dark);
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.preview-chorus span {
+  position: absolute;
+  font-family: 'Fraunces', Georgia, serif;
+}
+
+.preview-chorus .ch1 {
+  font-size: 2rem;
+  top: 30%;
+  left: 8%;
+  color: var(--color-voice-terra);
+  animation: ch-shout 0.8s ease-in-out infinite;
+  transform: rotate(-4deg);
+}
+
+.preview-chorus .ch2 {
+  font-size: 1.1rem;
+  top: 15%;
+  left: 50%;
+  color: var(--color-voice-teal);
+  animation: ch-whisper 10s ease-in-out infinite;
+  transform: rotate(5deg);
+  opacity: 0.8;
+}
+
+.preview-chorus .ch3 {
+  font-size: 1.5rem;
+  top: 60%;
+  left: 30%;
+  color: var(--color-voice-sand);
+  animation: sv-breathe-2 6s ease-in-out infinite;
+  transform: rotate(2deg);
+}
+
+.preview-chorus .ch4 {
+  font-size: 0.9rem;
+  top: 55%;
+  right: 8%;
+  color: var(--color-voice-teal);
+  animation: ch-whisper 14s ease-in-out infinite;
+  animation-delay: -4s;
+  opacity: 0.6;
+  transform: rotate(-6deg);
+}
+
+@keyframes ch-shout {
+  0%,100% { font-variation-settings: 'wght' 100, 'opsz' 9, 'SOFT' 0, 'WONK' 0; transform: rotate(-4deg) scale(1); }
+  50%      { font-variation-settings: 'wght' 900, 'opsz' 144, 'SOFT' 0, 'WONK' 0; transform: rotate(4deg) scale(1.1); }
+}
+
+@keyframes ch-whisper {
+  0%,100% { font-variation-settings: 'wght' 300, 'opsz' 24, 'SOFT' 80, 'WONK' 0; opacity: 0.5; }
+  50%      { font-variation-settings: 'wght' 500, 'opsz' 72, 'SOFT' 30, 'WONK' 0; opacity: 0.9; }
+}
+
+/* Single axis previews */
+.preview-breathe {
+  background: var(--color-preview-dark);
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 3rem;
+  color: var(--color-preview-dark-text);
+  animation: p-bones 8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.preview-optical {
+  background: var(--color-bg);
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center; gap: 1.5rem;
+  font-family: 'Fraunces', Georgia, serif;
+  padding: 1rem;
+}
+.preview-optical .po-sm { font-size: 0.9rem; color: var(--color-text-secondary); font-variation-settings: 'opsz' 9, 'wght' 400; }
+.preview-optical .po-lg { font-size: 2rem; color: var(--color-text); font-variation-settings: 'opsz' 144, 'wght' 400; }
+.preview-optical .po-an { font-size: 1.5rem; color: var(--color-accent); animation: p-opsz 6s ease-in-out infinite; }
+
+@keyframes p-opsz {
+  0%   { font-variation-settings: 'opsz' 9, 'wght' 400; }
+  50%  { font-variation-settings: 'opsz' 144, 'wght' 400; }
+  100% { font-variation-settings: 'opsz' 9, 'wght' 400; }
+}
+
+.preview-softness {
+  background: var(--color-preview-dark);
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.2rem;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.8rem;
+  color: var(--color-preview-dark-text);
+}
+.preview-softness span:nth-child(1) { animation: p-soft 8s ease infinite; }
+.preview-softness span:nth-child(2) { animation: p-soft 8s ease infinite 1.6s; }
+.preview-softness span:nth-child(3) { animation: p-soft 8s ease infinite 3.2s; }
+
+@keyframes p-soft {
+  0%   { font-variation-settings: 'wght' 600, 'opsz' 72, 'SOFT' 0; }
+  50%  { font-variation-settings: 'wght' 600, 'opsz' 72, 'SOFT' 100; }
+  100% { font-variation-settings: 'wght' 600, 'opsz' 72, 'SOFT' 0; }
+}
+
+.preview-mono {
+  background: var(--color-mono-bg);
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Recursive', monospace;
+  font-size: 1.4rem;
+  color: var(--color-mono-text);
+  padding: 1.5rem;
+  animation: p-mono 4s ease-in-out infinite;
+}
+
+@keyframes p-mono {
+  0%   { font-variation-settings: 'MONO' 0, 'CASL' 0, 'wght' 400; }
+  50%  { font-variation-settings: 'MONO' 1, 'CASL' 0, 'wght' 400; }
+  100% { font-variation-settings: 'MONO' 0, 'CASL' 0, 'wght' 400; }
+}
+
+.preview-width {
+  background: var(--color-preview-dark);
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Roboto Flex', sans-serif;
+  font-size: 2rem;
+  color: var(--color-preview-dark-text);
+  padding: 1rem;
+  animation: p-wdth 6s ease-in-out infinite;
+}
+
+@keyframes p-wdth {
+  0%   { font-stretch: 75%; }
+  50%  { font-stretch: 150%; }
+  100% { font-stretch: 75%; }
+}
+
+.preview-slant {
+  background: var(--color-bg);
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+  font-family: 'Recursive', sans-serif;
+  font-size: 1.6rem;
+  color: var(--color-text);
+  padding: 1rem;
+}
+.preview-slant span { display: inline-block; }
+.preview-slant span:nth-child(1) { animation: p-slnt 2.4s ease-in-out infinite; }
+.preview-slant span:nth-child(2) { animation: p-slnt 2.4s ease-in-out infinite 0.3s; }
+.preview-slant span:nth-child(3) { animation: p-slnt 2.4s ease-in-out infinite 0.6s; }
+
+@keyframes p-slnt {
+  0%   { font-variation-settings: 'slnt' 0, 'CASL' 0.5, 'MONO' 0, 'wght' 400; }
+  50%  { font-variation-settings: 'slnt' -15, 'CASL' 0.5, 'MONO' 0, 'wght' 400; }
+  100% { font-variation-settings: 'slnt' 0, 'CASL' 0.5, 'MONO' 0, 'wght' 400; }
+}
+
+.preview-grade {
+  background: var(--color-bg);
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center; gap: 2rem;
+  font-family: 'Roboto Flex', sans-serif;
+  font-size: 1.2rem;
+  color: var(--color-text);
+  padding: 1rem;
+}
+.preview-grade .pg-l { animation: p-grad 4s ease-in-out infinite; }
+.preview-grade .pg-r { animation: p-bones 4s ease-in-out infinite; }
+
+@keyframes p-grad {
+  0%   { font-variation-settings: 'GRAD' -200; }
+  50%  { font-variation-settings: 'GRAD' 150; }
+  100% { font-variation-settings: 'GRAD' -200; }
+}
+
+.preview-crisis {
+  background: var(--color-preview-dark);
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-family: 'Climate Crisis', sans-serif;
+  color: var(--color-preview-dark-text);
+}
+.preview-crisis .pc-word { font-size: 2.5rem; animation: p-crisis 10s linear infinite; }
+.preview-crisis .pc-year { font-size: 0.9rem; color: var(--color-accent); margin-top: 0.5rem; font-family: 'Source Sans 3', system-ui; }
+
+@keyframes p-crisis {
+  0%   { font-variation-settings: 'YEAR' 1979; }
+  100% { font-variation-settings: 'YEAR' 2050; }
+}
+
+/* Compositional previews */
+.preview-editorial {
+  background: var(--color-bg);
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
+  padding: 1.5rem 2rem;
+}
+.preview-editorial .pe-date { font-family: 'Source Sans 3', system-ui; font-size: 0.7rem; color: var(--color-text-secondary); letter-spacing: 0.1em; text-transform: uppercase; }
+.preview-editorial .pe-head { font-family: 'Fraunces', Georgia, serif; font-size: 1.6rem; color: var(--color-text); margin: 0.3rem 0; animation: p-opsz 6s ease-in-out infinite; }
+.preview-editorial .pe-body { font-family: 'Source Sans 3', system-ui; font-size: 0.8rem; color: var(--color-text-secondary); line-height: 1.4; }
+
+.preview-neon {
+  background: var(--color-preview-dark);
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.3rem;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 2.5rem;
+}
+.preview-neon .pn1 { color: var(--color-neon-coral); text-shadow: 0 0 10px var(--color-neon-coral), 0 0 30px color-mix(in srgb, var(--color-neon-coral) 25%, transparent); animation: slam-preview 3s ease infinite; }
+.preview-neon .pn2 { color: var(--color-neon-teal); text-shadow: 0 0 10px var(--color-neon-teal), 0 0 30px color-mix(in srgb, var(--color-neon-teal) 25%, transparent); animation: slam-preview 3s ease infinite 1s; }
+.preview-neon .pn3 { color: var(--color-neon-gold); text-shadow: 0 0 10px var(--color-neon-gold), 0 0 30px color-mix(in srgb, var(--color-neon-gold) 25%, transparent); animation: slam-preview 3s ease infinite 2s; }
+
+.preview-watercolor {
+  background: var(--color-watercolor-bg);
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 2rem;
+  color: var(--color-accent);
+  opacity: 0.8;
+}
+.preview-watercolor span { animation: p-soft 10s ease infinite; }
+.preview-watercolor span:nth-child(2) { animation-delay: -3.3s; }
+.preview-watercolor span:nth-child(3) { animation-delay: -6.6s; }
+
+.preview-brutalist {
+  background: var(--color-preview-dark);
+  width: 100%; height: 100%;
+  display: flex; flex-wrap: wrap; align-content: center;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 2rem;
+  color: var(--color-preview-dark-text);
+  line-height: 0.95;
+  overflow: hidden;
+  padding: 0;
+}
+.preview-brutalist span { animation: p-brut 1.2s steps(4, end) infinite; }
+.preview-brutalist span:nth-child(even) { color: var(--color-preview-dark); background: var(--color-preview-dark-text); }
+
+@keyframes p-brut {
+  0%   { font-weight: 100; }
+  25%  { font-weight: 400; }
+  50%  { font-weight: 700; }
+  75%  { font-weight: 900; }
+  100% { font-weight: 100; }
+}
+
+.preview-ticker {
+  background: var(--color-preview-dark);
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column; justify-content: center;
+  overflow: hidden;
+  font-family: 'Fraunces', Georgia, serif;
+  color: var(--color-preview-dark-text);
+  font-size: 1.2rem;
+  padding: 0.5rem 0;
+}
+.preview-ticker .pt-row { white-space: nowrap; animation: p-tick 12s linear infinite; }
+.preview-ticker .pt-row:nth-child(2) { animation-direction: reverse; font-size: 0.9rem; color: var(--color-accent); }
+
+@keyframes p-tick {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.preview-scatter {
+  background: var(--color-preview-dark);
+  width: 100%; height: 100%;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Fraunces', Georgia, serif;
+}
+.preview-scatter span {
+  position: absolute;
+  color: var(--color-preview-dark-text);
+  animation: p-bones 6s ease infinite;
+}
+
+/* Reactive previews */
+.preview-gravity {
+  background: var(--color-preview-dark);
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.5rem;
+  color: var(--color-preview-dark-text);
+  padding-bottom: 1.5rem;
+  gap: 0.3rem;
+}
+.preview-gravity span:nth-child(1) { animation: p-fall 2s ease-in infinite; }
+.preview-gravity span:nth-child(2) { animation: p-fall 2s ease-in infinite 0.5s; }
+.preview-gravity span:nth-child(3) { animation: p-fall 2s ease-in infinite 1s; }
+
+@keyframes p-fall {
+  0%   { transform: translateY(-180px); font-variation-settings: 'wght' 200, 'SOFT' 100; opacity: 0.3; }
+  80%  { transform: translateY(0); font-variation-settings: 'wght' 800, 'SOFT' 0; opacity: 1; }
+  90%  { transform: translateY(-20px); font-variation-settings: 'wght' 400, 'SOFT' 60; }
+  100% { transform: translateY(0); font-variation-settings: 'wght' 800, 'SOFT' 0; opacity: 1; }
+}
+
+.preview-trail {
+  background: var(--color-preview-dark);
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center; gap: 0.3rem;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 2rem;
+}
+.preview-trail span { color: var(--color-preview-dark-text); }
+.preview-trail span:nth-child(1) { opacity: 1; font-variation-settings: 'wght' 800, 'SOFT' 0; }
+.preview-trail span:nth-child(2) { opacity: 0.7; font-variation-settings: 'wght' 600, 'SOFT' 30; }
+.preview-trail span:nth-child(3) { opacity: 0.4; font-variation-settings: 'wght' 400, 'SOFT' 60; }
+.preview-trail span:nth-child(4) { opacity: 0.2; font-variation-settings: 'wght' 200, 'SOFT' 100; }
+.preview-trail span:nth-child(5) { opacity: 0.08; font-variation-settings: 'wght' 200, 'SOFT' 100; }
+
+.preview-waveform {
+  background: var(--color-preview-dark);
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center; gap: 0.1rem;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 2.5rem;
+}
+.preview-waveform span { display: inline-block; }
+.preview-waveform span:nth-child(1) { color: var(--color-neon-coral); animation: slam-preview 2s ease infinite; }
+.preview-waveform span:nth-child(2) { color: var(--color-wave-orange); animation: slam-preview 2.3s ease infinite; }
+.preview-waveform span:nth-child(3) { color: var(--color-neon-gold); animation: slam-preview 1.8s ease infinite; }
+.preview-waveform span:nth-child(4) { color: var(--color-wave-lime); animation: slam-preview 2.1s ease infinite; }
+.preview-waveform span:nth-child(5) { color: var(--color-neon-teal); animation: slam-preview 2.5s ease infinite; }
+.preview-waveform span:nth-child(6) { color: var(--color-wave-blue); animation: slam-preview 1.9s ease infinite; }
+
+.preview-heartbeat {
+  background: var(--color-preview-dark);
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 3rem;
+  color: var(--color-preview-dark-text);
+  animation: p-heart 1.2s ease-in-out infinite;
+}
+
+@keyframes p-heart {
+  0%   { transform: scale(1); font-variation-settings: 'wght' 200, 'SOFT' 100; }
+  15%  { transform: scale(1.15); font-variation-settings: 'wght' 800, 'SOFT' 0; }
+  30%  { transform: scale(0.95); font-variation-settings: 'wght' 300, 'SOFT' 80; }
+  45%  { transform: scale(1.1); font-variation-settings: 'wght' 700, 'SOFT' 10; }
+  100% { transform: scale(1); font-variation-settings: 'wght' 200, 'SOFT' 100; }
+}
+
 footer {
   margin-top: 6vh;
   padding-top: 3vh;
@@ -612,7 +1147,17 @@ footer a:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  h1, .pw1, .pw2, .pw3, .pw4, .pv1, .pv2, .pv4, .preview-cursor span {
+  h1, .pw1, .pw2, .pw3, .pw4, .pv1, .pv2, .pv4, .preview-cursor span,
+  .preview-speak span, .preview-chorus span,
+  .preview-breathe, .preview-optical .po-an,
+  .preview-softness span, .preview-mono,
+  .preview-width, .preview-slant span, .preview-grade .pg-l, .preview-grade .pg-r,
+  .preview-crisis .pc-word, .preview-editorial .pe-head,
+  .preview-neon .pn1, .preview-neon .pn2, .preview-neon .pn3,
+  .preview-watercolor span, .preview-brutalist span,
+  .preview-ticker .pt-row, .preview-scatter span,
+  .preview-gravity span, .preview-waveform span,
+  .preview-heartbeat {
     animation-play-state: paused;
   }
 }
@@ -622,7 +1167,7 @@ footer a:hover {
 
 <header>
   <h1>Living Type</h1>
-  <p class="subtitle">Variable font experiments. CSS animation driving weight, optical size, softness, and quirk axes in real time. Each piece is a self-contained HTML file under 5KB. Click to enter, click inside to freeze.</p>
+  <p class="subtitle">Variable font experiments. CSS animation driving weight, optical size, softness, and quirk axes in real time. Each piece is a self-contained HTML file under 8KB. Click to enter, click inside to freeze.</p>
 </header>
 
 <div class="grid">
@@ -699,6 +1244,150 @@ footer a:hover {
         <span>Fraunces</span>
         <span>italic + upright</span>
         <span>CSS only</span>
+      </div>
+    </div>
+  </a>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-label">single axis</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <a href="breathe.html" class="card">
+    <div class="card-preview">
+      <div class="preview-breathe">breathe</div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">breathe</div>
+      <div class="card-desc">One word. One axis. Weight cycles 200 to 900 over eight seconds. The simplest possible variable font animation.</div>
+      <div class="card-meta">
+        <span>Fraunces</span>
+        <span>wght only</span>
+        <span>CSS only</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="optical.html" class="card">
+    <div class="card-preview">
+      <div class="preview-optical">
+        <span class="po-sm">read</span>
+        <span class="po-an">read</span>
+        <span class="po-lg">read</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">optical</div>
+      <div class="card-desc">Optical size axis isolated. Caption, display, and animated side by side. Watch stroke contrast and x-height shift as opsz changes.</div>
+      <div class="card-meta">
+        <span>Fraunces</span>
+        <span>opsz only</span>
+        <span>educational</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="softness.html" class="card">
+    <div class="card-preview">
+      <div class="preview-softness">
+        <span>serif</span>
+        <span>serif</span>
+        <span>serif</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">softness</div>
+      <div class="card-desc">SOFT axis solo. Five instances cascade through serif dissolution. Sharp corners melt to rounds in a wave.</div>
+      <div class="card-meta">
+        <span>Fraunces</span>
+        <span>SOFT only</span>
+        <span>CSS only</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="mono.html" class="card">
+    <div class="card-preview">
+      <div class="preview-mono">the quick brown fox</div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">mono</div>
+      <div class="card-desc">MONO axis solo. Each word transitions from proportional to monospace at staggered delays. Watch the text reflow in slow motion.</div>
+      <div class="card-meta">
+        <span>Recursive</span>
+        <span>MONO only</span>
+        <span>JS stagger</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="width.html" class="card">
+    <div class="card-preview">
+      <div class="preview-width">stretch</div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">width</div>
+      <div class="card-desc">Width axis. A sentence stretches and compresses, breathing horizontally. font-stretch 75% to 150%.</div>
+      <div class="card-meta">
+        <span>Roboto Flex</span>
+        <span>wdth only</span>
+        <span>CSS only</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="slant.html" class="card">
+    <div class="card-preview">
+      <div class="preview-slant">
+        <span>the</span>
+        <span>wind</span>
+        <span>moves</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">slant</div>
+      <div class="card-desc">Slant axis. Words lean in sequence like grass in a breeze. Each word straightens and leans at staggered timing.</div>
+      <div class="card-meta">
+        <span>Recursive</span>
+        <span>slnt only</span>
+        <span>JS stagger</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="grade.html" class="card">
+    <div class="card-preview">
+      <div class="preview-grade">
+        <span class="pg-l">grade</span>
+        <span class="pg-r">weight</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">grade</div>
+      <div class="card-desc">Grade vs weight. Left column changes optical density without reflow. Right column changes weight and shifts layout. Same visual effect, different mechanics.</div>
+      <div class="card-meta">
+        <span>Roboto Flex</span>
+        <span>GRAD vs wght</span>
+        <span>educational</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="crisis.html" class="card">
+    <div class="card-preview">
+      <div class="preview-crisis">
+        <span class="pc-word">CLIMATE</span>
+        <span class="pc-year">1979 → 2050</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">crisis</div>
+      <div class="card-desc">Climate Crisis font. YEAR axis from 1979 to 2050. Letterforms degrade as the year advances. Typography as data visualization.</div>
+      <div class="card-meta">
+        <span>Climate Crisis</span>
+        <span>YEAR axis</span>
+        <span>JS counter</span>
       </div>
     </div>
   </a>
@@ -795,6 +1484,244 @@ footer a:hover {
 
   <div class="divider">
     <div class="divider-line"></div>
+    <span class="divider-label">compositional</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <a href="editorial.html" class="card">
+    <div class="card-preview">
+      <div class="preview-editorial">
+        <span class="pe-date">No. 1 — Spring 2026</span>
+        <span class="pe-head">The Variable Issue</span>
+        <span class="pe-body">Typography that breathes on the page...</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">editorial</div>
+      <div class="card-desc">Magazine layout. Source Serif 4 headline breathes optical size. Inter body shifts weight. Barely noticeable animation — editorial restraint.</div>
+      <div class="card-meta">
+        <span>Source Serif 4 + Inter</span>
+        <span>opsz + wght</span>
+        <span>CSS only</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="neon.html" class="card">
+    <div class="card-preview">
+      <div class="preview-neon">
+        <span class="pn1">hot</span>
+        <span class="pn2">cold</span>
+        <span class="pn3">gold</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">neon</div>
+      <div class="card-desc">Text-shadow glow in saturated color. Weight pulses drive glow intensity. Three lines at coral, cyan, and amber. Click cycles palettes.</div>
+      <div class="card-meta">
+        <span>Fraunces</span>
+        <span>text-shadow</span>
+        <span>3 palettes</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="watercolor.html" class="card">
+    <div class="card-preview">
+      <div class="preview-watercolor">
+        <span>water</span>
+        <span>color</span>
+        <span>bleed</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">watercolor</div>
+      <div class="card-desc">SVG feTurbulence wash behind dissolving serifs. SOFT axis makes serifs melt. Colors drift through warm earth tones.</div>
+      <div class="card-meta">
+        <span>Fraunces</span>
+        <span>feTurbulence</span>
+        <span>earth tones</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="brutalist.html" class="card">
+    <div class="card-preview">
+      <div class="preview-brutalist">
+        <span>WEIGHT</span><span>WEIGHT</span><span>WEIGHT</span><span>WEIGHT</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">brutalist</div>
+      <div class="card-desc">System fonts only. Black and white. No radius. Text fills viewport edge to edge. Weight jumps in hard steps. Anti-beauty as beauty.</div>
+      <div class="card-meta">
+        <span>Helvetica/Arial</span>
+        <span>steps()</span>
+        <span>no fonts loaded</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="ticker.html" class="card">
+    <div class="card-preview">
+      <div class="preview-ticker">
+        <div class="pt-row">kerning ligature ascender baseline x-height counter serif swash kerning ligature ascender baseline </div>
+        <div class="pt-row">bowl descender em leading tracking glyph axis weight bowl descender em leading </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">ticker</div>
+      <div class="card-desc">Horizontal marquee of typographic terms at different sizes and weights. Two rows in opposite directions. A news ticker from another dimension.</div>
+      <div class="card-meta">
+        <span>Roboto Flex + Fraunces</span>
+        <span>marquee</span>
+        <span>CSS translateX</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="scatter.html" class="card">
+    <div class="card-preview">
+      <div class="preview-scatter">
+        <span style="top: 15%; left: 10%; font-size: 1.8rem; opacity: 0.9; transform: rotate(-5deg);">drift</span>
+        <span style="top: 40%; left: 55%; font-size: 1.2rem; opacity: 0.6; color: var(--color-accent); transform: rotate(8deg);">warm</span>
+        <span style="top: 65%; left: 25%; font-size: 2rem; opacity: 0.4; transform: rotate(-12deg);">pulse</span>
+        <span style="top: 25%; left: 70%; font-size: 0.9rem; opacity: 0.7; transform: rotate(3deg);">bloom</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">scatter</div>
+      <div class="card-desc">Words at random positions, random fonts, random axes, random cycles. Click reshuffles everything. Controlled chaos. Constellation, not mess.</div>
+      <div class="card-meta">
+        <span>3 fonts</span>
+        <span>random axes</span>
+        <span>click shuffle</span>
+      </div>
+    </div>
+  </a>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-label">voice</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <a href="speak.html" class="card">
+    <div class="card-preview">
+      <div class="preview-speak">
+        <span class="sv1">light</span>
+        <span class="sv2">speak</span>
+        <span class="sv3">word</span>
+        <span class="sv4">drift</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">speak</div>
+      <div class="card-desc">Live speech-to-text. Words you say appear scattered across the screen, each with random Fraunces variation settings and a slow breathing animation. Words fade after 15 seconds. Requires microphone.</div>
+      <div class="card-meta">
+        <span>Fraunces</span>
+        <span>Web Speech API</span>
+        <span>live mic</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="chorus.html" class="card">
+    <div class="card-preview">
+      <div class="preview-chorus">
+        <span class="ch1">LOUD</span>
+        <span class="ch2">soft</span>
+        <span class="ch3">voice</span>
+        <span class="ch4">still</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">chorus</div>
+      <div class="card-desc">Speech transcription plus audio energy analysis. A whisper gets gentle breathing animations. A shout gets earthquake-level weight chaos. Bass-heavy speech is terracotta, treble-heavy is teal. Your voice shapes the typography in real time.</div>
+      <div class="card-meta">
+        <span>Fraunces</span>
+        <span>Web Speech + AudioContext</span>
+        <span>energy-reactive</span>
+      </div>
+    </div>
+  </a>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-label">reactive</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <a href="gravity.html" class="card">
+    <div class="card-preview">
+      <div class="preview-gravity">
+        <span>fall</span>
+        <span>bounce</span>
+        <span>rest</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">gravity</div>
+      <div class="card-desc">Physics simulation. Words fall, bounce, and settle. Each collision drives weight heavier and serifs sharper. Floating is light and soft.</div>
+      <div class="card-meta">
+        <span>Fraunces</span>
+        <span>physics</span>
+        <span>JS simulation</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="trail.html" class="card">
+    <div class="card-preview">
+      <div class="preview-trail">
+        <span>t</span><span>r</span><span>a</span><span>i</span><span>l</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">trail</div>
+      <div class="card-desc">Mouse trail stamps typographic marks. Each stamp decays from bold to thin, opaque to transparent. A ghostly typographic wake.</div>
+      <div class="card-meta">
+        <span>Fraunces</span>
+        <span>mouse trail</span>
+        <span>JS decay</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="waveform.html" class="card">
+    <div class="card-preview">
+      <div class="preview-waveform">
+        <span>L</span><span>I</span><span>S</span><span>T</span><span>E</span><span>N</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">waveform</div>
+      <div class="card-desc">Audio-reactive. Each letter of LISTEN maps to a frequency band. Sub-bass drives L, air drives N. Text becomes a graphic equalizer. Click to start mic.</div>
+      <div class="card-meta">
+        <span>Fraunces</span>
+        <span>6-band analyzer</span>
+        <span>mic input</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="heartbeat.html" class="card">
+    <div class="card-preview">
+      <div class="preview-heartbeat">pulse</div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">heartbeat</div>
+      <div class="card-desc">One word, two inputs. Sub-bass drives scale and weight. RMS drives background color toward red. The simplest audio piece. Click to start mic.</div>
+      <div class="card-meta">
+        <span>Fraunces</span>
+        <span>sub-bass</span>
+        <span>mic input</span>
+      </div>
+    </div>
+  </a>
+
+  <div class="divider">
+    <div class="divider-line"></div>
     <span class="divider-label">handmade</span>
     <div class="divider-line"></div>
   </div>
@@ -848,8 +1775,8 @@ footer a:hover {
 <img src="marks/eye.svg" class="atmosphere mark-sun" style="bottom: 35vh; right: 15vw; width: 70px; opacity: 0.03; animation-delay: 2.5s;" alt="">
 
 <footer>
-  Built with variable fonts from Google Fonts. No frameworks, no canvas, no build step.<br>
-  Fraunces by Undercase Type. Recursive by Arrow Type.
+  Built with variable fonts from Google Fonts. No frameworks, no build step.<br>
+  Fraunces by Undercase Type. Recursive by Arrow Type. Roboto Flex by Google. Climate Crisis by Daniel Coull &amp; Josev Meijer.
 </footer>
 
 </body>

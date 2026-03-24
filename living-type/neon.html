@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>neon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-bg: #0f0e0c;
+  --c1: #ff6b4a;
+  --c2: #4ae8ff;
+  --c3: #ffa64a;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--color-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.5rem, 2vh, 1.5rem);
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+.line {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(3rem, 12vw, 8rem);
+  line-height: 1;
+  user-select: none;
+  will-change: font-variation-settings, text-shadow;
+}
+
+#l1 {
+  color: var(--c1);
+  animation: pulse-1 3s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+#l2 {
+  color: var(--c2);
+  animation: pulse-2 3s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  animation-delay: -1s;
+}
+
+#l3 {
+  color: var(--c3);
+  animation: pulse-3 3s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  animation-delay: -2s;
+}
+
+@keyframes pulse-1 {
+  0%   {
+    font-variation-settings: 'wght' 200, 'opsz' 9, 'SOFT' 80, 'WONK' 0;
+    text-shadow:
+      0 0 10px color-mix(in srgb, var(--c1) 30%, transparent),
+      0 0 30px color-mix(in srgb, var(--c1) 15%, transparent),
+      0 0 60px color-mix(in srgb, var(--c1) 8%, transparent);
+  }
+  50%  {
+    font-variation-settings: 'wght' 800, 'opsz' 144, 'SOFT' 0, 'WONK' 0;
+    text-shadow:
+      0 0 10px color-mix(in srgb, var(--c1) 80%, transparent),
+      0 0 30px color-mix(in srgb, var(--c1) 55%, transparent),
+      0 0 60px color-mix(in srgb, var(--c1) 35%, transparent),
+      0 0 120px color-mix(in srgb, var(--c1) 15%, transparent);
+  }
+  100% {
+    font-variation-settings: 'wght' 200, 'opsz' 9, 'SOFT' 80, 'WONK' 0;
+    text-shadow:
+      0 0 10px color-mix(in srgb, var(--c1) 30%, transparent),
+      0 0 30px color-mix(in srgb, var(--c1) 15%, transparent),
+      0 0 60px color-mix(in srgb, var(--c1) 8%, transparent);
+  }
+}
+
+@keyframes pulse-2 {
+  0%   {
+    font-variation-settings: 'wght' 200, 'opsz' 9, 'SOFT' 80, 'WONK' 0;
+    text-shadow:
+      0 0 10px color-mix(in srgb, var(--c2) 30%, transparent),
+      0 0 30px color-mix(in srgb, var(--c2) 15%, transparent),
+      0 0 60px color-mix(in srgb, var(--c2) 8%, transparent);
+  }
+  50%  {
+    font-variation-settings: 'wght' 800, 'opsz' 144, 'SOFT' 0, 'WONK' 0;
+    text-shadow:
+      0 0 10px color-mix(in srgb, var(--c2) 80%, transparent),
+      0 0 30px color-mix(in srgb, var(--c2) 55%, transparent),
+      0 0 60px color-mix(in srgb, var(--c2) 35%, transparent),
+      0 0 120px color-mix(in srgb, var(--c2) 15%, transparent);
+  }
+  100% {
+    font-variation-settings: 'wght' 200, 'opsz' 9, 'SOFT' 80, 'WONK' 0;
+    text-shadow:
+      0 0 10px color-mix(in srgb, var(--c2) 30%, transparent),
+      0 0 30px color-mix(in srgb, var(--c2) 15%, transparent),
+      0 0 60px color-mix(in srgb, var(--c2) 8%, transparent);
+  }
+}
+
+@keyframes pulse-3 {
+  0%   {
+    font-variation-settings: 'wght' 200, 'opsz' 9, 'SOFT' 80, 'WONK' 0;
+    text-shadow:
+      0 0 10px color-mix(in srgb, var(--c3) 30%, transparent),
+      0 0 30px color-mix(in srgb, var(--c3) 15%, transparent),
+      0 0 60px color-mix(in srgb, var(--c3) 8%, transparent);
+  }
+  50%  {
+    font-variation-settings: 'wght' 800, 'opsz' 144, 'SOFT' 0, 'WONK' 0;
+    text-shadow:
+      0 0 10px color-mix(in srgb, var(--c3) 80%, transparent),
+      0 0 30px color-mix(in srgb, var(--c3) 55%, transparent),
+      0 0 60px color-mix(in srgb, var(--c3) 35%, transparent),
+      0 0 120px color-mix(in srgb, var(--c3) 15%, transparent);
+  }
+  100% {
+    font-variation-settings: 'wght' 200, 'opsz' 9, 'SOFT' 80, 'WONK' 0;
+    text-shadow:
+      0 0 10px color-mix(in srgb, var(--c3) 30%, transparent),
+      0 0 30px color-mix(in srgb, var(--c3) 15%, transparent),
+      0 0 60px color-mix(in srgb, var(--c3) 8%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .line { animation-play-state: paused; }
+}
+</style>
+</head>
+<body>
+
+<div id="l1" class="line">CORAL</div>
+<div id="l2" class="line">CYAN</div>
+<div id="l3" class="line">AMBER</div>
+
+<script>
+const palettes = [
+  { c1: '#ff6b4a', c2: '#4ae8ff', c3: '#ffa64a' },
+  { c1: '#5b9cf6', c2: '#a78bfa', c3: '#34d399' },
+  { c1: '#f72585', c2: '#b5e000', c3: '#ffeb3b' }
+];
+const labels = [
+  ['CORAL', 'CYAN', 'AMBER'],
+  ['BLUE', 'VIOLET', 'GREEN'],
+  ['MAGENTA', 'LIME', 'YELLOW']
+];
+
+let palette = 0;
+let frozen = false;
+
+document.addEventListener('click', () => {
+  if (frozen) {
+    frozen = false;
+    document.querySelectorAll('.line').forEach(l => {
+      l.style.animationPlayState = 'running';
+    });
+    document.body.style.cursor = 'crosshair';
+    return;
+  }
+
+  palette = (palette + 1) % palettes.length;
+  const p = palettes[palette];
+  const root = document.documentElement;
+  root.style.setProperty('--c1', p.c1);
+  root.style.setProperty('--c2', p.c2);
+  root.style.setProperty('--c3', p.c3);
+
+  const ls = labels[palette];
+  document.getElementById('l1').textContent = ls[0];
+  document.getElementById('l2').textContent = ls[1];
+  document.getElementById('l3').textContent = ls[2];
+});
+
+document.addEventListener('dblclick', () => {
+  frozen = !frozen;
+  document.querySelectorAll('.line').forEach(l => {
+    l.style.animationPlayState = frozen ? 'paused' : 'running';
+  });
+  document.body.style.cursor = frozen ? 'default' : 'crosshair';
+});
+</script>
+</body>
+</html>

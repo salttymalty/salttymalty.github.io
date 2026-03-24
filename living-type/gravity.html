@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>gravity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-bg: #0f0e0c;
+  --color-text: #e8e2d6;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--color-bg);
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+#stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.word {
+  position: absolute;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(1.5rem, 4vw, 3.5rem);
+  color: var(--color-text);
+  user-select: none;
+  will-change: transform, font-variation-settings;
+  white-space: nowrap;
+  line-height: 1;
+}
+</style>
+</head>
+<body>
+
+<div id="stage"></div>
+
+<script>
+const WORDS = ['fall','rise','weight','float','sink','drift','land','bounce','rest','drop'];
+const GRAVITY = 0.35;
+const DAMPING = 0.6;
+const FLOOR_PAD = 20;
+
+let frozen = false;
+let particles = [];
+let rafId = null;
+const stage = document.getElementById('stage');
+
+function measure(el) {
+  const r = el.getBoundingClientRect();
+  return { w: r.width, h: r.height };
+}
+
+function spawn(word) {
+  const el = document.createElement('span');
+  el.className = 'word';
+  el.textContent = word;
+  el.style.fontVariationSettings = "'wght' 200, 'opsz' 72, 'SOFT' 100, 'WONK' 0";
+  el.style.transform = 'translate(-9999px, -9999px)';
+  stage.appendChild(el);
+
+  // measure after render
+  requestAnimationFrame(() => {
+    const { w } = measure(el);
+    const x = Math.random() * Math.max(0, window.innerWidth - w);
+    const p = {
+      el,
+      x,
+      y: -80 - Math.random() * 200,
+      vy: 1 + Math.random() * 2,
+      w,
+      born: performance.now()
+    };
+    particles.push(p);
+    updateStyle(p);
+  });
+}
+
+function updateStyle(p) {
+  const speed = Math.abs(p.vy);
+  // faster = heavier and sharper; slower = lighter and softer
+  const t = Math.min(speed / 14, 1);
+  const wght = 200 + t * 600;
+  const soft = 100 - t * 100;
+  p.el.style.fontVariationSettings = `'wght' ${wght.toFixed(0)}, 'opsz' 72, 'SOFT' ${soft.toFixed(0)}, 'WONK' 0`;
+  p.el.style.transform = `translate(${p.x.toFixed(1)}px, ${p.y.toFixed(1)}px)`;
+}
+
+function tick() {
+  if (!frozen) {
+    const floorY = window.innerHeight - FLOOR_PAD;
+
+    for (const p of particles) {
+      p.vy += GRAVITY;
+      p.y += p.vy;
+
+      const elH = p.el.offsetHeight || 40;
+      if (p.y + elH >= floorY) {
+        p.y = floorY - elH;
+        p.vy *= -DAMPING;
+        // kill tiny bounces
+        if (Math.abs(p.vy) < 0.5) p.vy = 0;
+      }
+
+      updateStyle(p);
+    }
+  }
+
+  rafId = requestAnimationFrame(tick);
+}
+
+function init() {
+  // stagger spawns
+  WORDS.forEach((w, i) => {
+    setTimeout(() => spawn(w), i * 220);
+  });
+
+  // respawn words that have settled — respawn after 8-14s
+  setInterval(() => {
+    if (particles.length < 10) return;
+    // find a resting particle (vy ~0)
+    const resting = particles.filter(p => Math.abs(p.vy) < 0.1);
+    if (resting.length === 0) return;
+    const idx = Math.floor(Math.random() * resting.length);
+    const p = resting[idx];
+    const word = p.el.textContent;
+    p.el.remove();
+    particles.splice(particles.indexOf(p), 1);
+    setTimeout(() => spawn(word), 400);
+  }, 2200);
+
+  rafId = requestAnimationFrame(tick);
+}
+
+document.addEventListener('click', () => {
+  frozen = !frozen;
+  document.body.style.cursor = frozen ? 'default' : 'crosshair';
+});
+
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  frozen = true;
+  // just show words statically placed
+  WORDS.forEach((w, i) => {
+    const el = document.createElement('span');
+    el.className = 'word';
+    el.textContent = w;
+    el.style.fontVariationSettings = "'wght' 400, 'opsz' 72, 'SOFT' 50, 'WONK' 0";
+    el.style.position = 'absolute';
+    el.style.left = (5 + (i % 5) * 18) + '%';
+    el.style.top = (20 + Math.floor(i / 5) * 40) + '%';
+    stage.appendChild(el);
+  });
+} else {
+  init();
+}
+</script>
+</body>
+</html>

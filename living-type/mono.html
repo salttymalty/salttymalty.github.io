@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>mono</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Recursive:CASL,MONO,slnt,wght@0..1,0..1,-15..0,300..1000&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-bg: #1e1d1b;
+  --color-text: #a8c4a0;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--color-bg);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1.5rem, 5vw, 4rem);
+  cursor: crosshair;
+}
+
+#para {
+  font-family: 'Recursive', monospace;
+  font-size: clamp(1.25rem, 3.5vw, 2.25rem);
+  font-variation-settings: 'MONO' 0, 'CASL' 0, 'slnt' 0, 'wght' 400;
+  color: var(--color-text);
+  max-width: 22ch;
+  line-height: 1.55;
+  user-select: none;
+}
+
+.w {
+  display: inline-block;
+  animation: go-mono 4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  will-change: font-variation-settings;
+}
+
+@keyframes go-mono {
+  0%   { font-variation-settings: 'MONO' 0, 'CASL' 0, 'slnt' 0, 'wght' 400; }
+  50%  { font-variation-settings: 'MONO' 1, 'CASL' 0, 'slnt' 0, 'wght' 400; }
+  100% { font-variation-settings: 'MONO' 0, 'CASL' 0, 'slnt' 0, 'wght' 400; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .w { animation-play-state: paused; }
+}
+</style>
+</head>
+<body>
+
+<p id="para"></p>
+
+<script>
+const text = "the quick brown fox jumps over the lazy dog then pauses to consider the curious nature of variable fonts";
+const words = text.split(' ');
+const para = document.getElementById('para');
+
+words.forEach((word, i) => {
+  const span = document.createElement('span');
+  span.className = 'w';
+  span.textContent = word;
+  span.style.animationDelay = (i * 0.22) + 's';
+  para.appendChild(span);
+  if (i < words.length - 1) para.appendChild(document.createTextNode(' '));
+});
+
+let frozen = false;
+document.addEventListener('click', () => {
+  frozen = !frozen;
+  const state = frozen ? 'paused' : 'running';
+  document.querySelectorAll('.w').forEach(w => w.style.animationPlayState = state);
+  document.body.style.cursor = frozen ? 'default' : 'crosshair';
+});
+</script>
+</body>
+</html>

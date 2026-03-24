@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>slant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Recursive:CASL,MONO,slnt,wght@0..1,0..1,-15..0,300..1000&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-bg: #f5f0e8;
+  --color-text: #1a1714;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--color-bg);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  cursor: crosshair;
+  overflow: hidden;
+}
+
+#phrase {
+  font-family: 'Recursive', monospace;
+  font-size: clamp(2rem, 7vw, 5rem);
+  font-variation-settings: 'CASL' 0.5, 'MONO' 0, 'slnt' 0, 'wght' 400;
+  color: var(--color-text);
+  user-select: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25em;
+  justify-content: center;
+  align-items: baseline;
+  line-height: 1.2;
+}
+
+#phrase span {
+  display: inline-block;
+  animation: lean 2.4s ease-in-out infinite;
+  will-change: font-variation-settings;
+}
+
+#phrase span:nth-child(1) { animation-delay: 0.0s; }
+#phrase span:nth-child(2) { animation-delay: 0.3s; }
+#phrase span:nth-child(3) { animation-delay: 0.6s; }
+#phrase span:nth-child(4) { animation-delay: 0.9s; }
+#phrase span:nth-child(5) { animation-delay: 1.2s; }
+#phrase span:nth-child(6) { animation-delay: 1.5s; }
+
+@keyframes lean {
+  0%   { font-variation-settings: 'CASL' 0.5, 'MONO' 0, 'slnt'   0, 'wght' 400; }
+  50%  { font-variation-settings: 'CASL' 0.5, 'MONO' 0, 'slnt' -15, 'wght' 400; }
+  100% { font-variation-settings: 'CASL' 0.5, 'MONO' 0, 'slnt'   0, 'wght' 400; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #phrase span { animation-play-state: paused; }
+}
+</style>
+</head>
+<body>
+
+<div id="phrase">
+  <span>the</span>
+  <span>wind</span>
+  <span>moves</span>
+  <span>through</span>
+  <span>every</span>
+  <span>word</span>
+</div>
+
+<script>
+let frozen = false;
+document.addEventListener('click', () => {
+  frozen = !frozen;
+  const spans = document.querySelectorAll('#phrase span');
+  spans.forEach(s => s.style.animationPlayState = frozen ? 'paused' : 'running');
+  document.body.style.cursor = frozen ? 'default' : 'crosshair';
+});
+</script>
+</body>
+</html>

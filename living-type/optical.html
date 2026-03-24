@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<!-- guards: none — standalone experimental art piece -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>optical</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-bg: #f5f0e8;
+  --color-text: #1a1815;
+  --color-label: #7a6e62;
+  --color-rule: #d4cec4;
+  --color-accent: #b8652a;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--color-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1.5rem, 5vw, 4rem) clamp(1rem, 6vw, 5rem);
+  cursor: crosshair;
+  gap: clamp(2rem, 5vh, 4rem);
+}
+
+h1 {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+  font-weight: 400;
+  color: var(--color-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.columns {
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(2rem, 6vw, 6rem);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.col hr {
+  width: 100%;
+  border: none;
+  border-top: 1px solid var(--color-rule);
+}
+
+.word {
+  font-family: 'Fraunces', Georgia, serif;
+  color: var(--color-text);
+  user-select: none;
+  line-height: 1;
+}
+
+.label {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: clamp(0.7rem, 1.2vw, 0.8rem);
+  font-weight: 400;
+  color: var(--color-label);
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+
+.label strong {
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+#caption-word {
+  font-size: clamp(1.25rem, 3vw, 2rem);
+  font-variation-settings: 'wght' 400, 'opsz' 9, 'SOFT' 60, 'WONK' 0;
+}
+
+#display-word {
+  font-size: clamp(3rem, 9vw, 7rem);
+  font-variation-settings: 'wght' 400, 'opsz' 144, 'SOFT' 0, 'WONK' 0;
+}
+
+#animated-word {
+  font-size: clamp(3rem, 9vw, 7rem);
+  animation: optical-shift 6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  will-change: font-variation-settings;
+}
+
+@keyframes optical-shift {
+  0%   { font-variation-settings: 'wght' 400, 'opsz' 9,   'SOFT' 60, 'WONK' 0; }
+  50%  { font-variation-settings: 'wght' 400, 'opsz' 144, 'SOFT' 0,  'WONK' 0; }
+  100% { font-variation-settings: 'wght' 400, 'opsz' 9,   'SOFT' 60, 'WONK' 0; }
+}
+
+.note {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: clamp(0.7rem, 1.1vw, 0.8rem);
+  color: var(--color-label);
+  text-align: center;
+  max-width: 38rem;
+  line-height: 1.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #animated-word { animation-play-state: paused; }
+}
+</style>
+</head>
+<body>
+
+<h1>optical size axis — opsz 9 to 144</h1>
+
+<div class="columns">
+  <div class="col">
+    <div id="caption-word" class="word">reading</div>
+    <hr>
+    <div class="label">caption size<br><strong>opsz 9</strong></div>
+  </div>
+  <div class="col">
+    <div id="display-word" class="word">reading</div>
+    <hr>
+    <div class="label">display size<br><strong>opsz 144</strong></div>
+  </div>
+  <div class="col">
+    <div id="animated-word" class="word">reading</div>
+    <hr>
+    <div class="label">animated<br><strong>opsz 9 ↔ 144</strong></div>
+  </div>
+</div>
+
+<p class="note">Same word, same weight, same size — only optical size changes. At small sizes, strokes thicken and spacing opens. At large sizes, contrast sharpens and details emerge. Click to freeze.</p>
+
+<script>
+let frozen = false;
+document.addEventListener('click', () => {
+  frozen = !frozen;
+  document.getElementById('animated-word').style.animationPlayState = frozen ? 'paused' : 'running';
+  document.body.style.cursor = frozen ? 'default' : 'crosshair';
+});
+</script>
+</body>
+</html>
